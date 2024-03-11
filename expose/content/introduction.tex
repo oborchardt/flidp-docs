@@ -1,0 +1,24 @@
+\chapter{Introduction}
+
+Federated learning is a training method in machine learning (ML) in which models are trained locally at the location where the data for the training is generated. This avoids sending sensitive data to a central server and allows models to be further optimised on local data, such as in the case of word prediction for smartphone keyboards \parencite{mcmahan:2018}. 
+
+Despite the decentralised structure, privacy risks remain with Federated Learning. For example, federated learning cannot prevent membership inference attacks. Differential Privacy (DP), on the other hand, can very well prevent them \parencite{shokri:2017}. 
+
+However, the use of DP leads to a utility-privacy trade-off. Although \textcite{mcmahan:2018} has shown that accuracy can be maintained even under DP guarantees, this comes at the price of significantly more computational effort. Individual privacy budgets can help to minimise the loss of \textit{utility}. With classic DP training algorithms, the same privacy requirement is applied to all data. As different people have different privacy requirements for their data in reality, the strictest requirements are unnecessarily strict for a large proportion of the data. This can significantly impair the utility, i.e. the ability to learn from the data. In order to better reflect this heterogeneity in the requirements, research is being conducted into algorithms that optimally utilise these heterogeneous privacy budgets.
+
+The aim of this work is to develop and evaluate a training algorithm in a federated learning scenario, taking individual privacy budgets into account. In this scenario the clients have individual privacy budgets for their training data. The aim is not to protect the clients from the aggregating server, but to obtain a model at the end of the training process that complies with the individual privacy budgets.
+
+\section{Differential Privacy}
+
+Differential privacy is a concept for maintaining privacy when processing sensitive data that was introduced by \textcite{dwork:2006}. In principle, noise is added to query results in order to guarantee that the query result would occur with a similar probability for a \textit{adjacent data set}. This guarantees that the influence of a single data point on the query result is limited. The similarity of the probabilities is determined by the \textit{privacy budget} $\epsilon$. A less strict, but in practice much used definition also introduces a $\delta \in [0,1]$, which provides a probability that no privacy guarantees are observed. In \textcite{abadi:2016}, differential privacy is defined as follows:
+
+\begin{definition}
+  \emph{\textbf{$(\epsilon, \delta)$-Differential Privacy}} A \textit{randomized mechanism} $\mathcal{M}: \mathcal{D} \rightarrow \mathcal{R}$ with domain $\mathcal{D}$ and range $\mathcal{R}$ satisfies $(\epsilon, \delta)$-differential privacy if for any two adjacent inputs $d$, $d' \in \mathcal{D}$ and for any subset of outputs $S \subseteq \mathcal{R}$ it holds that $$\Pr[\mathcal{M}(d) \in S] \leq e^{\epsilon} \Pr[\mathcal{M}(d') \in S] + \delta$$
+\end{definition}
+
+Based on this definition, there are further theorems that enable the development of more complex DP algorithms. The first is the \textit{post processing} theorem. It states that the further processing of data from a DP mechanism cannot further increase the loss of privacy. This property is important, for example, in order to be able to use models trained with privacy guarantees after training without hesitation. In addition, there are composition theorems that provide estimates for the fact that data is processed multiple times.
+
+Noise is added using various mechanisms. Random values are drawn from distributions for which it has been proven that they fulfil the definition of differential privacy. For numerical queries, there is the Laplace mechanism, which draws the random values from the Laplace distribution, and the Gaussian mechanism, which draws the random values from the normal distribution. The Exponential Mechanism, for example, is suitable for categorical queries. Further details are described by \textcite{chang:2023}.
+
+Since the strength of the added noise should be proportional to the greatest possible influence of a data point on the query result, it is also often necessary to limit the value range \parencite[p.31]{chang:2023}. For count queries, this influence is naturally limited to $1$, but if for example an average salary is requested, it is necessary to define the value range of the possible salaries. The greatest possible influence of a data point is called \textit{sensitivity}.
+

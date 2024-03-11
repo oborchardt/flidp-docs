@@ -1,0 +1,21 @@
+\chapter{Method}
+
+In this work, the sampling approach of \textcite{boenisch:2023} is to be adapted to a federated learning scenario. It replaces the \textit{poisson sampling} of \textcite{abadi:2016} with a sampling of the data that is dependent on the respective \textit{privacy budget}. As with \textcite{aldaghri:2023} and \textcite{mcmahan:2018}, the aim of my work is to comply with the (heterogeneous) DP guarantees in the final model. In particular, the aim is therefore not to protect the clients from the aggregating server during training.
+
+To ensure compliance, like \textcite{boenisch:2023} and \textcite{aldaghri:2023}, I will use a \textit{moments accountant} for each group with the same privacy budget. In addition, I will use the \textit{FedAvg} algorithm, which is also the basis for \textcite{aldaghri:2023}.
+
+The following questions will be important in the course of my work: How can I monitor the privacy loss of each client during training? How can I aggregate the clipped gradients of the clients on the server? Can the implementation of \textcite{boenisch:2023} for calculating the sample probabilities of individual data points be transferred to the clients in the federated learning scenario? Does the use of individual privacy budgets with my algorithm have advantages over algorithms with homogeneous privacy budgets?
+
+\section{Implementation}
+
+The implementation is possible with both Pytorch and Tensorflow. With Pytorch, Flower \parencite{beutel:2020} for federated learning and Opacus \parencite{yousefpour:2021} for the privacy guarantees would be suitable. Opacus is a good choice, as \textcite{boenisch:2023} have provided their implementation, which is based on Opacus. However, Opacus is more experimental than the Tensorflow libraries, as technical bugs\footnote{\url{https://github.com/pytorch/opacus/issues/612}, accessed: 2024-03-08}, for example, have not yet been fixed in the current release (as of March 2024). 
+
+Tensorflow, on the other hand, offers a module for Differential Privacy \parencite{tfprivacy} as well as for Federated Learning \parencite{tffederated}. In particular, the use of both modules together is very well documented compared to the Pytorch libraries. In addition, relevant parts of the implementation of \textcite{boenisch:2023} can also be transferred to the Tensorflow ecosystem using Google's differential privacy library \parencite{googledp}.
+
+For the reasons mentioned, I will first try to implement the algorithms in my work with Tensorflow. Apart from that, I will work on the Leipzig University cluster\footnote{\url{https://www.sc.uni-leipzig.de/}, accessed: 2024-03-11} and use Docker containers for reproducibility. I will store both the containers and my code in a GitHub repository.
+
+\section{Evaluation}
+The evaluation of my approach should cover two areas in particular: On the one hand, compliance with the privacy guarantees for the respective clients, and on the other hand, the potential gain in utility for the trained model. The latter can be evaluated using common metrics such as accuracy, precision, recall, AUC or computational effort. The upper performance limit would be a non-private model, the lower one a model that is trained in compliance with the privacy guarantees of the strictest group.
+
+In my opinion, checking compliance with the privacy guarantees is the greater challenge. \textcite{aldaghri:2023} only examine these theoretically. \textcite{boenisch:2023} evaluate their approach with regard to membership inference attacks. This is also the aim of my work. In addition, the accountants can be used to verify at which points in time the budgets of the individual clients are exhausted. In particular, my algorithm should prevent the privacy budgets of the stricter clients from being exhausted more quickly.
+
