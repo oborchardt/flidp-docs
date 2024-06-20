@@ -44,7 +44,7 @@
 \input{Seitenstil}
 
 % Eigene Definitionen für Silbentrennung
-\include{Silbentrennung}
+\input{Silbentrennung}
 % Das eigentliche Dokument -------------------------------------------------
 %		Der eigentliche Inhalt des Dokuments beginnt hier. Die einzelnen Seiten
 %		und Kapitel werden in eigene Dateien ausgelagert und hier nur inkludiert.
@@ -65,7 +65,7 @@
 \ofoot{\pagemark}
 
 % Seitennummerierung -------------------------------------------------------
-%		Vor dem Hauptteil werden die Seiten in großen römischen Ziffern 
+%		Vor dem Hauptteil werden die Seiten in großen römischen Ziffern
 %		nummeriert...
 % --------------------------------------------------------------------------
 \pagenumbering{Roman}
@@ -81,7 +81,7 @@
 \listoftables					% Tabellenverzeichnis
 
 %\renewcommand{\lstlistlistingname}{Verzeichnis der Listings}
-%\lstlistoflistings	
+%\lstlistoflistings
 
 % ...danach in normalen arabischen Ziffern ---------------------------------
 \clearpage
@@ -93,10 +93,9 @@
 %		in den entsprechenden .TEX-Dateien vorliegen. Die Dateinamen können
 % 		natürlich angepasst werden.
 % --------------------------------------------------------------------------
-%\include{Inhalt/Einleitung}
+\include{Inhalt/Fundamentals}
 \include{Inhalt/RelatedWork}
 \include{Inhalt/Method}
-%\include{Inhalt/Grundlagen...}
 
 % Literaturverzeichnis -----------------------------------------------------
 %		Das Literaturverzeichnis wird aus der Datenbank erstellt.
@@ -109,7 +108,7 @@
 
 % \setcounter{page}{122}
 % \pagenumbering{gobble}
-\include{Inhalt/Erklaerung}	% Selbständigkeitserklärung 
+\include{Inhalt/Erklaerung}	% Selbständigkeitserklärung
 
 % Anhang -------------------------------------------------------------------
 %		Die Inhalte des Anhangs werden analog zu den Kapiteln inkludiert.
@@ -117,7 +116,7 @@
 % --------------------------------------------------------------------------
 \appendix
 \clearpage
-\renewcommand*{\thesection}{\Alph{section}} 
+\renewcommand*{\thesection}{\Alph{section}}
 \pagenumbering{Roman}
 %\include{Inhalt/Anhang}
 
@@ -128,6 +127,6 @@
 % --------------------------------------------------------------------------
 %\printindex		% Index hier einfügen
 %\ofoot{}
-%\include{Inhalt/Thesen}	% Thesen 
+%\include{Inhalt/Thesen}	% Thesen
 
 \end{document}
