@@ -1,0 +1,169 @@
+<mxfile host="Electron" modified="2024-07-19T09:19:53.571Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.5.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="J0-PLvCwvBFVSNw8ERTB" version="21.5.0" type="device">
+  <diagram name="Page-1" id="npcaDpJC0nhWCueivPFb">
+    <mxGraphModel dx="1516" dy="937" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="4681" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ySH65e0I9kpK-tleo24m-2" value="Programmierung" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2200" y="40" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-3" value="Recherche" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="455" y="260" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-4" value="Related Work" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="380" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-5" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ySH65e0I9kpK-tleo24m-4" target="ySH65e0I9kpK-tleo24m-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="305" y="620" as="sourcePoint" />
+            <mxPoint x="355" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-6" value="Grundlagen" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="360" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-7" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ySH65e0I9kpK-tleo24m-6" target="ySH65e0I9kpK-tleo24m-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="305" y="620" as="sourcePoint" />
+            <mxPoint x="355" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-8" value="Definition DP" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="520" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-9" value="Vorteile + gängigste Theoreme erwähnen" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="580" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-10" value="Differential Privacy" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="450" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-11" value="Federated Learning" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="450" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-12" value="" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ySH65e0I9kpK-tleo24m-6" target="ySH65e0I9kpK-tleo24m-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="470" y="440" as="sourcePoint" />
+            <mxPoint x="520" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-13" value="Herausforderungen in FL (siehe Buch)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="590" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-14" value="Definition FL (vs. Distributed Learning und P2P)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="505" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-15" value="Mehr Arbeiten zu meinem Thema (FL + IDP)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="530" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-16" value="IDP (Motivation + Ansätze)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="660" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-17" value="DP + FL" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="750" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-18" value="weitere Ansätze zum Schutz von Privacy in FL (Secure Aggregation, ...)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="810" width="120" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-19" value="Referenzen zu den Themen aus Grundlagen" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="450" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-20" value="Klarstellen welche Herausforderungen mich betreffen (non-iid data, ...) und welche nicht (Verfügbarkeit von Clients, ...)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="670" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-21" value="Methodik" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="270" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-22" value="schriftliche Arbeit" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="690" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-23" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ySH65e0I9kpK-tleo24m-3" target="ySH65e0I9kpK-tleo24m-22">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="720" y="520" as="sourcePoint" />
+            <mxPoint x="770" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-24" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ySH65e0I9kpK-tleo24m-21" target="ySH65e0I9kpK-tleo24m-22">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="800" y="260" as="sourcePoint" />
+            <mxPoint x="850" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-25" value="Argumentieren warum ich es so mache" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="930" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-26" value="noch keine Arbeit mit Sampling Raten gefunden" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="930" y="470" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-27" value="lokal vs. global Privacy (Threat) Modell" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="930" y="580" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-28" value="Was sind notwendige Änderungen im Algorithmus? Welche in der Praxis?" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="930" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-29" value="Auswahl und vorbereitung der Datensätze" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-30" value="getestete Modelle" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-31" value="verschiedene Daten / Verteilungen" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="460" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-32" value="Ergebnisse im non-FL Training" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="460" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-33" value="non-FL Training mit FL Datensätzen (für die Vergleichbarkeit)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1870" y="150" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-34" value="Dazu muss tff in Anaconda installiert werden!" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1870" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-35" value="die aktuellen Versionen finde ich auf dem Cluster nicht&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1870" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-36" value="Die normale DP-Version des Trainings muss getestet werden" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2280" y="150" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-37" value="bei CIFAR: zu kleine Budgets schlagen fehl -&amp;gt; dem noch einmal auf den Grund gehen" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2460" y="150" width="120" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-38" value="Hat irgendwas mit der Berechnung der Noise Multiplier zu tun" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2460" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-39" value="alle Experimente ausführen" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2100" y="550" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-40" value="Accuracy Werte mit den verschiedenen Setups" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2100" y="650" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-41" value="Wie wirken sich die Privacy Setups auf die Ergebnisse aus?" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2100" y="740" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-42" value="Wie wirken sich die Datensätze auf die Ergebnisse aus?" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2100" y="840" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-43" value="CIFAR-10 in tff einbinden" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2080" y="150" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-44" value="wie genau wurde CIFAR-100 in tff erstellt? -&amp;gt; LDA" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2080" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-45" value="CNNs" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="450" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-46" value="Warum braucht es Privacy im FL?" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="610" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-47" value="Unterschiede meine Arbeit zu anderen" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="700" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-48" value="Änderungen im Sampling ggü Boenisch" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1490" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ySH65e0I9kpK-tleo24m-49" value="Datasets die non-iid sind iid machen und vergleichen" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="580" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

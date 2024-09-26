@@ -1,0 +1,61 @@
+\begin{chapter}{Structure}
+	\begin{section}{Fundamentals}
+		\textbf{Dieser Teil soll Grundlagen beschreiben (es kann ein B.Sc. Informatik vorausgesetzt werden). Es können Arbeiten referenziert werden, die existieren, aber nicht direkt meine Arbeit beeinflusst haben.}
+		
+		\subsection{Federated Learning}
+		\begin{itemize}
+			\item 
+		\end{itemize}
+		
+		\subsection{Differential Privacy}
+		\begin{itemize}
+			\item zunächst beschreiben was Privacy ist und wo sich DP einordnen lässt? (interactive, anstatt non-interactive wie k-anonymity)
+			\item Attacken auf Privatheit beschreiben, gegen die DP hilft? (wie in der Introduction von \cite{abadi:2016})
+			\item 2006 vorgeschlagen von \cite{dwork:2006}
+			\item 
+		\end{itemize}
+		
+		\subsection{Personalized Differential Privacy}
+		\begin{itemize}
+			\item \cite{alaggan:2016} und \cite{jorgensen:2015} haben Personalized Differential Privacy eingeführt (Alaggan kurz vor Jorgensen)
+		\end{itemize}
+		
+	\end{section}
+	
+	\begin{section}{Related Work}
+		\textbf{Dieser Teil soll Arbeiten referenzieren, die direkt meine Arbeit beeinflusst haben. Dazu zählen auch Arbeiten die die gewählten Parameter rechtfertigen (Verteilung der Budgets, die Budgets selbst, ...)}
+		
+		\subsection{Wahl der Parameter}
+		\subsubsection{Wahl der Privacy-Budgets}
+		\begin{itemize}
+			\item Wahl zunächst wie bei \cite{boenisch:2023}
+			\item \cite{sun:2021} legt Nahe, dass die größe der Budgets um gut trainieren zu können stark von den Datensätzen abhängt
+			\begin{itemize}
+				\item bei mnist gehen sie von $\epsilon > 0.3$ aus während sie für CIFAR10 erst bei $\epsilon > 5$ sagen, dass ein Großteil der Accuracy beibehalten wird
+			\end{itemize}
+		\end{itemize}
+		\subsubsection{Verteilung der einzelnen Privacy-Gruppen}
+		\begin{itemize}
+			\item \cite{alaggan:2016} für individual-relaxed Verteilung der Budgets
+				\begin{itemize}
+					\item auf S.15f beschreiben sie, dass sich die Privacy Einstellungen von Nutzern in 3 Gruppen einteilen lassen (Fundamentalists, Pragmatists und Unconcerned)
+					\item \cite{jensen:2005} wird als Beleg für die 0.34, 0.43, 0.23 Verteilung genannt (individual-strict)
+					\item \cite{acquisti:2005} ist eine Umfrage, die die weniger strikte Verteilung nahelegt (0.54, 0.37, 0.09) (individual-relaxed)
+				\end{itemize}
+		\end{itemize}
+		
+		\subsection{Algorithmus}
+		\begin{itemize}
+			\item \cite{boenisch:2023} für den Sampling Ansatz
+			\item \cite{mcmahan:2016} für FedAvg
+			\item \cite{mcmahan:2018} für FedAvg mit DP
+			\item \cite{aldaghri:2023} für ein anderes Verfahren mit individualisierter DP im Federated Learning?
+			\begin{itemize}
+				\item entspricht eher dem Scale Ansatz von \cite{boenisch:2023}
+				\item nur mit zwei \glqq{}Privacy Niveaus\grqq{} getestet
+			\end{itemize}
+		\end{itemize}
+		
+		\subsection{Ergebnisse anderer Paper auf meinen Datensätzen}
+	\end{section}
+\end{chapter}

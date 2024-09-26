@@ -31,7 +31,7 @@
 %		Erlaubt automatische Trennung von Worten mit Umlauten.
 % --------------------------------------------------------------------------
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+%\usepackage[T1]{fontenc}
 %\usepackage{ae} % "schöneres" ä
 \usepackage{textcomp} % Euro-Zeichen etc.
 \usepackage{lmodern} % schööön
@@ -110,8 +110,8 @@
 
 %% Wichtig für korrekte Zitierweise ------------------------------------------
 
-\usepackage[autocite=inline, sorting=none]{biblatex}
-\bibliography{quellen} % Name der .bib-Datei
+\usepackage[autocite=inline, sorting=none, backend=biber]{biblatex}
+\addbibresource{quellen.bib} % Name der .bib-Datei
 
 \usepackage{csquotes} % Empfohlen, um Zitierten Text richtig darzustellen
 
@@ -177,3 +177,9 @@ linktocpage % Seitenzahlen anstatt Text im Inhaltsverzeichnis verlinken
 % für subfigures
 \usepackage{caption}
 \usepackage{subcaption}
+
+% für Durchschnittszeichen
+\usepackage{wasysym}
+
+% für tabellen
+\usepackage{multirow}

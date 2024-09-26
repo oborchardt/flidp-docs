@@ -2,63 +2,88 @@
 
 \section{Differential Privacy}
 
-Differential privacy is a concept for maintaining privacy when processing sensitive data that was introduced by \textcite{dwork:2006}. In principle, noise is added to query results in order to guarantee that the query result would occur with a similar probability for an \textit{adjacent data set}. The definition of what is considered an adjacent dataset depends on the application at hand, but it generally refers to datasets that differ in the contribution of data from one user. This guarantees that the influence of a single data point on the query result is limited. The similarity of the probabilities is determined by the \textit{privacy budget} $\epsilon$.
+Differential Privacy ist ein Verfahren, dass die Privatheit bei interaktiven Anfragen auf Datenbanken schützen kann. Es wurde in \cite{dwork:2006} formalisiert, nachdem gezeigt wurde, dass Anforderungen an Privatheit aus \cite{dalenius:1977} in der Praxis nicht umsetzbar sind. In \cite{dalenius:1977} war die Philosophie, dass ein Angreifer nichts lernen soll, was er nicht auch ohne Zugriff auf die Datenbank hätte lernen können. \textcite{dwork:2006} zeigt, dass diese Definition aufgrund von Hilfsinformationen, die der Angreifer besitzen kann nicht umsetzbar ist. Stattdessen verfolgt \textcite{dwork:2006} mit der Differential Privacy einen Ansatz, bei dem nicht direkt das Wissen des Angreifers einbezogen wird, sondern ob der Angreifer bei einer bestimmten Anfrage mehr über ein Individuum lernen kann, wenn es in der zugrundeliegenden Datenbank ist.
+
+Formal vergleicht Differential Privacy die Wahrscheinlichkeit ein ähnliches Anfrageergebnis zu erhalten, wenn ein Individuum in einer Datenbank ist oder nicht. Je weniger diese Wahrscheinlichkeiten auseinander liegen, desto weniger kann ein Angreifer durch die Präsenz des Individuums in der Datenbank lernen und desto höher ist die Privacy. Die Definition aus \cite{dwork:2006} ist folgende:
 
 \begin{definition}
-  \emph{\textbf{$\epsilon$-Differential Privacy}} A \textit{randomized mechanism} $\mathcal{M}: \mathcal{D} \rightarrow \mathcal{R}$ with domain $\mathcal{D}$ and range $\mathcal{R}$ satisfies $\epsilon$-differential privacy if for any two adjacent inputs $d$, $d' \in \mathcal{D}$ and for any subset of outputs $S \subseteq \mathcal{R}$ it holds that $$\Pr[\mathcal{M}(d) \in S] \leq e^{\epsilon} \Pr[\mathcal{M}(d') \in S]$$
-
+	\emph{\textbf{$\epsilon$-Differential Privacy}} A \textit{randomized mechanism} $\mathcal{M}: \mathcal{D} \rightarrow \mathcal{R}$ with domain $\mathcal{D}$ and range $\mathcal{R}$ satisfies $\epsilon$-differential privacy if for any two adjacent inputs $d$, $d' \in \mathcal{D}$ and for any subset of outputs $S \subseteq \mathcal{R}$ it holds that $$\Pr[\mathcal{M}(d) \in S] \leq e^{\epsilon} \Pr[\mathcal{M}(d') \in S]$$
 \end{definition}
 
-A less strict, but in practice much used definition also introduces a $\delta \in [0,1]$, which provides a probability that no privacy guarantees are observed. In \textcite{abadi:2016}, differential privacy is defined as follows:
+Hervorzuheben ist hierbei noch, dass die Definition keine Anforderungen an die Datenbanken $d, d'$ macht, außer, dass sie benachbart sind, sich also nur in einem Eintrag unterscheiden.
+
+Eine leicht abgeschwächte Version der Definition fügt einen Parameter $\delta$ hinzu, der die Wahrscheinlichkeit repräsentiert, dass die Privatheitsgarantien nicht eingehalten werden. Er sollte demenstprechend sehr klein gewählt werden.\cite{dwork:2014} 
 
 \begin{definition}
-  \emph{\textbf{$(\epsilon, \delta)$-Differential Privacy}} A \textit{randomized mechanism} $\mathcal{M}: \mathcal{D} \rightarrow \mathcal{R}$ with domain $\mathcal{D}$ and range $\mathcal{R}$ satisfies $(\epsilon, \delta)$-differential privacy if for any two adjacent inputs $d$, $d' \in \mathcal{D}$ and for any subset of outputs $S \subseteq \mathcal{R}$ it holds that $$\Pr[\mathcal{M}(d) \in S] \leq e^{\epsilon} \Pr[\mathcal{M}(d') \in S] + \delta$$
+	\emph{\textbf{$(\epsilon, \delta)$-Differential Privacy}} A \textit{randomized mechanism} $\mathcal{M}: \mathcal{D} \rightarrow \mathcal{R}$ with domain $\mathcal{D}$ and range $\mathcal{R}$ satisfies $(\epsilon, \delta)$-differential privacy if for any two adjacent inputs $d$, $d' \in \mathcal{D}$ and for any subset of outputs $S \subseteq \mathcal{R}$ it holds that $$\Pr[\mathcal{M}(d) \in S] \leq e^{\epsilon} \Pr[\mathcal{M}(d') \in S] + \delta$$
 \end{definition}
 
-Based on this definition, there are further theorems that enable the development of more complex DP algorithms. The first is the \textit{post-processing} theorem. It states that the further processing of data from a DP mechanism cannot further increase the loss of privacy. This property is important, for example, in order to be able to use models trained with privacy guarantees after training without hesitation. In addition, there are composition theorems that provide estimates for the fact that data is processed multiple times.
+Um die Definitionen zu erfüllen wird auf ein Anfrageergebnis von $\mathcal{M}$ Rauschen hinzugefügt. Die Varianz der Verteilung, aus der das Rauschen gezogen wird hängt von der Sensitivität einer Anfrage ab. Sie beschreibt die größtmögliche Veränderung für eine Anfrage, die durch das Hinzufügen oder das Löschen eines Eintrags auftreten kann.\cite{dwork:2006}
 
-Noise is added using various mechanisms. Random values are drawn from distributions for which it has been proven that they fulfil the definition of differential privacy. For numerical queries, there is the Laplace mechanism, which draws the random values from the Laplace distribution, and the Gaussian mechanism, which draws the random values from the normal distribution. The Exponential Mechanism, for example, is suitable for categorical queries. Further details are described by \textcite{chang:2023}.
+\begin{definition}
+	\emph{\textbf{L1-Sensitivity}} For $\mathcal{M}: \mathcal{D} \rightarrow \mathcal{R}^{d}$, the L1-Sensitivity of $\mathcal{M}$ is 
+	$$
+	\Delta \mathcal{M} = \max_{d_1, d_2}{||\mathcal{M}(d_1) - \mathcal{M}(d_2)||}_1
+	$$
+	for all adjacent datasets $d_1$, $d_2$
+\end{definition}
 
-Since the strength of the added noise should be proportional to the greatest possible influence of a data point on the query result, it is also often necessary to limit the value range \parencite[p.31]{chang:2023}. For count queries, this influence is naturally limited to $1$, but if for example an average salary is requested, it is necessary to define the value range of the possible salaries. The greatest possible influence of a data point is called \textit{sensitivity}.
+Das Rauschen wird je nach Anwendungsfall aus verschiedenen Verteilungen gezogen. Beispielsweise gibt es den Laplace- oder den Gauss'schen Mechanismus, um numerische Anfragen, beispielsweise Durchschnitt einer Datenbank, privat zu machen. Für Anfragen, die ein Ergebnis aus einer festgelegten Menge liefern sollen, gibt es den Exponentiellen Mechanismus. Dieser bewertet die potenziellen Ergebnisse anhand einer Bewertungsfunktion.\cite{mcsherry:2007}
 
-Machine learning models can also be regarded as queries on a data set. A DP mechanism can be applied to them at different points in time, as can be seen in \autoref{fig:design_principles_dpml}. Adding noise in the respective steps has various advantages and disadvantages.
+Bei den Mechanismen ist variiert die Definition der Sensitivität leicht, beispielsweise nutzt der Gauss'sche Mechanismus die $\ell_2$-Norm anstatt der $\ell_1$-Norm, die Intuition, dass es um die maximale Abweichung im Anfrageergebnis durch ein Individuum geht, bleibt jedoch immer erhalten. Darüber hinaus erfüllt der Laplace Mechanismus $\epsilon$-Differential Privacy, der Gauss'sche Mechanismus jedoch nur $(\epsilon, \delta)$-Differential Privacy.\cite[p.261ff]{dwork:2014}
 
-\begin{figure}[tb]
-  \centering
-  \includegraphics[width=0.7\textwidth]{Bilder/design_principles_dpml.png}
-  \caption{Design principles of differentially private ML from \textcite{chang:2023}}
-  \label{fig:design_principles_dpml}
-\end{figure}
+Mit den bisher erwähnten Methoden kann die Privatheit einzelner Anfragen gewährleistet werden. Wenn die gleichen Anfragen aber zum Beispiel mehrfach gestellt werden muss auch das Niveau der Privatheit abnehmen, da der Durchschnitt der einzelnen Anfragen irgendwann gegen den echten Wert konvergiert.\cite[p.42]{dwork:2014} Ein großer Vorteil von Differential Privacy ist, dass sich diese Verringerung der Privatheit abschätzen lässt. Dafür gibt es einige Kompositionstheoreme:
 
-With \textit{input pertubation}, noise is added to the training data before training. This is easy to implement and versatile, but also requires a larger amount of noise as the data usually has a high \textit{sensitivity}.
-
-Using \textit{algorithm pertubation}, the models are trained with unchanged data. In iterative algorithms, the intermediate results can be distorted in the individual steps. \textcite{abadi:2016}, for example, add noise to the gradients.
-
-\textit{Output pertubation} adds noise to the outputs generated by the model. However, the method is not applicable if the model is to be published, as the number of requests to the model cannot be predicted and therefore no privacy guarantees are possible.
-
-With \textit{Objective pertubation}, noise is added to the \textit{Objective function} for which the model is optimised.
-
-The Differentially Private-Stochastic Gradient Descent (DP-SGD) presented by \textcite{abadi:2016} is now a widely used algorithm for training neural networks, on which many other works are based. It is based on the \textit{Stochastic Gradient Descent} (SGD), an iterative optimisation algorithm that is used in various machine learning methods. Compared to the SGD, the DP-SGD has some additional hyperparameters to fulfil the privacy guarantees:
-
+% Kompositionstheoreme einfügen
 \begin{itemize}
-  \item \textbf{Noise scale $\sigma$} A factor by which the noise of the DP mechanism is controlled. 
-  \item \textbf{Lot size $L$} The number of data points that are included in a gradient update.
-  \item \textbf{Gradient norm bound $C$} All calculated gradients are clipped so that they have a maximum $\ell_2$ norm of $C$. This is necessary because noise with the Gaussian mechanism is added in the following and the sensitivity of vectors is defined via the $\ell_2$ norm. 
+	\item Group Privacy
+	\item Sequential Composition
+	\item Parallel Composition
+	\item Complex Composition Theorem(?)
+	\item Strong Composition Theorem(?)\cite{dwork:2010}
 \end{itemize}
 
-During training, these parameters affect how quickly a desired $(\epsilon, \delta)$ privacy budget is exhausted. In their results, \textcite{abadi:2016} show that the choice of these parameters (in addition to the parameters from the normal SGD) also has an effect on the accuracy of the model under a fixed privacy budget.
+Darüber hinaus können Ergebnisse, die durch einen Mechanismus erhalten wurden der Differential Privacy erfüllt, weiterverarbeitet werden, ohne dass die Privatheit weiter kompromittiert wird (\textit{post-processing}).\cite{dwork:2014}
 
-In addition to the specific algorithm, \textcite{abadi:2016} developed the \textit{Moments Accountant}, a method for estimating the loss of privacy during training, which is asympotically much more accurate than classical estimates using composition theorems. They prove this benefit in their work through empirical experiments.
+\subsection{Differential Privacy in Machine Learning}
+Es gibt verschiedene Punkte, an denen Differential Privacy im Machine Learning ansetzen kann um die Privatheit zu gewährleisten. Jeder Punkt hat verschiedene Vor- und Nachteile, die ich im Folgenden umreiße. Eine Übersicht dazu ist in \autoref{fig:design_principles_dpml} zu sehen.
 
-In their paper, \textcite{mcmahan:2018} develop a variant of the \textit{Federated Averaging} (FedAvg) algorithm \parencite{mcmahan:2016} based on the work of \textcite{abadi:2016}, which ensures DP guarantees for users. Their goal is to train an LSTM model for \textit{Next-Word Prediction} on mobile devices. They transfer the definition of adjacent datasets to federated learning by defining the neighbourhood by adding or removing all data of a user. In their experiments, they show that the accuracy of the model can be maintained under DP guarantees, but at a higher computational cost.
+\begin{figure}[tb]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Bilder/design_principles_dpml.png}
+	\caption{Design principles of differentially private ML from \textcite{chang:2023}}
+	\label{fig:design_principles_dpml}
+\end{figure}
 
-The main changes compared to the non-private FedAvg are a limited sensitivity at the clients (by clipping) and at the server (by estimators of the aggregation with a limited range of values). In addition, the server adds noise to the aggregated update based on sensitivity.
+Bei der \textit{Input Pertubation} wird den Trainingsdaten Rauschen hinzugefügt, bevor das Modell mit ihnen trainiert wird. Dieser Ansatz ist ohne weitere Änderungen am Trainingsalgorithmus oder am Modell anwendbar, da der Trainingsalgorithmus dann Daten verarbeitet, die bereits differential private sind und es damit einem \textit{post-processing} entspricht. Das Modell kann danach also problemlos weiterverwendet werden. Ein großer Nachteil ist aber, dass die Anfragen auf den Trainingsdaten im Allgemeinen eine hohe Sensitivität haben und daher viel Rauschen hinzugefügt werden muss.
+
+Die \textit{Algorithm Pertubation} ist das am weitesten verbreitete Verfahren und liegt großen Bibliotheken wie Opacus\cite{yousefpour:2021} und TensorFlow Privacy\cite{tfprivacy} zugrunde. Es kann für iterative Optimierungsverfahren wie Gradient Descent oder die Power Iteration Methode bei einer Principal Component Analysis (PCA) genutzt werden. 
+
+Bei der Anwendung dieses Verfahrens im Gradient Descent wird Differential Privacy auf die Updates der Gradienten angewendet, das heißt diese werden für gewöhnlich auf eine bestimmte Vektornorm gestutzt und dann wird basierend darauf Rauschen addiert. In der Regel muss hierbei deutlich weniger Rauschen hinzugefügt werden, als bei der \textit{Input Pertubation}.\cite{chang:2023} Der \textit{Privacy Loss}, der durch einen Trainingsdurchlauf anfällt, kann mithilfe von Kompositionstheoremen bestimmt werden. Für die Abschätzung wurde das \textit{Strong Composition Theorem}\cite{dwork:2010} genutzt, allerdings konnten \textcite{abadi:2016} mit dem \textit{Moments Accountant} eine deutlich genauere Abschätzung für das Training von Neuronalen Netzen liefern. So können Neuronale Netze mit dem Verfahren bereits mit kleinen Privacy Budgets trainiert werden. Das trainierte Modell kann ebenfalls veröffentlicht werden, da dessen Gewichte die Anforderungen der Differential Privacy erfüllen.
+
+\textit{Objective Pertubation} verändert die Zielfunktion des Trainings. Statt auf die Daten wird während des Trainings Rauschen auf diese Funktion gelegt.
+
+Bei der \textit{Output Pertubation} wird ein nicht-privates Modell trainiert und nur die Ausgabe des Modells verrauscht. Dieses Verfahren hat den großen Nachteil, dass es nicht anwendbar ist, wenn das Modell veröffentlicht werden soll.
+
+\subsection{Individualized Differential Privacy}
+
+
 
 \section{Federated Learning}
 
-Federated Learning (FL) ist ein Optimierungsverfahren, bei dem einzelne Clients gemeinsam ein Modell trainieren, ohne dabei ihre eigenen Trainingsdaten mit anderen zu teilen. Dabei initialisiert ein Server ein Modell und seine Parameter. Danach wählt er eine Menge an Clients aus, mit denen in dieser Runde das Modell trainiert werden soll und schickt das Modell an diese. Die Clients optimieren das Modell auf ihren eigenen Daten und schicken das optimierte Update an den Server zurück. Dieser aggregiert alle Updates und aktualisiert damit sein Modell. Das ganze Verfahren wird über mehrere Runden wiederholt. 
+Federated Learning (FL) ist ein Optimierungsverfahren, bei dem einzelne Clients gemeinsam ein Modell trainieren, ohne dabei ihre eigenen Trainingsdaten mit anderen zu teilen. Dabei initialisiert ein Server ein Modell und seine Parameter. Danach wählt er eine Menge an Clients aus, mit denen in dieser Runde das Modell trainiert werden soll und schickt das Modell an diese. Die Clients optimieren das Modell auf ihren eigenen Daten und schicken das Update an den Server zurück. Dieser aggregiert alle Updates und aktualisiert damit sein Modell. Das ganze Verfahren wird über mehrere Runden wiederholt. 
 
-Die lokale Optimierung und die Aggregation der Updates kann je nach Algorithmus variieren. FedAvg lässt die Clients mehrere Epochen auf ihren eigenen Daten trainieren und gewichtet die Updates bei der Aggregation nach der Menge der Daten, die die einzelnen Clients haben. FedSGD ist ein spezialfall von FedAvg, bei dem die Clients nur für einen Schritt trainieren und das Update dann zurückschicken \parencite{mcmahan:2016}. 
+Die lokale Optimierung und die Aggregation der Updates kann je nach Algorithmus variieren. FedAvg lässt die Clients mehrere Epochen auf ihren eigenen Daten trainieren und gewichtet die Updates bei der Aggregation nach der Menge der Daten, die die einzelnen Clients haben. FedSGD ist ein spezialfall von FedAvg, bei dem die Clients nur für einen Schritt trainieren und das Update dann zurückschicken \parencite{mcmahan:2016}.
+
+\begin{itemize}
+	\item cross-device vs cross-silo vs fully distributed
+	\item availability of clients (Vorraussetzungen, wie Batterie, Netz, ...)
+	\item Non-IID Data
+	\begin{itemize}
+		\item within a client: can be mitigated by shuffling the datapoints (p.18)
+		\item among clients: feature distribution skew, label distribution skew
+	\end{itemize}
+\end{itemize}
 
 Das verteilte Training kann vor allem zwei Probleme mit sich bringen. Zunächst kann der Overhead für die Kommunikation sehr groß werden, gerade wenn über viele Runden hinweg trainiert wird. Zum anderen kann nicht angenommen werden, dass die Daten über die Clients hinweg IID sind, was die Konvergenz der Algorithmen beeinträchtigen kann. \textcite{karimireddy:2020} versuchen diesem Problem zu begegnen, indem sie in ihrem Algorithmus die generelle Richtung, in die die Clients optimieren, an die Clients schicken und diese sie in ihre Updates einfließen lassen.
 

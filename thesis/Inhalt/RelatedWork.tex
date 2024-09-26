@@ -1,5 +1,27 @@
 \chapter{Related work}
 
+In diesem Kapitel beschreibe ich den Stand der Forschung in den für meine Arbeit relevanten Forschungsgebieten. Da sie mehrere Problemfelder umfasst, werde ich das Kapitel im folgenden in drei Teile unterteilen. In \autoref{sec:rw-fl} beschreibe ich den Stand der Forschung in Bezug auf Fragen des Federated Learning, beispielsweise wie mit unterschiedlichen Verteilungen in den Trainingsdatensätzen umgegangen werden kann. In \autoref{sec:rw-idp}
+In \autoref{sec:rw-flidp}
+
+\section{Federated Learning}\label{sec:rw-fl}
+
+Die Forschung zu Federated Learning, die abgesehen von Differential Privacy für meine Arbeit relevant ist, beschäftigt sich damit wie die Konvergenz von Federated Learning Algorithmen verbessert werden kann. Dabei geht es vor allem um die Behandlung von unterschiedlich verteilten Datensätzen, aber auch um den Ausfall von Clients und die Verringerung der Kommunikationskosten.
+
+Die von \textcite{mcmahan:2016} vorgestellten Algorithmen \texttt{FedSGD} und vor allem \texttt{FedAvg} sind die de facto Standardalgorithmen für das Federated Learning. \textcite{karimireddy:2020} stellen einen weiteren Algorithmus vor, \texttt{SCAFFOLD}, der versucht den \textit{client-drift} zu reduzieren, indem die Varianz der Updates durch \textit{control-variates} reduziert wird. \textit{client-drift} beschreibt das Verhalten, dass sich die einzelnen Clients jeweils zu ihrem lokalen Optimum bewegen und der Server zu dem Durchschnitt der Optima. Die Differenz zwischen dem Durchschnitt und dem tatsächlichen globalen Optimum muss bei \texttt{FedAvg} durch kleine Schritte gering gehalten werden wodurch die Konvergenz verlangsamt wird \parencite[p.4]{karimireddy:2020}.
+
+\begin{itemize}
+	\item Hyperparameter Tuning
+\end{itemize}
+
+
+\section{Individualized Differential Privacy}\label{sec:rw-idp}
+
+\section{Federated Learning with Individualized Differential Privacy}\label{sec:rw-flidp}
+
+\begin{itemize}
+	\item Client-level vs record-level dp
+\end{itemize}
+
 \textcite{mcmahan:2018} entwickeln eine Version des FedAvg-Algorithmus, die Differential Privacy Garantien erfüllt, um lokale Language Modelle zu trainieren. Darin begrenzen sie die $\ell_2$-Norm der Gradienten der Clients und können so die Sensitivität der Aggregation der Clients abschätzen. Einen ähnlichen Ansatz liefern \textcite{geyer:2017}, allerdings berechnen sie die Sensitivität der einzelnen Gradienten basierend auf der Median-Norm.
 
 \textcite{boenisch:2023} untersuchen in ihrer Arbeit zwei Ansätze für das Training mit individuellen Privacy Budgets. Bei einem wird das Rauschen, das auf die Gradienten addiert wird, mit individuellen \textit{noise multipliers} an die individuellen Budgets angepasst. Bei dem anderen Ansatz wird mit individuellen \textit{sampling rates} gearbeitet. Beide Ansätze werden mit verschiedenen Budgets und verschiedenen Verteilungen der Budgets evaluiert. Dabei liefert der zweite Ansatz bessere Ergebnisse.
@@ -13,3 +35,18 @@
 \textcite{shen:2023} entwickeln in ihrer Arbeit ebenfalls einen Algorithmus, der lokale DP bei individuellen Privacy Budgets erfüllt. Ihre Definition von Privacy ist aus \textcite{chen:2016}. Bei dieser wird ein Bereich $\tau$ eingeführt, für dessen Werte dann $\epsilon$-DP erfüllt wird. Sie evaluieren ihren Ansatz und vergleichen ihn mit FedAvg \parencite{mcmahan:2016} als oberer Schranke und PLU-FedOA aus \textcite{yang:2021}. Hier liegt die Performance ihres Algorithmus unter, aber nahe an FedAvg und über PLU-FedOA.
 
 \textcite{noble:2023} verweisen auf das Problem von heterogenen Daten im Federated Learning. Sie entwickeln einen Algorithmus, der in ihren Experimenten FedAvg schlägt, wenn die Daten der Clients heterogener werden. Als Basis nutzen sie SCAFFOLD, einen Algorithmus, die Gradienten mit einer durchschnittlichen Richtung, in die alle Clients optimieren kombiniert. Als Angreifermodell nutzen sie den "honest-but-curious" Server (lokale DP-Garantien). 
+
+\begin{itemize}
+	\item Konvergenz des FL verbessern durch Algorithmen
+	\begin{itemize}
+		\item Varianz reduzieren (SCAFFOLD), Momente nutzen, ... (sehr viele Ansätze werden in \textcite[p.26ff]{kairouz:2021} erwähnt)
+	\end{itemize}
+	\item Ansätze für personalisierte Modelle (bei non-iid Datensätzen) \parencite[p.28ff]{kairouz:2021} bzw. auch die Idee Globale Modelle durch Kontext anzureichern um bessere Vorhersagen für einzelne Nutzer zu bekommen
+	\item Übertragung von non-FL Verfahren auf FL und die Probleme die dabei entstehen (z.B. beim Hyperparametertuning) (p.30ff)
+	\item Kompression / Effizienzsteigerung von FL (p.32ff.)
+	\item sehr interessanter Absatz zu Kompatibilität von DP und Kompressionstechniken (p.33)
+	\item DP in FL (p. 44ff), vor allem die Referenzen zu Hybrid DP tun das was ich machen will aber anders
+	\item Kapitel 4.3 (p.48 ff) für mein Szenario mit einem vertrauenswürdigen Server
+	\item p.50 hat vieles was bei mir in Future Work kann
+	\item p.54 hat ganz klaren Vergleich zwischen Local und Central DP!
+\end{itemize}
