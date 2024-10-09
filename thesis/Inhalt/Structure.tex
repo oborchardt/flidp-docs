@@ -2,22 +2,54 @@
 	\begin{section}{Fundamentals}
 		\textbf{Dieser Teil soll Grundlagen beschreiben (es kann ein B.Sc. Informatik vorausgesetzt werden). Es können Arbeiten referenziert werden, die existieren, aber nicht direkt meine Arbeit beeinflusst haben.}
 		
-		\subsection{Federated Learning}
-		\begin{itemize}
-			\item 
-		\end{itemize}
-		
 		\subsection{Differential Privacy}
 		\begin{itemize}
 			\item zunächst beschreiben was Privacy ist und wo sich DP einordnen lässt? (interactive, anstatt non-interactive wie k-anonymity)
+			\item Randomized Response als anschauliches Beispiel?
 			\item Attacken auf Privatheit beschreiben, gegen die DP hilft? (wie in der Introduction von \cite{abadi:2016})
 			\item 2006 vorgeschlagen von \cite{dwork:2006}
-			\item 
+			\item Exponential Mechanism vs andere Mechanismen -> mit ihm kann man alle DP-Mechanismen beschreiben? (\url{https://en.wikipedia.org/wiki/Exponential_mechanism})
+			\item Kompositionstheoreme
+		\end{itemize}
+		
+		\subsection{DP in der Praxis?}
+		\begin{itemize}
+			\item Google RAPPOR und Apple DP
+		\end{itemize}
+		
+		\subsection{DP in ML}
+		\begin{itemize}
+			\item Warum nutzt man DP, was ist die Motivation -> Verteidigung gegen Model Inversion Attacks(?), ...
+			\item was sind Variablen beim Training, die einen Einfluss auf das benötigte Privacy Budget haben? (Da kann dann eine Brücke zum FL geschlagen werden)
 		\end{itemize}
 		
 		\subsection{Personalized Differential Privacy}
 		\begin{itemize}
 			\item \cite{alaggan:2016} und \cite{jorgensen:2015} haben Personalized Differential Privacy eingeführt (Alaggan kurz vor Jorgensen)
+			\item Lucas nach dem Beweis von das Sample DP erfüllt in \cite{jorgensen:2015} fragen
+			\item Sample Mechanismus aus \cite{jorgensen:2015} beschreiben und evtl mit \cite{boenisch:2023} vergleichen
+			\begin{itemize}
+				\item evtl auf Threshold $t$ eingehen und dabei auf die Trade-Off zwischen dem ausschließen von Daten durch einen geringen Threshold vs. dem Nutzen aller Daten aber dafür einem höheren Rauschen durch den DP-Algorithmus eingehen (bei höherem $t$)?
+			\end{itemize}
+		\end{itemize}
+		
+		\subsection{Federated Learning}
+		\begin{itemize}
+			\item Genereller Ablauf (Server initialisiert Parameter, schickt die an Clients, ...)
+			\item \texttt{FedAvg} und \texttt{FedSGD} als Standardalgorithmen
+			\item cross-silo vs fully distributed (unterschiedliche Szenarien bzw Clients, zb Forschungsgruppen / datacenter vs Smartphone User)
+			\item besondere Herausforderungen im FL (siehe vor allem \cite{kairouz:2021})
+			\begin{itemize}
+				\item Non-iid Data (und dessen mögliche Formen)
+				\item Verfügbarkeit von Clients
+				\item Menge der über das Netzwerk zu transportierenden Daten
+				\item gute Debugging / Monitoring-Lösungen
+			\end{itemize}
+			\item Privacy model in Federated Learning
+			\begin{itemize}
+				\item global vs lokal
+				\item record-level vs user-level
+			\end{itemize}
 		\end{itemize}
 		
 	\end{section}
@@ -57,5 +89,9 @@
 		\end{itemize}
 		
 		\subsection{Ergebnisse anderer Paper auf meinen Datensätzen}
+		
+		\begin{itemize}
+			\item cifar-10, mnist \cite{sun:2021}
+		\end{itemize}
 	\end{section}
 \end{chapter}

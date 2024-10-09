@@ -1,7 +1,16 @@
 \chapter{Related work}
 
-In diesem Kapitel beschreibe ich den Stand der Forschung in den für meine Arbeit relevanten Forschungsgebieten. Da sie mehrere Problemfelder umfasst, werde ich das Kapitel im folgenden in drei Teile unterteilen. In \autoref{sec:rw-fl} beschreibe ich den Stand der Forschung in Bezug auf Fragen des Federated Learning, beispielsweise wie mit unterschiedlichen Verteilungen in den Trainingsdatensätzen umgegangen werden kann. In \autoref{sec:rw-idp}
+In diesem Kapitel beschreibe ich den Stand der Forschung in den für meine Arbeit relevanten Forschungsgebieten. Da sie mehrere Problemfelder umfasst, werde ich das Kapitel im folgenden in drei Teile unterteilen. In \autoref{sec:rw-fl} beschreibe ich den Stand der Forschung in Bezug auf Fragen des Federated Learning, beispielsweise wie mit unterschiedlichen Verteilungen in den Trainingsdatensätzen umgegangen werden kann. In \autoref{sec:rw-idp-ml}
 In \autoref{sec:rw-flidp}
+
+\section{Individualized Differential Privacy in Machine Learning}\label{sec:rw-idp-ml}
+
+\textcite{boenisch:2023} untersuchen in ihrer Arbeit das Training mit individuellen Privacy Budgets. Sie stellen zwei Verfahren vor: \textbf{SAMPLE} und \textbf{SCALE}. \textbf{SAMPLE} ist basiert auf \textcite{jorgensen:2015} und erreicht die individuellen Budgets indem Datenpunkte im Training mit unterschiedlichen Wahrscheinlichkeiten gezogen werden. Allerdings werden die Wahrscheinlichkeiten anders berechnet als bei \textcite{jorgensen:2015}. \textbf{SCALE} ist inspiriert von \textcite{alaggan:2016}. Anders als bei deren \textit{Stretching Mechanism} werden allerdings nicht die Datenpunkte selbst skaliert, sondern das addierte Rauschen. 
+
+Beide Ansätze werden mit verschiedenen Budgets und Verteilungen der Budgets evaluiert. Sie teilen die Trainingsdaten in drei Gruppen ein (niedriges, mittleres und hohe Privacy Budget). Darüber hinaus testen sie zwei Szenarien, bei denen sich die Größen der drei Gruppen unterscheiden. Die erste Verteilung lässt mehr Trainingspunkte mit hohem und mittleren Budget zu ($34\%$, $43\%$, $23\%$), die andere weniger ($54\%$, $37\%$, $9\%$). Wie bei \textcite{jorgensen:2015} sind die Ergebnisse im ersten Fall besser und werden im zweiten Fall schlechter. In der Evaluation schneidet \textbf{SAMPLE} in allen Experimenten bis auf einem etwas besser ab.
+
+% PATE bzw Individualized PATE hinzunehmen?
+Auch für PATE haben \textcite{boenisch:2023b} eine individualisierte Version entwickelt, IPATE. Sie erforschen zwei unterschiedliche Ansätze: \textit{upsampling} und \textit{weighting}. Der erste dupliziert Datenpunkte in Abhängigkeit von ihrem Privacy-Budget. Damit ist die Disjunktheit der Daten der einzelnen \textit{Teacher Models} nicht mehr gegeben. Mit \textit{weighting} gewichten sie die Stimmen der unterschiedlichen \textit{Teacher Models} unterschiedlich. Sie analysieren die Privacy-Kosten von PATE und IPATE und können mit dem individualisierten Ansatz deutlich mehr Trainingsdaten für das \textit{Student Model} klassifizieren bis die Privacy-Budgets aufgebraucht sind. Außerdem zeigen sie, dass die zusätzlichen Trainingsdaten einen positiven Effekt auf die Genauigkeit des \textit{Student Models} hat.
 
 \section{Federated Learning}\label{sec:rw-fl}
 
@@ -13,9 +22,6 @@ Die von \textcite{mcmahan:2016} vorgestellten Algorithmen \texttt{FedSGD} und vo
 	\item Hyperparameter Tuning
 \end{itemize}
 
-
-\section{Individualized Differential Privacy}\label{sec:rw-idp}
-
 \section{Federated Learning with Individualized Differential Privacy}\label{sec:rw-flidp}
 
 \begin{itemize}
@@ -23,8 +29,6 @@ Die von \textcite{mcmahan:2016} vorgestellten Algorithmen \texttt{FedSGD} und vo
 \end{itemize}
 
 \textcite{mcmahan:2018} entwickeln eine Version des FedAvg-Algorithmus, die Differential Privacy Garantien erfüllt, um lokale Language Modelle zu trainieren. Darin begrenzen sie die $\ell_2$-Norm der Gradienten der Clients und können so die Sensitivität der Aggregation der Clients abschätzen. Einen ähnlichen Ansatz liefern \textcite{geyer:2017}, allerdings berechnen sie die Sensitivität der einzelnen Gradienten basierend auf der Median-Norm.
-
-\textcite{boenisch:2023} untersuchen in ihrer Arbeit zwei Ansätze für das Training mit individuellen Privacy Budgets. Bei einem wird das Rauschen, das auf die Gradienten addiert wird, mit individuellen \textit{noise multipliers} an die individuellen Budgets angepasst. Bei dem anderen Ansatz wird mit individuellen \textit{sampling rates} gearbeitet. Beide Ansätze werden mit verschiedenen Budgets und verschiedenen Verteilungen der Budgets evaluiert. Dabei liefert der zweite Ansatz bessere Ergebnisse.
 
 \textcite{aldaghri:2023} stellen in ihrer Arbeit einen Algorithmus zum Training mit individuellen Privacy Budgets im Federated Learning vor. Im ersten Schritt leiten sie einen Algorithmus für lineare Regressionen her, im zweiten einen darauf basierenden generellen Algorithmus. Ihr Algorithmus arbeitet mit individuellen \textit{noise multipliers} und einer uniformen \textit{sampling rate}. Anders als \citeauthor{boenisch:2023} evaluieren sie ihren Algorithmus nur mit zwei Abstufungen von Privacy Budgets, nämlich privaten und nicht privaten Clients.
 
