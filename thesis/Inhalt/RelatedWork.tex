@@ -5,22 +5,81 @@ In \autoref{sec:rw-flidp}
 
 \section{Individualized Differential Privacy in Machine Learning}\label{sec:rw-idp-ml}
 
+% noch einmal kurz beschreiben warum wir das betrachten?
+Wie in \autoref{label}
+
 \textcite{boenisch:2023} untersuchen in ihrer Arbeit das Training mit individuellen Privacy Budgets. Sie stellen zwei Verfahren vor: \textbf{SAMPLE} und \textbf{SCALE}. \textbf{SAMPLE} ist basiert auf \textcite{jorgensen:2015} und erreicht die individuellen Budgets indem Datenpunkte im Training mit unterschiedlichen Wahrscheinlichkeiten gezogen werden. Allerdings werden die Wahrscheinlichkeiten anders berechnet als bei \textcite{jorgensen:2015}. \textbf{SCALE} ist inspiriert von \textcite{alaggan:2016}. Anders als bei deren \textit{Stretching Mechanism} werden allerdings nicht die Datenpunkte selbst skaliert, sondern das addierte Rauschen. 
 
 Beide Ansätze werden mit verschiedenen Budgets und Verteilungen der Budgets evaluiert. Sie teilen die Trainingsdaten in drei Gruppen ein (niedriges, mittleres und hohe Privacy Budget). Darüber hinaus testen sie zwei Szenarien, bei denen sich die Größen der drei Gruppen unterscheiden. Die erste Verteilung lässt mehr Trainingspunkte mit hohem und mittleren Budget zu ($34\%$, $43\%$, $23\%$), die andere weniger ($54\%$, $37\%$, $9\%$). Wie bei \textcite{jorgensen:2015} sind die Ergebnisse im ersten Fall besser und werden im zweiten Fall schlechter. In der Evaluation schneidet \textbf{SAMPLE} in allen Experimenten bis auf einem etwas besser ab.
 
-% PATE bzw Individualized PATE hinzunehmen?
 Auch für PATE haben \textcite{boenisch:2023b} eine individualisierte Version entwickelt, IPATE. Sie erforschen zwei unterschiedliche Ansätze: \textit{upsampling} und \textit{weighting}. Der erste dupliziert Datenpunkte in Abhängigkeit von ihrem Privacy-Budget. Damit ist die Disjunktheit der Daten der einzelnen \textit{Teacher Models} nicht mehr gegeben. Mit \textit{weighting} gewichten sie die Stimmen der unterschiedlichen \textit{Teacher Models} unterschiedlich. Sie analysieren die Privacy-Kosten von PATE und IPATE und können mit dem individualisierten Ansatz deutlich mehr Trainingsdaten für das \textit{Student Model} klassifizieren bis die Privacy-Budgets aufgebraucht sind. Außerdem zeigen sie, dass die zusätzlichen Trainingsdaten einen positiven Effekt auf die Genauigkeit des \textit{Student Models} hat.
 
+% beschreiben woher die Budgets kommen (diese 2 Studien)
+Die Privacy-Budgets und die Einteilung der Daten in die drei Gruppen basieren auf zwei Studien aus dem Jahr 2005\cite{jensen:2005, acquisti:2005}. Beide Studien untersuchen die Privacy-Präferenzen im Internet. Die Einteilung in drei Gruppen wird auch von älteren Studien zu dem Thema gemacht, ist also eine gängige Einteilung\cite{westin:1998}.
+
+Bei \textcite{jensen:2005} erfolgt die Einteilung von Befragten basierend auf fünf Fragen. Beantworten sie vier davon mit einem Fokus auf Privatheit, kommen sie in die strengste der drei Gruppen. Beantworten sie keine der Fragen dementsprechend werden sie der laxesten Gruppe zugeordnet. Der Rest kommt in die mittlere Gruppe. So kommen sie auf die Verteilung von ($34\%$, $43\%$, $23\%$) (von strenger zu weniger streng). 
+
+Sie merken an, dass Befragte bei ihren Antworten ihre Sorge um die Privatheit und ihren Willen zu handeln stärker zum Ausdruck bringen, als sie tatsächlich sind. Diese These untermauern sie, indem sie Fragen ob eine Person sich mit Technologien für das Internet-Tracking (Cookies, Web-Bugs, ...) auskennt. Zur Überprüfung haben sie für die Themen Wissensfragen vorbereitet. Nur ein kleiner Teil von den Personen, die angegeben haben sich mit dem Thema auszukennen konnten die Wissensfragen richtig beantworten.
+
+\textcite{acquisti:2005} haben ebenfalls eine Umfrage dazu durchgeführt und bemerken ebenfalls eine Diskrepanz zwischen der Angegebenen Sorge um Privatheit und bisher unternommenen Schritten um diese zu verbessern. Diese Unterschiede in beiden Studien legen Nahe, dass es wichtig ist, den Schutz der Privatheit einfach zu ermöglichen und so zugänglich zu halten, dass die Endnutzer sich nicht weiter mit den Details auskennen müssen. \textcite{jorgensen:2015} plädieren ebenfalls dafür, merken aber an, dass die genaue Wahl eines Privacy-Budgets für ein gegebenes System ein offenes Problem ist.
+
+% noble:2023 Seite 2 für mehr related work!
 \section{Federated Learning}\label{sec:rw-fl}
 
-Die Forschung zu Federated Learning, die abgesehen von Differential Privacy für meine Arbeit relevant ist, beschäftigt sich damit wie die Konvergenz von Federated Learning Algorithmen verbessert werden kann. Dabei geht es vor allem um die Behandlung von unterschiedlich verteilten Datensätzen, aber auch um den Ausfall von Clients und die Verringerung der Kommunikationskosten.
+Wie in \autoref{fund-fl} angedeutet, sind \texttt{FedSGD} und vor allem \texttt{FedAvg} die Standardalgorithmen im Federated Learning. Beide sind relativ simpel und in Federated Learning Frameworks wie \textit{tensorflow federated} und \textit{flower} enthalten. In \autoref{alg:fedavg} ist der Pseudocode für \texttt{FedAvg} aus \cite{mcmahan:2016} dargestellt. 
 
-Die von \textcite{mcmahan:2016} vorgestellten Algorithmen \texttt{FedSGD} und vor allem \texttt{FedAvg} sind die de facto Standardalgorithmen für das Federated Learning. \textcite{karimireddy:2020} stellen einen weiteren Algorithmus vor, \texttt{SCAFFOLD}, der versucht den \textit{client-drift} zu reduzieren, indem die Varianz der Updates durch \textit{control-variates} reduziert wird. \textit{client-drift} beschreibt das Verhalten, dass sich die einzelnen Clients jeweils zu ihrem lokalen Optimum bewegen und der Server zu dem Durchschnitt der Optima. Die Differenz zwischen dem Durchschnitt und dem tatsächlichen globalen Optimum muss bei \texttt{FedAvg} durch kleine Schritte gering gehalten werden wodurch die Konvergenz verlangsamt wird \parencite[p.4]{karimireddy:2020}.
 
-\begin{itemize}
-	\item Hyperparameter Tuning
-\end{itemize}
+\begin{algorithm}[H]\label{alg:fedavg}
+	\caption{FederatedAveraging (\texttt{FedAvg})}
+	\SetKwFunction{ClientUpdate}{ClientUpdate}
+	\SetKwFunction{Server}{Server}
+	\SetKwProg{Fn}{Function}{:}{}
+	\Fn{\Server{}}{
+		initialize $w_0$; \\
+		\For{each round $t = 1, 2, \dots$}{
+			$S_t \leftarrow$ random set of $\max(C \cdot K, 1)$ clients\;
+			\ForEach{client $k \in S_t$ \textbf{in parallel}}{
+				$w_{t+1}^{k} \leftarrow \texttt{ClientUpdate}(k, w_t)$\;
+			}
+			$w_{t+1} \leftarrow \sum_{k=1}^K \frac{n_k}{n} w_{t+1}^{k}$\;
+		}
+	}
+	\Fn{\ClientUpdate{$k, w$}}{
+		\For{each local epoch $i$ from $1$ to $E$}{
+			batches $\leftarrow$ data $P_k$ split into batches of size $B$\;
+			\For{each batch $b \in$ batches}{
+				$w \leftarrow w - \eta \nabla \ell(w; b)$\;
+			}
+		}
+		\KwRet $w$ to server\;
+	}
+	
+\end{algorithm}
+
+Auch wenn sich der Algorithmus in der Praxis bewährt hat\cite{hard:2018, ramaswamy:2020}, hat er Probleme bei nicht-gleichverteilten Daten. Um die Konvergenz unter solchen Bedingungen zu beschleunigen haben \textcite{karimireddy:2020} und \textcite{li:2020} abgewandelte Algorithmen entworfen.
+
+\textcite{karimireddy:2020} stellen einen weiteren Algorithmus vor, \texttt{SCAFFOLD}, der versucht den \textit{client-drift} zu reduzieren, indem die Varianz der Updates durch \textit{control-variates} reduziert wird. \textit{client-drift} beschreibt das Verhalten, dass sich die einzelnen Clients jeweils zu ihrem lokalen Optimum bewegen und der Server zu dem Durchschnitt der Optima. Die Differenz zwischen dem Durchschnitt und dem tatsächlichen globalen Optimum muss bei \texttt{FedAvg} durch kleine Schritte gering gehalten werden wodurch die Konvergenz verlangsamt wird \parencite[p.4]{karimireddy:2020}.
+
+\textcite{li:2020} erlauben den Clients in ihrem Algorithmus \texttt{FedProx} weniger exakte Updates zu erzeugen und fügen der lokalen Verlustfunktion einen \textit{proximal term} hinzu, der gewährleisten soll, dass die lokalen Parameter nicht zu stark von dem globalen Modell abweichen. Der Grund für das Zulassen von weniger exakten Updates ist, dass so weniger potente Clients weniger trainieren können um zu verhindern, dass ihre Ergebnisse aufgrund von Zeitüberschreitungen verworfen werden.
+
+Ein weiteres Problem ist die Wahl geeigneter Hyperparameter für das Training. Da der eigentliche Trainingsprozess in Produktivumgebungen mehrere Tage\cite[p.5]{hard:2018} oder Wochen\cite[p.4]{ramaswamy:2020} dauern kann, ist es in der Regel nicht möglich viele Trainingsdurchläufe durchzuführen. In Verbindung mit Differential Privacy ist das Problem noch verschärft, da bei mehreren Trainingsdurchläufen auch die Privacy Kosten steigen. Damit gibt es dabei ebenfalls einen Trade-Off zwischen Netzwerk- und Ressourcennutzung und guten Hyperparametern. Auch \textcite[p.31]{kairouz:2021} plädieren für mehr Forschung in diesem Bereich und merken darüber hinaus an, dass die Anzahl der Hyperparameter im Federated Learning noch deutlich größer ist, als bei dem zentralisierten Training.
+
+\section{Federated Learning with Differential Privacy}
+% evtl hier den ganzen Algorithmus näher beschreiben? -> mit Pseudo Code etc damit klar wird wo Rauschen hinzugefügt wird und wo geclippt wird
+Zwar verhindert Federated Learning gegenüber zentralisierten Trainingsverfahren den direkten Austausch von Trainingsdaten, was intuitiv einen besseren Schutz der Privatheit nahelegt. Verschiedene Arbeiten \cite{wang:2019, geiping:2020} zeigen jedoch, dass Modelle und Modellupdates auch im Federated Learning angegriffen und einzelne Trainingsbeispiele rekonstruiert werden können. In Verbindung mit Attacken auf klassisch trainierte Modelle zeigen diese Fälle die Notwendigkeit von verlässlichen Abwehrmechanismen wie Differential Privacy auch im Federated Learning.
+
+\textcite{mcmahan:2018} entwickeln eine Version des \texttt{FedAvg}-Algorithmus, die Differential Privacy Garantien erfüllt, um lokale Sprachmodelle zu trainieren (\texttt{DP-FedAvg}). Darin begrenzen sie die $\ell_2$-Norm der Gradienten der Clients und können so die Sensitivität der Aggregation Updates abschätzen. Auf die gewichteten Summe der Client Updates wird entsprechend der Sensitivität Rauschen aus der Normalverteilung addiert. Außerdem wird nicht mehr eine feste Anzahl von Clients gezogen, sondern jeder Client mit einer festen Wahrscheinlichkeit gezogen. Dies ist ein wichtiges Detail, um genauere Abschätzungen des benötigten Privacy Budgets machen zu können\cite{wang:2020}. Sie zeigen, dass sie mit mehr Rechenleistung auch unter Einhaltung von Privacy-Budgets die gleichen Genauigkeiten erzielen können wie ohne Privacy-Garantien. Sie merken an, dass die benötigte Rechenleistung verringert werden kann, indem die Modelle nicht zufällig initialisiert werden, sondern auf öffentlichen Daten vortrainiert werden.
+
+Einen ähnlichen Ansatz liefern \textcite{geyer:2017}, allerdings begrenzen sie die $\ell_2$-Norm nicht auf einen festen Wert, sondern berechnen jede Runde die Median-Norm der Updates aller in der Runde teilnehmenden Clients. Da sie auf dem Server berechnet werden muss findet auch das Stutzen der Updates auf die diese Norm auf dem Server statt. 
+
+\textcite{andrew:2021} generalisieren dies in ihrer Arbeit und schlagen vor statt festen Werten Quantile bis zu denen die Updates gestutzt werden sollen zu spezifizieren. Dafür geben die Clients zusätzlich zu dem Update ein Bit zurück, das angibt ob ihr Update größer war als die \textit{Clipping Norm}. Basierend darauf berechnet der Server den Anteil der Clients, deren Updates gestutzt wurden. Dies geschieht ebenfalls durch einen DP-Mechanismus. Die \textit{Clipping Norm} für die nächste Runde wird dementsprechend mit einer spezifizierten \textit{Learning Rate} angepasst. Die richtige \textit{Clipping Norm} wird als auch trainiert. Sie können in ihrer Arbeit zeigen, dass das für die Berechnung der \textit{Clipping Norm} benötigte Budget häufig sehr klein ist, die dynamische Norm aber Vorteile im Training mit sich bringt.
+
+\textcite{noble:2023} verweisen auf das Problem von heterogenen Daten im Federated Learning. Sie entwickeln basierend auf \texttt{SCAFFOLD} einen Algorithmus, \texttt{DP-SCAFFOLD}. Darüber hinaus analysieren sie dessen Konvergenz theoretisch und vergleichen ihn in Experimenten mit \texttt{DP-FedAvg}. Ihr Algorithmus erfüllt lokale Differential Privacy Garantien, schützt also die Updates der Clients auch gegenüber dem aggregierenden Server. Dieser ist laut ihrem Angreifermodell "honest-but-curious". Allerdings betrachten sie nur \textit{record-level} DP, geben also keine Privacy Garantien für ganze Clients, was eine schwächere Definition ist als \textit{user-level} DP\cite[p.44]{kairouz:2021}
+
+Sie evaluieren ihren Algorithmus auf synthetischen Daten, bei denen die Heterogenität zwischen den Clients gesteuert werden kann, und auf dem \texttt{EMNIST}-Datensatz. Dabei weisen sie einen Teil der Daten zufällig zu und den übrigen Teil sortiert nach der Klasse, um Datenheterogenität zu simulieren. Die Ergebnisse zeigen, dass \texttt{DP-SCAFFOLD} bei gleichverteilten Daten zwar eine ein wenig schlechtere Performanz hat, als \texttt{DP-FedAvg}, allerdings deutlich robuster ist, wenn die Daten zwischen den einzelnen Clients heterogener werden.
+
+\textcite{ramaswamy:2020} nutzen den \texttt{DP-FedAvg} als Grundlage, um ein \textit{Next-Word-Prediction} Modell in einer Produktivumgebung zu trainieren. Im Vorfeld des Trainings führen sie ein Hyperparameter Tuning auf einem öffentlichen Datensatz durch, um Privacy-Kosten zu vermeiden. Sie zeigen, dass sie die Nützlichkeit gegenüber dem vorher genutzten Sprachmodell steigern können. Allerdings machen sie Abstriche bei dem formalen Nachweis des genutzten Privacy-Budgets, da Anforderungen für dessen Abschätzung (zufälliges Sampling der Clients) nicht eingehalten werden können\cite{wang:2020}. Stattdessen weisen sie empirisch nach, dass ihre Anwendung von Differential Privacy gegen das ungewollte Einprägen von exakten Trainingsdaten im Modell hilft.
+
 
 \section{Federated Learning with Individualized Differential Privacy}\label{sec:rw-flidp}
 
@@ -28,17 +87,13 @@ Die von \textcite{mcmahan:2016} vorgestellten Algorithmen \texttt{FedSGD} und vo
 	\item Client-level vs record-level dp
 \end{itemize}
 
-\textcite{mcmahan:2018} entwickeln eine Version des FedAvg-Algorithmus, die Differential Privacy Garantien erfüllt, um lokale Language Modelle zu trainieren. Darin begrenzen sie die $\ell_2$-Norm der Gradienten der Clients und können so die Sensitivität der Aggregation der Clients abschätzen. Einen ähnlichen Ansatz liefern \textcite{geyer:2017}, allerdings berechnen sie die Sensitivität der einzelnen Gradienten basierend auf der Median-Norm.
-
 \textcite{aldaghri:2023} stellen in ihrer Arbeit einen Algorithmus zum Training mit individuellen Privacy Budgets im Federated Learning vor. Im ersten Schritt leiten sie einen Algorithmus für lineare Regressionen her, im zweiten einen darauf basierenden generellen Algorithmus. Ihr Algorithmus arbeitet mit individuellen \textit{noise multipliers} und einer uniformen \textit{sampling rate}. Anders als \citeauthor{boenisch:2023} evaluieren sie ihren Algorithmus nur mit zwei Abstufungen von Privacy Budgets, nämlich privaten und nicht privaten Clients.
 
 \textcite{yang:2021} unterscheiden in ihrer Arbeit zwischen Algorithmen mit globaler und lokaler DP im Federated Learning. Letztere schützen nicht nur das entstehende globale Modell, sondern auch die Gradientenupdates der Clients gegenüber dem aggregierenden Server. Sie entwickeln einen Algorithmus, der lokale DP für individuelle Privacy Budgets erfüllt.
 
 \textcite{liu:2021} merken in ihrer Arbeit an, dass während des Trainings das Modell einen Bias bezüglich der Daten von weniger privaten Clients entwickeln kann. In ihrem Ansatz versuchen sie daher anstelle verrauschter Updates die "richtigen" Informationen privater Clients zu extrahieren. Dazu extrahieren sie den wichtigsten Unterraum der Updates öffentlicher Clients und projizieren die Updates privater Clients auf diesen.
 
-\textcite{shen:2023} entwickeln in ihrer Arbeit ebenfalls einen Algorithmus, der lokale DP bei individuellen Privacy Budgets erfüllt. Ihre Definition von Privacy ist aus \textcite{chen:2016}. Bei dieser wird ein Bereich $\tau$ eingeführt, für dessen Werte dann $\epsilon$-DP erfüllt wird. Sie evaluieren ihren Ansatz und vergleichen ihn mit FedAvg \parencite{mcmahan:2016} als oberer Schranke und PLU-FedOA aus \textcite{yang:2021}. Hier liegt die Performance ihres Algorithmus unter, aber nahe an FedAvg und über PLU-FedOA.
-
-\textcite{noble:2023} verweisen auf das Problem von heterogenen Daten im Federated Learning. Sie entwickeln einen Algorithmus, der in ihren Experimenten FedAvg schlägt, wenn die Daten der Clients heterogener werden. Als Basis nutzen sie SCAFFOLD, einen Algorithmus, die Gradienten mit einer durchschnittlichen Richtung, in die alle Clients optimieren kombiniert. Als Angreifermodell nutzen sie den "honest-but-curious" Server (lokale DP-Garantien). 
+\textcite{shen:2023} entwickeln in ihrer Arbeit ebenfalls einen Algorithmus, der lokale DP bei individuellen Privacy Budgets erfüllt. Ihre Definition von Privacy ist aus \textcite{chen:2016}. Bei dieser wird ein Bereich $\tau$ eingeführt, für dessen Werte dann $\epsilon$-DP erfüllt wird. Sie evaluieren ihren Ansatz und vergleichen ihn mit FedAvg \parencite{mcmahan:2016} als oberer Schranke und PLU-FedOA aus \textcite{yang:2021}. Hier liegt die Performance ihres Algorithmus unter, aber nahe an FedAvg und über PLU-FedOA. 
 
 \begin{itemize}
 	\item Konvergenz des FL verbessern durch Algorithmen

@@ -52,7 +52,13 @@ Mit den bisher erwähnten Methoden kann die Privatheit einzelner Anfragen gewäh
 Darüber hinaus können Ergebnisse, die durch einen Mechanismus erhalten wurden der Differential Privacy erfüllt, weiterverarbeitet werden, ohne dass die Privatheit weiter kompromittiert wird (\textit{post-processing}).\cite{dwork:2014}
 
 \subsection{Differential Privacy in Machine Learning}
-Es gibt verschiedene Punkte, an denen Differential Privacy im Machine Learning ansetzen kann um die Privatheit zu gewährleisten. Jeder Punkt hat verschiedene Vor- und Nachteile, die ich im Folgenden umreiße. Eine Übersicht dazu ist in \autoref{fig:design_principles_dpml} zu sehen.
+Das Ziel von Differential Privacy im Machine Learning, ist es die Privatheit der einzelnen Datenpunkte in den Trainingsdaten zu schützen. Insbesondere kann Differential Privacy die Effektivität von \textit{Membership Inference Attacks}\cite{shokri:2017} deutlich verringern.\cite[p.14f]{chang:2023} Ziel der Attacke ist es, aufgrund von Ausgaben eines trainierten Modells herauszufinden, ob ein Datenpunkt Teil der Trainingsdaten war.
+
+Im Allgemeinen entsteht durch die Anwendung von Differential Privacy im Machine Learning ein Trade-Off zwischen der Nützlichkeit und der Privatheit des Modells (\textit{Privacy-Utility Trade-off}). Es wird auf verschiedene Arten versucht dabei eine möglichst gute Nützlichkeit des Modells beizubehalten. Zum einen wird an besseren Abschätzungen der Privacy-Kosten geforscht\cite{abadi:2016}. Darüber hinaus gibt es Algorithmen, die bessere Ergebnisse erzielen können als andere\cite{papernot:2017}. Es gibt auch Arbeiten, die sich mit der Modellarchitektur selbst beschäftigen, z.B. haben \textcite{papernot:2021} den Effekt von beschränkten Aktivierungsfunktionen erforscht und konnten neue \textit{State-of-the-art} Genauigkeiten auf MNIST, FashionMNIST und CIFAR10 erzielen.
+
+Eine weitere Forschungsrichtung ist die Anwendung von individuellen Privacy Budgets für einzelne Nutzer oder Datenpunkte. Sie kann sich auf empirische Studien stützen, die nahelegen, dass verschiedene Personen unterschiedliche Anforderungen an die Privatheit ihrer Daten haben\cite{jensen:2005, acquisti:2005}. Diese wird in \autoref{fund-idp} und den weiteren Kapiteln weiter beleuchtet.
+
+Im Training selbst gibt es verschiedene Punkte, an denen Differential Privacy ansetzen kann um die Privatheit zu gewährleisten. Jeder Punkt hat verschiedene Vor- und Nachteile, die ich im Folgenden umreiße. Eine Übersicht dazu ist in \autoref{fig:design_principles_dpml} zu sehen.
 
 \begin{figure}[tb]
 	\centering
@@ -82,7 +88,7 @@ Abgesehen von der Varianz des Laplaceschen Rauschens ist die Anzahl der \textit{
 
 Der größte Nachteil an PATE ist, dass der Algorithmus nicht-private (potenziell ungelabelte) Daten benötigt, da das \textit{Student Model} nicht-privat trainiert wird. Diese Voraussetzung braucht der Algorithmus von \textcite{abadi:2016} nicht.
 
-\subsection{Individualized Differential Privacy}
+\subsection{Individualized Differential Privacy}\label{fund-idp}
 
 Motiviert von den verschiedenen Anforderungen und Präferenzen unterschiedlicher Personen an die Privatheit ihrer Daten haben \textcite{alaggan:2016} und wenig später unabhängig \textcite{jorgensen:2015} Arbeiten zu Differential Privacy mit individuellen Privacy Budgets veröffentlicht.
 
@@ -101,9 +107,9 @@ Sie weisen die Effektivität ihrer Verfahren in Experimenten nach, in denen sie 
 
 Auch bei der linearen Regression kann der Sampling Ansatz das Verfahren von \cite{alaggan:2016} schlagen. Der modifizierte \textit{Exponential Mechanism} ist hier nicht anwendbar.
 
-\section{Federated Learning}
+\section{Federated Learning}\label{fund-fl}
 
-Federated Learning (FL) ist ein Optimierungsverfahren, bei dem einzelne Clients gemeinsam über mehrere Runden ein Modell trainieren, ohne dabei ihre eigenen Trainingsdaten mit anderen zu teilen. 
+Federated Learning (FL) ist ein Optimierungsverfahren, bei dem einzelne Clients gemeinsam über mehrere Runden ein Modell trainieren, ohne dabei ihre eigenen Trainingsdaten mit anderen zu teilen. Auch wenn noch viele Fragen im Federated Learning offen sind und erforscht werden, wird es erfolgreich in Produktivumgebungen eingesetzt und konnte sich gegenüber dem klassischen zentralisierten Training behaupten\cite{hard:2018, ramaswamy:2020}.
 
 Das Verfahren umfasst einen Server, der den Ablauf des Trainings steuert und eine beliebige Anzahl von Clients, die das lokale Training auf ihren eigenen Daten durchführen. Der generelle Ablauf einer Trainingsrunde sieht wie folgt aus: 
 
