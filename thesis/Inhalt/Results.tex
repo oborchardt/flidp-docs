@@ -1,7 +1,13 @@
-\chapter{Results}
+\chapter{Results}\label{chap:results}
+\begin{itemize}
+	\item Hyperparameter beschreiben (Clients pro Runde, Learning Rate yadayadayada)
+	\item Numerisch beschreiben was es für Unterschiede gibt (bei iid ist das Delta von der Privacy setups so und so usw)
+	\item angepasste Privacy Budgets von SVHN und CIFAR-10 rechtfertigen, bzw beschreiben warum ich sie angepasst habe
+\end{itemize}
 
-\section{Local Training} \label{sec:local-training-results}
+In diesem Kapitel gehe ich auf meine Ergebnisse ein. In \autoref{sec:non-fl-training-results} beschreibe ich Ergebnisse von lokalen Trainingsdurchläufen mit dem identischen Modell. In \autoref{sec:fl-training-results} beschreibe ich detaillierter welche Ergebnisse ich im Federated Learning erzielt habe und beschreibe die genutzten Hyperparameter.
 
+\section{Non-federated Training} \label{sec:non-fl-training-results}
 Die Ergebnisse der lokalen Trainingsdurchläufe sind wie zu erwarten etwas besser als im Federated Learning, auch wenn sie nicht der state-of-the-art entsprechen. Das liegt an dem einfachen und kleinen Modell, das ich für das Training genutzt habe.
 
 Bei MNIST und SVHN erreicht das Modell bereits innerhalb von 10 Epochen gute Ergebnisse. Bei CIFAR-100 sind die Ergebnisse deutlich schlechter, weshalb ich hier mit einem \texttt{EarlyStopping}-callback gearbeitet habe. Trotzdem liegt die erreichte Accuracy unter 50\% (siehe \autoref{tab:local-model-results}).
@@ -12,9 +18,9 @@ Bei MNIST und SVHN erreicht das Modell bereits innerhalb von 10 Epochen gute Erg
 		\hline
 		Dataset & Accuracy & Loss \\
 		\hline
-		MNIST & 0.9873 & 0.0382 \\
-		SVHN & 0.8550 & 0.5106 \\
-		CIFAR-100 & 0.4745 & 1.6995 \\
+		MNIST & 0.9858 & 0.0494 \\
+		SVHN & 0.8963 & 0.3695 \\
+		CIFAR-10 & 0.5881 & 1.1652 \\
 		\hline
 	\end{tabular}
 	\caption{The results of non-federated training without differential privacy}
@@ -30,58 +36,175 @@ Die Trainingszeit liegt darüber hinaus ohne bei wenigen Sekunden oder Minuten. 
 	\begin{subfigure}{0.3\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/mnist-results-local.png}
-		\caption{}
+		\caption{MNIST}
 	\end{subfigure}
 	\begin{subfigure}{0.3\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/svhn-results-local.png}
-		\caption{}
+		\caption{SVHN}
 	\end{subfigure}
 	\begin{subfigure}{0.3\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar-results-local.png}
-		\caption{}
+		\caption{CIFAR-10}
 	\end{subfigure}
 	\label{fig:local-training-histories}
 	\caption{Training and validation accuracies of the non-federated training processes}
 \end{figure}
 
-\section{Federated Training}
+\section{Federated Training}\label{sec:fl-training-results}
 
-\subsection{MNIST}
+Die Ergebnisse des Trainings im Federated Learning sind in \autoref{tab:all-fed-results} zu sehen. Die Ergebnisse sind nach den Datensätzen aufgeteilt und jeweils für die normale Version (\textit{non-i.i.d.}) und die gleichverteilte Version (\textit{i.i.d.}) notiert. Die gleichverteilte Version ist durch das in \autoref{sec:iid-dataset-creation} beschriebene Verfahren entstanden.
 
-Die Ergebnisse auf dem MNIST-Datensatz sind vielversprechend. Die Genauigkeit des Modells, das ohne Differential Privacy trainiert wurde, liegt nur knapp unter dem lokal trainierten Modell, was zeigt, dass das Federated Training auf dem Datensatz gut funktioniert.
+Die Genauigkeit bezieht sich in jedem Fall auf die Genauigkeit auf den Testdaten. Für die Evaluierung habe ich die Testdaten zu einem zentralen Datensatz zusammengefügt und dann das Modell darauf evaluiert. Eine andere Möglichkeit wäre es gewesen, die Evaluierung ebenfalls auf den Clients durchzuführen, allerdings war ich nur an der allgemeinen Performanz des Modells interessiert. Für den Fall, dass man ein vortrainiertes Modell für jeden Client noch einmal nachtrainiert hätte, damit es auf seinen Daten gut funktioniert, wäre diese Art der Evaluierung angemessener gewesen.
 
-Wie erwartet wirkt sich die Anwendung von Differential Privacy auf die Ergebnisse aus. Bereits die Anwendung des größten Privacy Budgets (\texttt{relaxed}) verringert die Genauigkeit deutlich.
-
-Allerdings zeigt sich auch, dass die Anwendung von individualisierten Privacy Budgets hier deutlich besser funktioniert, als der allgemeine Ansatz, der das kleinste Budget auf alle Clients anwenden würde (\texttt{strict}).
-
-Innerhalb der individualisierten Privacy Setups ist kaum ein Unterschied. In \autoref{fig:federated-mnist-results} schneidet \texttt{individual-strict} am Ende des Trainings sogar leicht besser ab als \texttt{individual-relaxed}, allerdings erreicht \texttt{individual-relaxed} bereits früher im Verlauf des Trainings bessere Werte. Allerdings sind die Unterschiede hier sehr gering.
-
-\begin{figure}
-	\centering
-	\includegraphics[width=0.7\textwidth]{Bilder/mnist-results.png}
-	\caption{Accuracies of the different privacy setups during training on the MNIST dataset}
-	\label{fig:federated-mnist-results}
-\end{figure}
+Es ist auffällig, dass die Modelle auf allen Datensätzen in der gleichverteilten Version besser abschneiden. Das deckt sich mit dem Stand der Forschung zu \texttt{FedAvg}.
 
 \begin{table}
 	\centering
-	\begin{tabular}{|c|c|c|}
+	\begin{tabular}{|l|p{4em}|p{4em}|p{4em}|p{4em}|p{4em}|p{4em}|}
 		\hline
-		Privacy Setup & Noise Multiplier & Accuracy \\
+		\multirow{2}{4em}{Setup} & \multicolumn{2}{c|}{MNIST} & \multicolumn{2}{c|}{SVHN} & \multicolumn{2}{c|}{CIFAR-10} \\
+		\cline{2-7}
+		& i.i.d. & non-i.i.d. & i.i.d. & non-i.i.d. & i.i.d. & non-i.i.d. \\
 		\hline
-		no-dp & 0.0 & 0.9721 \\
-		relaxed & 0.9292 & 0.9042 \\
-		individual-relaxed & 1.1368 & 0.8764 \\
-		individual-strict & 1.2558 & 0.8741 \\
-		strict & 1.5719 & 0.7963 \\
+		\texttt{no-dp} & 0.906 & 0.896 & 0.825 & - & 0.419 & 0.246 \\
+		\texttt{relaxed-dp} & 0.931 & 0.855 & 0.544 & - & 0.407 & 0.252 \\
+		\texttt{relaxed-idp} & 0.917 & 0.883 & 0.418 & - & 0.394 & 0.255 \\
+		\texttt{strict-idp} & 0.91 & 0.887 & 0.446 & - & 0.386 & 0.235 \\
+		\texttt{strict-dp} & 0.895 & 0.811 & 0.292 & - & 0.387 & 0.246 \\
 		\hline
 	\end{tabular}
-	\caption{The noise multipliers and the accuracies of the different privacy setups on the MNIST dataset}
-	\label{tab:federated-mnist-noise-multiplier}
+	\caption{Accuracies of the DP setups on all datasets}
+	\label{tab:all-fed-results}
 \end{table}
+
+\subsection{Hyperparameter Setups}
+Ich habe das Training mit allen Datensätzen auf $100$ Runden begrenzt. Grund dafür war einerseits die Trainingszeiten kurz zu halten, andererseits hat die Anzahl der Runden eine Wechselwirkung mit dem Privacy Loss. Bei einer höheren Rundenzahl wird jeder Client wahrscheinlicher gezogen, daher muss im Umkehrschluss das Rauschen größer werden. 
+
+Ein weiterer Hyperparameter, der einen Einfluss auf die Stärke des Rauschens hat, ist die Wahrscheinlichkeit mit der die Clients gezogen werden. Hier gilt ebenso, dass bei einer größeren Wahrscheinlichkeit die Daten eines Clients einen größeren Einfluss auf das trainierte Modell haben.
+
+Hyperparameter, die sich nicht auf den Privacy Loss auswirken sind die Learning Rates auf dem Server und die Learning Rates auf den Clients. Auch die Anzahl der Epochen, die jeder Client auf seinen Daten trainiert und die Größe der Batches wirken sich nicht auf den Privacy Loss aus.
+
+\begin{table}[tb]
+	\centering
+	\begin{tabular}{|l|c|c|c|}
+		\hline
+		Hyperparameter & MNIST & SVHN & CIFAR-10 \\
+		\hline
+		Rounds & 100 & 100 & 100 \\
+		Clients per round & 50 & 30 & 30 \\
+		Batchsize & 128 & 128 & 128 \\
+		Local Epochs & 5 & 5 & 5 \\
+		Client learning rate & 0.001 & 0.001 & 0.001 \\
+		Server learning rate & 1.0 & 1.0 & 1.0 \\
+		\hline
+	\end{tabular}
+	\caption{Hyperparameters used on each dataset for the federated training}
+	\label{tab:fl-hyperparameters}
+\end{table}
+
+\subsection{MNIST}
+
+Bei MNIST konnten die DP-Algorithmen ähnlich gute Ergebnisse erzielen wie das nicht-private \texttt{FedAvg}. In \autoref{fig:fed-emnist-results} ist dennoch ein Einfluss des Privacy Setups auf das Ergebnis zu sehen. Vor allem \texttt{strict-dp} konvergiert ein bisschen instabiler und kommt nicht ganz an die anderen Ergebnisse heran. Außerdem fällt der Loss bei \texttt{no-dp} bereits deutlich früher ab und bei den anderen Setups erst nach ungefähr 15 Runden.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/emnist-accuracy.png}
+		\caption{validation accuracy (non-i.i.d)}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/emnist-loss.png}
+		\caption{validation loss (non-i.i.d)}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/emnist-accuracy-iid.png}
+		\caption{validation accuracy (i.i.d)}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/emnist-loss-iid.png}
+		\caption{validation loss (i.i.d)}
+	\end{subfigure}
+	\label{fig:fed-emnist-results}
+	\caption{Metrics of the different privacy setups on MNIST (non-iid) in the course of training}
+\end{figure}
+
+Die vorher berechneten Noise Multiplier für jedes Setup sind in \autoref{tab:noise-multipliers} zu sehen. Wie erwartet sind sie aufsteigend, je nach Größe des Privacy Budgets der Clients.
+
+\begin{table}
+	\centering
+	\begin{tabular}{|l|c|c|c|}
+		\hline
+		Setup & MNIST & SVHN & CIFAR-10 \\
+		\hline
+		\texttt{no-dp} & - & - & - \\
+		\texttt{relaxed-dp} & 0.769 & 0.348 & 0.384 \\
+		\texttt{relaxed-idp} & 0.917 & 0.415 & 0.461 \\
+		\texttt{strict-idp} & 1.000 & 0.444 & 0.494 \\
+		\texttt{strict-dp} & 1.180 & 0.508 & 0.568 \\
+		\hline
+	\end{tabular}
+	\caption{Noise Multipliers of the different setups}
+	\label{tab:noise-multipliers}
+\end{table}
+
+Bei dem Training auf MNIST konnte ich mit $50$ Clients pro Runde im Erwartungswert gute Ergebnisse erzielen.
 
 \subsection{SVHN}
 
-\subsection{CIFAR-100}
+Bei SVHN ist der Unterschied zwischen dem Training mit und ohne Differential Privacy sehr viel deutlicher zu sehen. Während die Metriken sich ohne Differential Privacy im Trainingsprozess kontinuierlich verbessern, hat jedes Setup mit Differential Privacy ab einem Punkt im Training Probleme sich weiter zu verbessern. Vor allem \texttt{strict-dp} kann sich nur für kurze Zeit am Anfang verbessern. Bereits \texttt{relaxed-dp} erreicht kaum mehr eine halb so gute Genauigkeit wie das \texttt{no-dp} und die beiden individualisierten Setups liegen noch ein wenig darunter, liefern allerdings deutlich bessere Ergebnisse als \texttt{strict-dp}. Interessant ist, dass \texttt{strict-idp} noch ein bisschen besser abschneidet, als \texttt{relaxed-idp}, allerdings kann das Zufall sein.
+
+Die Noise Multiplier sind ebenfalls aufsteigend, je nach Budgets des Setups, allerdings sind sie insgesamt deutlich niedriger als bei MNIST. Dies zeigt, dass dieser Datensatz deutlich anfälliger gegenüber dem hinzufügen von Rauschen ist und sich die Ergebnisse sehr schnell verschlechtern können.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/svhn-accuracy.png}
+		\caption{validation accuracy}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/svhn-loss.png}
+		\caption{validation loss}
+	\end{subfigure}
+	\label{fig:fed-svhn-results}
+	\caption{Metrics of the different privacy setups on SVHN in the course of training}
+\end{figure}
+
+\subsection{CIFAR-10}
+Bei CIFAR-10 ist auffällig, dass die Performanz des Modells nicht so abhängig vom Privacy-Setup ist, sondern eher von der Verteilung der Daten. Bei der ungleichmäßigen Verteilung mit dem \textit{Label Distribution Skew} verbessern sich alle Modelle nur sehr langsam und unstetig. Die Unterschiede zwischen den Privacy Setups selbst sind kaum zu erkennen.
+
+Bei dem Training auf dem gleichverteilten Datensatz werden alle Modelle deutlich besser. Jedoch liegen auch hier die verschiedenen Privacy-Setups nah an dem nicht-privat trainierten Modell. Es fällt aber auf, dass die Verbesserungen der privat trainierten Modelle etwas weniger gleichmäßig ist.
+
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/cifar10-accuracy.png}
+		\caption{validation accuracy (non-i.i.d)}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/cifar10-loss.png}
+		\caption{validation loss (non-i.i.d)}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/cifar10-accuracy-iid.png}
+		\caption{validation accuracy (i.i.d)}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/cifar10-loss-iid.png}
+		\caption{validation loss (i.i.d)}
+	\end{subfigure}
+	\label{fig:fed-cifar10-results}
+	\caption{Metrics of the different privacy setups on CIFAR-10 in the course of training}
+\end{figure}

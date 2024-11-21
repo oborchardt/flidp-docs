@@ -1,10 +1,22 @@
-\chapter{Fundamentals}
+\chapter{Fundamentals}\label{chap:fundamentals}
+
+\begin{itemize}
+	\item evtl Section o.ä. zu Angriffen auf nicht DP-Federated Learning, bzw. warum braucht es DP auch im FL?
+\end{itemize}
+
+In diesem Kapitel gehe ich auf die Grundlagen ein, die für meine Arbeit wichtig sind. Zunächst gebe ich einen Überblick zu Differential Privacy, beschreibe die zugrundeliegende Idee, formalisiere sie und umreiße die wichtigsten Mechanismen, um sie anzuwenden. Danach beschreibe ich die Grundlagen von Federated Learning, erwähne Probleme, die das Verfahren bei verzerrten Datenverteilungen hat und gehe auf mögliche Privacy Modelle im Federated Learning ein.
 
 \section{Differential Privacy}
 
-Differential Privacy ist ein Verfahren, dass die Privatheit bei interaktiven Anfragen auf Datenbanken schützen kann. Es wurde in \cite{dwork:2006} formalisiert, nachdem gezeigt wurde, dass Anforderungen an Privatheit aus \cite{dalenius:1977} in der Praxis nicht umsetzbar sind. In \cite{dalenius:1977} war die Philosophie, dass ein Angreifer nichts lernen soll, was er nicht auch ohne Zugriff auf die Datenbank hätte lernen können. \textcite{dwork:2006} zeigt, dass diese Definition aufgrund von Hilfsinformationen, die der Angreifer besitzen kann nicht umsetzbar ist. Stattdessen verfolgt \textcite{dwork:2006} mit der Differential Privacy einen Ansatz, bei dem nicht direkt das Wissen des Angreifers einbezogen wird, sondern ob der Angreifer bei einer bestimmten Anfrage mehr über ein Individuum lernen kann, wenn es in der zugrundeliegenden Datenbank ist.
+Differential Privacy ist ein Verfahren, dass die Privatheit bei interaktiven Anfragen auf Datenbanken schützt. Die zugrundeliegende Datenbank selbst wird dabei nicht verändert, was es von nicht-interaktiven Privatheitsmaßen wie \textit{k-anonymity} abgrenzt. Stattdessen wird die Anfrage an die Datenbank so abgewandelt, dass die Privatheit von Individuen geschützt wird. 
 
-Formal vergleicht Differential Privacy die Wahrscheinlichkeit ein ähnliches Anfrageergebnis zu erhalten, wenn ein Individuum in einer Datenbank ist oder nicht. Je weniger diese Wahrscheinlichkeiten auseinander liegen, desto weniger kann ein Angreifer durch die Präsenz des Individuums in der Datenbank lernen und desto höher ist die Privacy. Die Definition aus \cite{dwork:2006} ist folgende:
+Es wurde von \textcite{dwork:2006} formalisiert, nachdem gezeigt wurde, dass Anforderungen an Privatheit von \textcite{dalenius:1977} in der Praxis nicht umsetzbar sind. In \citeauthor{dalenius:1977} war die Philosophie, dass ein Angreifer nichts lernen soll, was er nicht auch ohne Zugriff auf die Datenbank hätte lernen können. \citeauthor{dwork:2006} zeigt, dass diese Definition aufgrund von Hilfsinformationen, die der Angreifer besitzen kann nicht umsetzbar ist. 
+
+In einem Beispiel von \citeauthor{dwork:2006} gibt es eine Datenbank, aus der die durchschnittliche Größe von litauischen Frauen hervorgeht und die Größe der Individuen eine sensible Information ist. Wenn der Angreifer nun die Hilfsinformation hat \glqq{}Person X ist zwei Zentimeter kleiner als der Durchschnitt litauischer Frauen\grqq{}, dann lernt er die genaue Größe von Person X, unabhängig davon, ob sie in der Datenbank ist oder nicht. 
+
+Stattdessen verfolgt \citeauthor{dwork:2006} mit der Differential Privacy einen Ansatz, bei dem nicht direkt das Wissen des Angreifers einbezogen wird, sondern ob der Angreifer bei einer bestimmten Anfrage mehr über ein Individuum lernen kann, wenn es in der zugrundeliegenden Datenbank ist.
+
+Formal vergleicht Differential Privacy die Wahrscheinlichkeit ein ähnliches Anfrageergebnis zu erhalten, wenn ein Individuum in einer Datenbank ist oder eben nicht. Je näher diese Wahrscheinlichkeiten beieinander liegen, desto weniger kann ein Angreifer durch die Präsenz des Individuums in der Datenbank lernen und desto höher ist die Privatheit. Die Definition aus \cite{dwork:2006} ist folgende:
 
 \begin{definition}\label{def:eps-differential-privacy}
 	\emph{\textbf{$\epsilon$-Differential Privacy}} A \textit{randomized mechanism} $\mathcal{M}: \mathcal{D} \rightarrow \mathcal{R}$ with domain $\mathcal{D}$ and range $\mathcal{R}$ satisfies $\epsilon$-differential privacy if for any two adjacent inputs $d$, $d' \in \mathcal{D}$ and for any subset of outputs $S \subseteq \mathcal{R}$ it holds that $$\Pr[\mathcal{M}(d) \in S] \leq e^{\epsilon} \Pr[\mathcal{M}(d') \in S]$$
@@ -18,13 +30,15 @@ Hervorzuheben ist hierbei noch, dass die Definition keine Anforderungen an die D
 
 Wenn in dieser Arbeit von benachbarten Datensätzen die Rede ist, gilt i.A. diese Definition, wenn nicht explizit anders beschrieben.
 
-Eine leicht abgeschwächte Version der Definition fügt einen Parameter $\delta$ hinzu, der die Wahrscheinlichkeit repräsentiert, dass die Privatheitsgarantien nicht eingehalten werden. Er sollte demenstprechend sehr klein gewählt werden.\cite{dwork:2014} 
+Eine leicht abgeschwächte Version der Definition fügt einen Parameter $\delta$ hinzu, der die Wahrscheinlichkeit repräsentiert, dass die Privatheitsgarantien nicht eingehalten werden. Er sollte demenstprechend sehr klein gewählt werden.\cite{dwork:2014} Diese Definition ist relevant, da der häufig verwendete Gaussian Mechanism die strengere $\epsilon$-Differential Privacy Definition nicht erfüllt, man aber trotzdem mit ihm arbeiten will.
 
 \begin{definition}\label{def:eps-delta-differential-privacy}
 	\emph{\textbf{$(\epsilon, \delta)$-Differential Privacy}} A \textit{randomized mechanism} $\mathcal{M}: \mathcal{D} \rightarrow \mathcal{R}$ with domain $\mathcal{D}$ and range $\mathcal{R}$ satisfies $(\epsilon, \delta)$-differential privacy if for any two adjacent inputs $d$, $d' \in \mathcal{D}$ and for any subset of outputs $S \subseteq \mathcal{R}$ it holds that $$\Pr[\mathcal{M}(d) \in S] \leq e^{\epsilon} \Pr[\mathcal{M}(d') \in S] + \delta$$
 \end{definition}
 
-Um die Definitionen zu erfüllen wird auf ein Anfrageergebnis von $\mathcal{M}$ Rauschen hinzugefügt. Die Varianz der Verteilung, aus der das Rauschen gezogen wird hängt von der Sensitivität einer Anfrage ab. Sie beschreibt die größtmögliche Veränderung für eine Anfrage, die durch das Hinzufügen oder das Löschen eines Eintrags auftreten kann.\cite{dwork:2006}
+Darüber hinaus gibt es noch die Rényi-Differential Privacy, die neben dem $\epsilon$ noch einen Parameter $\alpha$ hat. Sie ist für viele Theoreme wichtig, ist aber weniger anschaulich und kann immer in $(\epsilon, \delta)$-Differential Privacy überführt werden, weshalb ich hier nicht weiter auf diese Definition eingehen werde. Es gilt, dass ein Mechanismus, der $(\alpha, \epsilon)$-DP erfüllt auch immer $(\epsilon + \frac{\log 1 / \delta}{\alpha - 1}, \delta)$-DP erfüllt für $0 < \delta < \epsilon$ \cite{mironov:2017}.
+
+Damit eine Anfrage Differential Privacy erfüllt, wird auf ein Anfrageergebnis von $\mathcal{M}$ Rauschen hinzugefügt. Das Rauschen kann beispielsweise aus der Laplace- oder der Normalverteilung gezogen werden. Die Varianz der Verteilung, aus der das Rauschen gezogen wird hängt von der Sensitivität einer Anfrage ab. Sie beschreibt die größtmögliche Veränderung des Anfrageergebnisses, die durch das Hinzufügen oder das Löschen eines Eintrags auftreten kann \cite{dwork:2006}.
 
 \begin{definition}\label{def:l1-sensitivity}
 	\emph{\textbf{L1-Sensitivity}} For $\mathcal{M}: \mathcal{D} \rightarrow \mathcal{R}^{d}$, the L1-Sensitivity of $\mathcal{M}$ is 
@@ -34,11 +48,11 @@ Um die Definitionen zu erfüllen wird auf ein Anfrageergebnis von $\mathcal{M}$ 
 	for all adjacent datasets $d_1$, $d_2$
 \end{definition}
 
-Das Rauschen wird je nach Anwendungsfall aus verschiedenen Verteilungen gezogen. Beispielsweise gibt es den Laplace- oder den Gauss'schen Mechanismus, um numerische Anfragen, beispielsweise Durchschnitt einer Datenbank, privat zu machen. Für Anfragen, die ein Ergebnis aus einer festgelegten Menge liefern sollen, gibt es den Exponentiellen Mechanismus. Dieser bewertet die potenziellen Ergebnisse anhand einer Bewertungsfunktion.\cite{mcsherry:2007}
+Die Verteilungen werden je nach Anwendungsfall gewählt. Beispielsweise gibt es den Laplace- oder den Gauss'schen Mechanismus, um numerische Anfragen, beispielsweise Durchschnitt einer Datenbank, privat zu machen. Für Anfragen, die ein Ergebnis aus einer festgelegten Menge liefern sollen, gibt es den Exponentiellen Mechanismus. Dieser bewertet die potenziellen Ergebnisse anhand einer Bewertungsfunktion.\cite{mcsherry:2007}
 
 Bei den Mechanismen ist variiert die Definition der Sensitivität leicht, beispielsweise nutzt der Gauss'sche Mechanismus die $\ell_2$-Norm anstatt der $\ell_1$-Norm, die Intuition, dass es um die maximale Abweichung im Anfrageergebnis durch ein Individuum geht, bleibt jedoch immer erhalten. Darüber hinaus erfüllt der Laplace Mechanismus $\epsilon$-Differential Privacy, der Gauss'sche Mechanismus jedoch nur $(\epsilon, \delta)$-Differential Privacy.\cite[p.261ff]{dwork:2014}
 
-Mit den bisher erwähnten Methoden kann die Privatheit einzelner Anfragen gewährleistet werden. Wenn die gleichen Anfragen aber zum Beispiel mehrfach gestellt werden muss auch das Niveau der Privatheit abnehmen, da der Durchschnitt der einzelnen Anfragen irgendwann gegen den echten Wert konvergiert.\cite[p.42]{dwork:2014} Ein großer Vorteil von Differential Privacy ist, dass sich diese Verringerung der Privatheit abschätzen lässt. Dafür gibt es einige Kompositionstheoreme:
+Mit den bisher erwähnten Methoden kann die Privatheit einzelner Anfragen gewährleistet werden. Wenn die gleichen Anfragen aber zum Beispiel mehrfach gestellt werden muss auch das Niveau der Privatheit abnehmen, da der Durchschnitt der einzelnen Anfragen irgendwann gegen den echten Wert konvergiert \cite[p.42]{dwork:2014}. Ein großer Vorteil von Differential Privacy ist, dass sich diese Verringerung der Privatheit abschätzen lässt. Dafür gibt es einige Kompositionstheoreme:
 
 % Kompositionstheoreme einfügen
 \begin{itemize}
@@ -69,9 +83,11 @@ Im Training selbst gibt es verschiedene Punkte, an denen Differential Privacy an
 
 Bei der \textit{Input Pertubation} wird den Trainingsdaten Rauschen hinzugefügt, bevor das Modell mit ihnen trainiert wird. Dieser Ansatz ist ohne weitere Änderungen am Trainingsalgorithmus oder am Modell anwendbar, da der Trainingsalgorithmus dann Daten verarbeitet, die bereits differential private sind und es damit einem \textit{post-processing} entspricht. Das Modell kann danach also problemlos weiterverwendet werden. Ein großer Nachteil ist aber, dass die Anfragen auf den Trainingsdaten im Allgemeinen eine hohe Sensitivität haben und daher viel Rauschen hinzugefügt werden muss.
 
-Die \textit{Algorithm Pertubation} ist das am weitesten verbreitete Verfahren und liegt großen Bibliotheken wie Opacus\cite{yousefpour:2021} und TensorFlow Privacy\cite{tfprivacy} zugrunde. Es kann für iterative Optimierungsverfahren wie Gradient Descent oder die Power Iteration Methode bei einer Principal Component Analysis (PCA) genutzt werden. 
+Die \textit{Algorithm Pertubation} ist das am weitesten verbreitete Verfahren und liegt großen Bibliotheken wie Opacus\cite{yousefpour:2021} und TensorFlow Privacy\cite{tfprivacy} zugrunde. Es kann für iterative Optimierungsverfahren wie Gradient Descent oder die Power Iteration Methode bei einer Principal Component Analysis (PCA) genutzt werden.
 
 Bei der Anwendung dieses Verfahrens im Gradient Descent wird Differential Privacy auf die Updates der Gradienten angewendet, das heißt diese werden für gewöhnlich auf eine bestimmte Vektornorm gestutzt und dann wird basierend darauf Rauschen addiert. In der Regel muss hierbei deutlich weniger Rauschen hinzugefügt werden, als bei der \textit{Input Pertubation}.\cite{chang:2023} Der \textit{Privacy Loss}, der durch einen Trainingsdurchlauf anfällt, kann mithilfe von Kompositionstheoremen bestimmt werden. Für die Abschätzung wurde das \textit{Strong Composition Theorem}\cite{dwork:2010} genutzt, allerdings konnten \textcite{abadi:2016} mit dem \textit{Moments Accountant} eine deutlich genauere Abschätzung für das Training von Neuronalen Netzen liefern. So können Neuronale Netze mit dem Verfahren bereits mit kleinen Privacy Budgets trainiert werden. Das trainierte Modell kann ebenfalls veröffentlicht werden, da dessen Gewichte die Anforderungen der Differential Privacy erfüllen.
+
+\textcite{shokri:2015} entwickeln bereits vor \textcite{abadi:2016} ein dezentrales Trainingsverfahren für Neuronale Netze unter Einhaltung von Differential Privacy. Ähnlich wie im Federated Learning (siehe \autoref{fund-fl}) schlagen sie ein verteiltes Training vor. In ihrem Protokoll werden von jedem Teilnehmer nur eine Teilmenge seiner Parameter geteilt, weshalb die Privacy-Budgets pro Modellparameter spezifiziert werden. Parameter, die einen größeren Gradienten als einen vorher spezifizierten Schwellwert haben, werden mit dem Laplace-Mechanismus verrauscht und dann an den Modell-Server geschickt. Die Summe der Privacy-Budgets für ein ganzes Modell kann allerdings sehr groß werden\cite[p.10]{abadi:2016}.
 
 \textit{Objective Pertubation} verändert die Zielfunktion des Trainings. Statt auf die Daten wird während des Trainings Rauschen auf diese Funktion gelegt.
 
@@ -133,7 +149,7 @@ Bei dem \textit{Cross-silo Federated Learning} geht es vor allem um das Trainier
 
 Auch der Server selbst kann bei einer sehr großen Zahl an Clients zu einem Bottleneck werden.\cite[p.11]{kairouz:2021} Daher wird ebenfalls an vollständig verteilten Trainingsverfahren geforscht, bei denen kein zentraler Server nötig ist (\textit{Fully-decentralized learning}).
 
-\subsection{Data heterogeneity}
+\subsection{Data heterogeneity}\label{fund-fl-data-heterogenity}
 
 Ein generelles Problem beim Federated Learning ist die Heterogenität der Trainingsdaten. Da die Daten von unterschiedlichen Parteien generiert werden ist eine zufällige Verteilung der abhängigen und unabhängigen Variablen in der Regel nicht gegeben. Diese Heterogenität kann sich auf verschiedene Arten ausdrücken, wie im folgenden beschrieben.
 
@@ -147,7 +163,7 @@ Die Verteilung der Features kann sich zwischen den Clients unterscheiden, auch w
 Die Verteilung der Labels auf den Clients kann sich unterscheiden, zum Beispiel aufgrund von regionalen Unterschieden. Beispielsweise können Kängurus fast nur in Australien beobachtet werden.
 
 \subsubsection{Other Distribution Skews}
-Darüber hinaus werden weitere Verzerrungen erwähnt. Es kann sein, dass die bedingten Wahrscheinlichkeiten von Features und Labels sich unterscheiden, beispielsweise sieht ein Haus in den USA anders aus als in Europa, in beiden Fällen ist es aber ein Haus (\textit{concept drift}). Andersherum kann es auch sein, dass die gleichen Features anders gelabelt sind, beispielsweise weil manche Daten auch für Menschen ununterscheidbar sind.
+Darüber hinaus werden weitere Verzerrungen erwähnt. Es kann sein, dass die bedingten Wahrscheinlichkeiten von Features und Labels sich unterscheiden, beispielsweise sieht ein Haus in den USA anders aus als in Europa, in beiden Fällen ist es aber ein Haus (\textit{concept drift}). Andersherum kann es auch sein, dass die gleichen Features anders gelabelt sind, beispielsweise weil manche Daten auch für Menschen ununterscheidbar sind. Außerdem kann die Anzahl der Trainingsbeispiele von Client zu Client sehr stark variieren. 
 
 \subsection{Privacy model in Federated Learning}
 % local vs global (trusted server), record vs user level
@@ -161,4 +177,4 @@ Mit dieser Definition kann gewährleistet werden, dass die Anwesenheit oder Abwe
 
 Darüber hinaus kann Differential Privacy auf zwei Arten angewendet werden: lokal oder global. Bei der globalen Anwendung erfüllt wie oben beschrieben das Modell am Ende Differential Privacy. Allerdings sind die Parameterupdates, die an den Server geschickt werden nicht privat, denn das nötige Rauschen wird nur auf das Modellupdate angewendet, dass aus den Updates aller Clients aggregiert wird. Es muss also dem Server vertraut werden \cite[p.44]{kairouz:2021}.
 
-Alternativ dazu ist die lokale Anwendung von Differential Privacy. Dabei muss das Rauschen hinzugefügt werden, bevor der Client sein Update an den Server schickt. In der Praxis hat sich allerdings gezeigt, dass dieser Ansatz schwierig umzusetzen ist\cite[p.54]{kairouz:2021}.
+Alternativ dazu ist die lokale Anwendung von Differential Privacy. Dabei muss das Rauschen hinzugefügt werden, bevor der Client sein Update an den Server schickt. Dem Server wird nicht mehr per se vertraut, stattdessen wird in der Regel angenommen, dass der Server "honest-but-curious" ist. Das bedeutet, dass er zwar die Aufgaben, die er in dem Protokoll hat, richtig umsetzt, aber gleichzeitig versucht, aus den Zwischenergebnissen Informationen herauszufinden. In der Praxis hat sich allerdings gezeigt, dass dieser Ansatz schwierig umzusetzen ist\cite[p.54]{kairouz:2021}.
