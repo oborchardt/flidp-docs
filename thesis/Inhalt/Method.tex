@@ -1,17 +1,17 @@
 \chapter{Method}\label{chap:methods}
 
-\begin{itemize}
-	\item (argumentieren, warum ich rdp Accountant nutzen kann, also auf \cite[p.26]{boenisch:2023} verweisen)
-	\item auf die Schätzer eingehen, bzw. darauf, dass sie in der TF Implementierung keine Rolle spielen(?)
-	\item Effekte von Hyperparametern erklären? (mehr Runden mehr Privacy Loss etc)
-	\item Effekt des Noise Multipliers im Detail erklären
-	\item Algorithmus von DP-FedAvg (evtl mit Adaptive Clipping?) bzw direkt ganzen Algorithmus von mir
+%\begin{itemize}
+%	\item (argumentieren, warum ich rdp Accountant nutzen kann, also auf \cite[p.26]{boenisch:2023} verweisen)
+%	\item auf die Schätzer eingehen, bzw. darauf, dass sie in der TF Implementierung keine Rolle spielen(?)
+%	\item Effekte von Hyperparametern erklären? (mehr Runden mehr Privacy Loss etc)
+%	\item Effekt des Noise Multipliers im Detail erklären
+%	\item Algorithmus von DP-FedAvg (evtl mit Adaptive Clipping?) bzw direkt ganzen Algorithmus von mir
 	
-	\item High Level Einordnung -> Beispiele werden durch Clients ersetzt, was ist der Unterschied zu Related work
-	\item In der Methode noch den Ablauf der Experimente High Level beschreiben -> kann sich ein bisschen mit Experimente wiederholen
-	\item Einordnung in Research Kosmos und was ich damit in Experimenten mache
-	\item General Structure zu Aufbau des Algorithmus -> Änderungen beschreiben auf Related Work verweisen
-\end{itemize}
+%	\item High Level Einordnung -> Beispiele werden durch Clients ersetzt, was ist der Unterschied zu Related work
+%	\item In der Methode noch den Ablauf der Experimente High Level beschreiben -> kann sich ein bisschen mit Experimente wiederholen
+%	\item Einordnung in Research Kosmos und was ich damit in Experimenten mache
+%	\item General Structure zu Aufbau des Algorithmus -> Änderungen beschreiben auf Related Work verweisen
+%\end{itemize}
 
 % Methodik beschreiben
 % evtl hier auch Erwartungen beschreiben, in Bezug auf die 3 Punkte aus der Conclusion von wei:2020
@@ -26,9 +26,11 @@ Mein Algorithmus grenzt sich dabei von Arbeiten mit dem gleichen Ziel wie beispi
 \section{General structure}
 Mein Algorithmus lässt sich in zwei Schritte aufteilen. Der erste umfasst die Berechnung von einem Noise Multiplier und den Sampling Rates für einzelne Clients. Der Noise Multiplier ist ein Faktor, der mit der Sensitivität multipliziert wird, um die Standardabweichung der Normalverteilung, aus der das Rauschen gezogen wird zu berechnen. Wenn er größer wird, wird auch das Rauschen größer. Das Verfahren dafür beschreibe ich in \autoref{sec:idp-sampling-rates}. 
 
-Es basiert auf dem \texttt{SAMPLE}-Algorithmus von \textcite{boenisch:2023}, allerdings sind die Parameter an das Federated Learning Szenario angepasst. Darin entsprechen die Epochen den Runden und die Gradienten einzelner Trainingsbeispiele entsprechen den Updates der Clients. So werden aus \textit{example-level} Garantien \textit{user-level} Garantien der Differential Privacy.
+Die Berechnung dieser Faktoren basiert auf dem \texttt{SAMPLE}-Algorithmus von \textcite{boenisch:2023}, allerdings sind die Parameter dafür an das Federated Learning Szenario angepasst. Darin entsprechen die Epochen den Runden und die Gradienten einzelner Trainingsbeispiele den Updates der Clients. So werden aus \textit{example-level} Garantien \textit{user-level} Garantien der Differential Privacy, wie in \autoref{sec:pm-in-fl} beschrieben.
 
-Der zweite Schritt ist die Durchführung des eigentlichen Trainings mit diesen vorher berechneten Parametern. Dafür nutze ich \texttt{DP-FedAvg} mit Adaptive Clipping \cite{andrew:2021}, allerdings ziehe ich die Clients mit den vorher berechneten individuellen Sampling Rates. Anders als bei \citeauthor{aldaghri:2023} haben alle Clients einen einheitlichen Noise Multiplier.
+Der zweite Schritt ist die Durchführung des eigentlichen Trainings mit diesen vorher berechneten Parametern. Dafür nutze ich \texttt{DP-FedAvg} mit Adaptive Clipping \cite{andrew:2021}, allerdings ziehe ich die Clients mit den vorher berechneten individuellen Sampling Rates. Anders als bei \citeauthor{aldaghri:2023} haben alle Clients einen einheitlichen Noise Multiplier und individuelle Sampling Rates.
+
+Mit meinem Algorithmus habe ich Experimente auf drei Benchmark Datensätzen durchgeführt, um den Effekt der individuellen Privacy-Budgets und heterogenen Datenverteilungen zu analysieren. Details dazu sind in \autoref{chap:experiments} beschrieben.
 
 % Beweis von \cite{boenisch:2023} zu Sample beschreiben oder übernehmen (basiert auf RDP und Privacy Amplification through Subsampling)
 % auf das Thema User-level DP eingehen?
@@ -36,7 +38,7 @@ Der zweite Schritt ist die Durchführung des eigentlichen Trainings mit diesen v
 
 \textcite{boenisch:2023} konnten in ihrer Arbeit zeigen, dass das Training mit individuellen \textit{sampling rates}, die auf Grundlage der individuellen Privacy Budgets berechnet werden, gute Ergebnisse erzielen kann. Die Ergebnisse sind insbesondere besser, als die, die sie mit der individuellen Skalierung der \textit{Noise Multiplier} bzw. der \textit{clipping norms} erzielt haben, einem Ansatz der auch im Federated Learning vorgeschlagen wurde \cite{aldaghri:2023}. 
 
-Sie schlagen einen Algorithmus vor, um die \textit{sampling rates} zu berechnen und dabei den Erwartungswert der Anzahl der Datenpunkte, die gezogen werden, beibehalten. Der Algorithmus ist in \autoref{alg:boenisch-sample} zu sehen.
+Ihr Algorithmus zur Berechnung der \textit{sampling rates} behält dabei den Erwartungswert der Anzahl der Datenpunkte, die gezogen werden, bei. Der Algorithmus ist in \autoref{alg:boenisch-sample} zu sehen.
 
 \begin{algorithm}[tb]
 	\caption{\texttt{GetSampleRates}, per-group Privacy Budget Algorithm from \cite[p.6]{boenisch:2023}}
@@ -64,13 +66,13 @@ Sie schlagen einen Algorithmus vor, um die \textit{sampling rates} zu berechnen 
 
 Vor der Anwendung des Algorithmus müssen die einzelnen Datenpunkte nach ihrem Privacy Budget gruppiert werden. So entstehen $P$ Gruppen, wobei $P$ die Anzahl der verschiedenen Privacy-Budgets im Datensatz ist.
 
-Die Ausgabe des Algorithmus ist ein Noise-Multiplier $\sigma_{\text{SAMPLE}}$, der für alle Datenpunkte einheitlich ist, und individuelle Sampling Rates $\{q_1, ..., q_P\}\}$, welche die Wahrscheinlichkeit beschreiben einen Datenpunkt in einem Mini-Batch zu ziehen. Wichtig ist, dass $\sigma_{\text{SAMPLE}}$ so lange angepasst wird, bis die durchschnittliche Sampling Rate aller Gruppen wieder einer Rate von $q$ entspricht. So kann die Menge der gezogenen Punkte in einem Mini-Batch im Erwartungswert weiterhin gesteuert werden.
+Die Ausgabe des Algorithmus ist ein Noise-Multiplier $\sigma_{\text{SAMPLE}}$, der für alle Datenpunkte einheitlich ist, und individuelle Sampling Rates $\{q_1, ..., q_P\}\}$, welche die Wahrscheinlichkeit beschreiben einen Datenpunkt in einem Mini-Batch zu ziehen. Wichtig ist, dass $\sigma_{\text{SAMPLE}}$ so lange angepasst wird, bis die durchschnittliche Sampling Rate aller Gruppen wieder der ursprünglich festgelegten Rate von $q$ entspricht. So kann die Menge der gezogenen Punkte in einem Mini-Batch im Erwartungswert weiterhin gesteuert werden.
 
-Die Funktion \texttt{getSampleRate} in dem Algorithmus bezieht sich auf eine Opacus\cite{yousefpour:2021}-Funktion. Sie berechnet die \textit{Sampling Rates} für ein Training mit homogenen Privacy-Budgets auf Grundlage der übergebenen Parameter.
+Die Funktion \texttt{getSampleRate} in dem Algorithmus bezieht sich auf eine Opacus-Funktion \cite{yousefpour:2021}. Sie berechnet die \textit{Sampling Rates} für ein Training mit homogenen Privacy-Budgets auf Grundlage der übergebenen Parameter.
 
 Die Kombination aus dem \textit{Noise-Multiplier} und den individuellen \textit{sampling rates} sorgt dafür, dass die Privacy Budgets aller Datenpunkte der unterschiedlichen Privacy-Gruppen nach $I$ Iterationen aufgebraucht sind. 
 
-Der \textit{Noise Multiplier} $\sigma$, mit dem $\sigma_{\text{SAMPLE}}$ zunächst initialisiert wird, entspricht dem Wert, den es bräuchte, wenn alle Datenpunkte das kleinste Privacy Budget, also $\epsilon_1$ hätten. Da aber die individualisierten Budgets größer sind, wird der Wert in jeder Iteration mit dem Faktor $0 < s_i < 1$ verringert.
+Der \textit{Noise Multiplier} $\sigma$, mit dem $\sigma_{\text{SAMPLE}}$ zunächst initialisiert wird, entspricht dem Wert, den es bräuchte, wenn alle Datenpunkte das kleinste Privacy Budget, also $\epsilon_1$ hätten. Da aber die individualisierten Budgets teilweise größer sind, wird der Wert in jeder Iteration mit dem Faktor $0 < s_i < 1$ verringert.
 
 \textcite[p.26f.]{boenisch:2023} beweisen in ihrer Arbeit, dass ihr Algorithmus $(\epsilon_p, \delta_p)$ Differential Privacy erfüllt. Ihr Beweis basiert auf \textcite{mironov:2017, mironov:2019}. 
 
@@ -79,7 +81,7 @@ Der \textit{Noise Multiplier} $\sigma$, mit dem $\sigma_{\text{SAMPLE}}$ zunäch
 
 \citeauthor{boenisch:2023} argumentieren, dass ihr \texttt{IDP-SGD} ein solcher SGM ist und übertragen den Beweis von \citeauthor{mironov:2019} direkt auf die Privacy-Parameter der Gruppen $\{q_1, ..., q_P\}\}$ und $\sigma_{\text{SAMPLE}}$. Mithilfe von \textcite{mironov:2017} können sie die Rényi-Differential Privacy in die klassische $(\epsilon, \delta)$-Form überführen.
 
-Im Federated Learning verändern sich die Parameter. Der Server, auf dem Zwischenergebnisse verrauscht werden sollen, zieht keine einzelnen Datenpunkte, sondern Gradienten verschiedener Clients. Dieser Prozess wiederholt sich über mehrere Iterationen, die Runden genannt werden. Die Iterationen im lokalen Trainingsprozess der Clients haben keinen Einfluss auf die Parameter mit denen die Updates verrauscht werden, was auch \textcite[p.3]{mcmahan:2018} als einen Vorteil von \texttt{FedAvg} gegenüber \texttt{FedSGD} werten. 
+Im Federated Learning verändern sich die Parameter. Der Server, auf dem Zwischenergebnisse verrauscht werden, zieht keine einzelnen Datenpunkte, sondern Gradienten verschiedener Clients. Dieser Prozess wiederholt sich über mehrere Iterationen, die Runden genannt werden. Die Iterationen im lokalen Trainingsprozess der Clients haben keinen Einfluss auf die Parameter mit denen die Updates verrauscht werden, was auch \textcite[p.3]{mcmahan:2018} als einen Vorteil von \texttt{FedAvg} gegenüber \texttt{FedSGD} werten. 
 
 Um die Sampling Rates in meinem Federated Learning Algorithmus zu berechnen nutze ich daher ebenfalls \autoref{alg:boenisch-sample}, allerdings entsprechen die Zahl der Iterationen $I$ hier der Anzahl der Runden und die Anzahl der Datenpunkte $N$ ist die Anzahl der Clients. Wie auch \textcite{mcmahan:2018, boenisch:2023} wende ich zur Abschätzung der gesamten Privacy Kosten den \textit{moments accountant}, bzw. den \textit{rdp accountant} \cite{wang:2020} basierend auf Rényi Differential Privacy \cite{mironov:2017} an.
 
@@ -94,9 +96,9 @@ Sie gehen davon aus, dass jeder Client ein Gewicht $w_k$ zugewiesen bekommt, das
 
 Die Sensitivität der Updates der einzelnen Clients gebe ich nicht direkt vor sondern nutze Adaptive Clipping \cite{andrew:2021}. Dabei wird statt einer festen Clipping Norm ein Quantil der Clients festgelegt, deren Updates geclippt werden sollen. Zur Abschätzung der dafür notwendigen Clipping Norm gibt jeder Client ein Bit zurück, das sagt, ob sein Update größer war als die aktuelle Norm oder nicht. Zur Abschätzung des geclippten Quantils wird dann die Summe der geclippten Updates mittels Differential Privacy berechnet. Dabei wird ein kleiner Teil des Privacy Budgets verwendet. Danach wird die Clipping Norm dementsprechend mit einer eigenen Learning Rate angepasst. 
 
-Da die Berechnung der Anzahl der geclippten Updates selbst einen kleinen Teil des Privacy Budgets verbraucht, ist der Noise Multiplier für das Modelltraining leicht höher als der ursprünglich vorgegebene. Allerdings ist das Quantil der Updates, das gestutzt werden soll, ein Hyperparameter, der sich leichter optimieren lässt als die konkrete Clipping Norm.
+Da die Berechnung der Anzahl der geclippten Updates selbst einen kleinen Teil des Privacy Budgets verbraucht, ist der Noise Multiplier für das Modelltraining leicht höher als der ursprünglich vorgegebene. Allerdings ist das Quantil der Updates, das gestutzt werden soll, ein Hyperparameter, der sich leichter optimieren lässt als die konkrete Clipping Norm, die potenziell abhängiger von dem Trainingsdatensatz sein kann.
 
-Der Algorithmus ist in \autoref{alg:idp-fedavg} beschrieben. \texttt{DPFedAvhAdaptiveClipping} bezieht sich auf Algorithmus 1 aus \textcite[p.4]{andrew:2021} mit der Änderung, dass das Sampling der Clients nicht gleichverteilt passiert, sondern mit den individuellen Sampling Rates. Die Parameter, die sich auf das adaptive clipping beziehen, habe ich in meiner Arbeit auf den Standardwerten belassen. Dabei ist das Quantil der Clients, deren Updates geclippt werden sollen der Median. Die weiteren Parameter dafür sind in im Repository von Tensorflow Federated zu finden.\footnote{\url{https://github.com/google-parfait/tensorflow-federated/blob/main/tensorflow_federated/python/aggregators/differential_privacy.py} (accessed 20-11-2024)}
+Der Algorithmus ist in \autoref{alg:idp-fedavg} beschrieben. \texttt{DPFedAvgAdaptiveClipping} bezieht sich auf Algorithmus 1 aus \textcite[p.4]{andrew:2021} mit der Änderung, dass das Sampling der Clients nicht gleichverteilt passiert, sondern mit den individuellen Sampling Rates. Die Parameter, die sich auf das \textit{Adaptive Clipping} beziehen, habe ich in meiner Arbeit auf den Standardwerten belassen. Dabei ist das Quantil der Clients, deren Updates geclippt werden sollen der Median. Die weiteren Parameter dafür sind in im Repository von Tensorflow Federated zu finden.\footnote{\url{https://github.com/google-parfait/tensorflow-federated/blob/main/tensorflow_federated/python/aggregators/differential_privacy.py} (accessed 20-11-2024)}
 
 
 \begin{algorithm}[tb]

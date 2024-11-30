@@ -1,13 +1,23 @@
 \chapter{Discussion}
 
 \begin{itemize}
-	\item sagen was es für Limitierungen gibt -> DP verschlechtert die Ergebnisse, FedAvg hat auch schon Probleme bei non-iid, ...
+	\item lokale vs globale DP?
 \end{itemize}
 
-%Future work
+Die Ergebnisse meiner Arbeit zeigen, dass individualisierte Privacy Budgets mit meinem Algorithmus einen Vorteil bei der Modellgenauigkeit gegenüber der Nutzung homogener Budgets bringen. Insbesondere kann es darüber entscheiden ob ein Modell mit einem gegebenen Budget etwas lernen kann oder nicht. Das wurde vor allem beim SVHN Datensatz mit kleinen Privacy Budgets sichtbar.
 
-\chapter{Conclusion}
+Gleichzeitig zeigen meine Experimente, dass Federated Learning mit deutlich mehr Aufwand verbunden ist als das Training auf einem Datensatz. Einerseits betrifft das die Laufzeit und den Rechenaufwand der Simulationen, andererseits aber auch das Tuning der Hyperparameter. In meiner Arbeit bin ich vor allem auf die Auswirkungen der Privacy Budgets auf die Ergebnisse eingegangen, allerdings hatten auch die Hyperparameter aus \autoref{tab:fl-hyperparameters} einen Einfluss auf die Ergebnisse.
 
-\begin{itemize}
-	\item Introduction und Discussion zusammenfügen + 
-\end{itemize}
+Die erreichten Genauigkeiten liegen auch bei dem nicht-privaten Federated Learning noch deutlich unter den Ergebnissen mit klassischem Training. Besonders deutlich wurde das bei den schwierigeren Datensätzen, SVHN und CIFAR-10. Möglicherweise würden sich die Ergebnisse über mehr Runden annähern, allerdings ist dies bei dem privaten Training nicht unbegrenzt möglich, da eine höhere Rundenzahl auch ein stärkeres Rauschen bedeuten würde.
+
+Außerdem hat sich auf allen Datensätzen, aber vor allem auf CIFAR-10 gezeigt, dass die Verteilung der Trainingsdaten einen großen Einfluss auf die Ergebnisse des Modells hat. Zwar gibt es Algorithmen wie \texttt{SCAFFOLD}, die besser auf heterogenen Daten funktionieren, allerdings sind sie dann auf gleichverteilten Daten wiederum schlechter. Da die Partei, die das Federated Learning durchführt, die Daten aber nicht sieht, kann sie keine informierte Entscheidung diesbezüglich treffen.
+
+Die Anwendung von Differential Privacy ist auch im Federated Learning wichtig, um die Privatheit von Nutzern zu schützen. Allerdings zeigt sich, dass sie das Training deutlich erschweren und in einigen Fällen fast unmöglich machen kann. Auch das für den Datensatz angemessene Privacy Budget ist im Vorfeld schwer einzuschätzen, wie die Unterschiede zwischen MNIST und CIFAR-10 bzw. SVHN zeigen.
+
+Darüber hinaus bringt Differential Privacy die Schwierigkeit mit sich, dass die Hyperparameter nicht auf den sensiblen Daten optimiert werden können, da wiederholte Trainings dafür auch in die Berechnung der Privacy Budgets einfließen müssen. Das Hyperparameter Tuning auf öffentlichen Datensätzen, wie es \textcite{ramaswamy:2020} durchgeführt haben, ist eine Möglichkeit, das Problem zu umgehen, allerdings müssen öffentliche Datensätze mit einer ähnlichen Datenverteilung existieren.
+
+Individualisierte Differential Privacy wurde im Federated Learning bereits in verschiedenen Arbeiten untersucht. Allerdings werden dafür häufig individualisierte Noise Multiplier vorgeschlagen. Die Arbeiten von \textcite{jorgensen:2015, boenisch:2023} legen allerdings nahe, dass individualisierte Sampling Rates eine weitere effektive Maßnahme sein können um die individuellenn Privacy Garantien zu erfüllen. Eine umfassendere Forschung dazu im Federated Learning könnte helfen, das private und datensparsam trainierte Modelle zu mehr Popularität zu verhelfen.
+
+Abgesehen davon ist die Forschung zu robusteren Federated Learning Algorithmen wichtig, um sensible Daten analysieren zu können und gleichzeitig Vertrauen bei den Leuten zu schaffen, die solche Daten generieren. Um die Hürde für Forschung in der Richtung zu senken, ist die Weiterentwicklung von Bibliotheken wie Tensorflow Federated und Flower \cite{beutel:2020} ebenfalls wichtig. 
+
+Die Vergleichbarkeit der Ergebnisse von Federated Learning Verfahren ist ebenfalls noch nicht gegeben. Da anders als im klassischem Training nicht nur die Daten selbst für die Performanz der Modelle verantwortlich sind, sondern vor allem auch wie sie auf die Clients verteilt werden. Darüber hinaus können Modelle unterschiedlich evaluiert werden. Eine Möglichkeit ist dies zentral zu tun, aber es ist auch möglich Durchschnittsmetriken von Evaluierungen auf den einzelnen Clients anzugeben. All diese Faktoren sollten mindestens auch angegeben werden, wenn Ergebnisse publiziert werden. Idealerweise sollte auch die Verbreitung von Bibliotheken unabhängigen Benchmarks vorangetrieben werden.
