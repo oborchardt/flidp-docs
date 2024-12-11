@@ -1,18 +1,18 @@
 \chapter{Fundamentals}\label{chap:fundamentals}
 
-\begin{itemize}
-%	\item evtl Section o.ä. zu Angriffen auf nicht DP-Federated Learning, bzw. warum braucht es DP auch im FL?
-	\item IDP-Teil nach Related Work?
-\end{itemize}
+%\begin{itemize}
+%%	\item evtl Section o.ä. zu Angriffen auf nicht DP-Federated Learning, bzw. warum braucht es DP auch im FL?
+%	\item IDP-Teil nach Related Work?
+%\end{itemize}
 
 In diesem Kapitel gehe ich auf die Grundlagen ein, die für meine Arbeit wichtig sind. Zunächst gebe ich einen Überblick zu Differential Privacy, beschreibe die zugrundeliegende Idee, formalisiere sie und umreiße die wichtigsten Mechanismen, um sie anzuwenden. Danach beschreibe ich die Grundlagen von Federated Learning, erwähne Probleme, die das Verfahren bei verzerrten Datenverteilungen hat und gehe auf mögliche Privacy Modelle im Federated Learning ein.
 
 \section{Differential Privacy}
 
-\begin{itemize}
-%	\item Anwendung von DP in the wild (\cite{erlingsson:2014, tezapsidis:2017, apple:2017}) -> steht in introduction
-	\item Randomized Response als anschauliches Beispiel? (ähnlich wie bei \cite[p.1]{erlingsson:2014}) 
-\end{itemize}
+%\begin{itemize}
+%%	\item Anwendung von DP in the wild (\cite{erlingsson:2014, tezapsidis:2017, apple:2017}) -> steht in introduction
+%	\item Randomized Response als anschauliches Beispiel? (ähnlich wie bei \cite[p.1]{erlingsson:2014}) 
+%\end{itemize}
 
 Differential Privacy ist ein Verfahren, dass die Privatheit bei interaktiven Anfragen auf Datenbanken schützt. Die zugrundeliegende Datenbank selbst wird dabei nicht verändert, was es von nicht-interaktiven Privatheitsmaßen wie \textit{k-anonymity} abgrenzt. Stattdessen wird die Anfrage an die Datenbank so abgewandelt, dass die Privatheit von Individuen geschützt wird. 
 
@@ -70,11 +70,11 @@ Darüber hinaus können Ergebnisse, die durch einen Mechanismus erhalten wurden 
 
 \subsection{Differential Privacy in Machine Learning}\label{sec:fund-dp-in-ml}
 
-\begin{itemize}
-%	\item Attacken auf Privatheit beschreiben, gegen die DP hilft? (wie in der Introduction von \cite{abadi:2016})
-%	\item Warum nutzt man DP, was ist die Motivation -> Verteidigung gegen Model Inversion Attacks(?), ...
-	\item was sind Variablen beim Training, die einen Einfluss auf das benötigte Privacy Budget haben? (Da kann dann eine Brücke zum FL geschlagen werden)
-\end{itemize}
+%\begin{itemize}
+%%	\item Attacken auf Privatheit beschreiben, gegen die DP hilft? (wie in der Introduction von \cite{abadi:2016})
+%%	\item Warum nutzt man DP, was ist die Motivation -> Verteidigung gegen Model Inversion Attacks(?), ...
+%	\item was sind Variablen beim Training, die einen Einfluss auf das benötigte Privacy Budget haben? (Da kann dann eine Brücke zum FL geschlagen werden)
+%\end{itemize}
 
 Das Ziel von Differential Privacy im Machine Learning, ist es die Privatheit der einzelnen Datenpunkte in den Trainingsdaten zu schützen. Das bezieht sich in dem Fall nicht auf den Schutz der Datenbank, sondern darauf, zu verhindern, dass sensible Informationen aus den Trainingsdaten bei der Nutzung des trainierten Modells durch Dritte gefunden werden können. 
 

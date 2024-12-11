@@ -1,20 +1,20 @@
 \chapter{Related work}\label{chap:related-work}
 
-\begin{itemize}
-	%	\item Konvergenz des FL verbessern durch Algorithmen
-	%	\begin{itemize}
-		%		\item Varianz reduzieren (SCAFFOLD), Momente nutzen, ... (sehr viele Ansätze werden in \textcite[p.26ff]{kairouz:2021} erwähnt)
-		%	\end{itemize}
-	\item Ansätze für personalisierte Modelle (bei non-iid Datensätzen) \parencite[p.28ff]{kairouz:2021} bzw. auch die Idee Globale Modelle durch Kontext anzureichern um bessere Vorhersagen für einzelne Nutzer zu bekommen
-	\item Ergebnisse von anderen Arbeiten auf den gleichen Datensätzen
-	%	\item Übertragung von non-FL Verfahren auf FL und die Probleme die dabei entstehen (z.B. beim Hyperparametertuning) (p.30ff)
-	%	\item Kompression / Effizienzsteigerung von FL (p.32ff.)
-	%	\item sehr interessanter Absatz zu Kompatibilität von DP und Kompressionstechniken (p.33)
-	%	\item DP in FL (p. 44ff), vor allem die Referenzen zu Hybrid DP tun das was ich machen will aber anders
-	%	\item Kapitel 4.3 (p.48 ff) für mein Szenario mit einem vertrauenswürdigen Server
-	%	\item p.50 hat vieles was bei mir in Future Work kann
-	%	\item p.54 hat ganz klaren Vergleich zwischen Local und Central DP!
-\end{itemize}
+%\begin{itemize}
+%	%	\item Konvergenz des FL verbessern durch Algorithmen
+%	%	\begin{itemize}
+%		%		\item Varianz reduzieren (SCAFFOLD), Momente nutzen, ... (sehr viele Ansätze werden in \textcite[p.26ff]{kairouz:2021} erwähnt)
+%		%	\end{itemize}
+%%	\item Ansätze für personalisierte Modelle (bei non-iid Datensätzen) \parencite[p.28ff]{kairouz:2021} bzw. auch die Idee Globale Modelle durch Kontext anzureichern um bessere Vorhersagen für einzelne Nutzer zu bekommen
+%%	\item Ergebnisse von anderen Arbeiten auf den gleichen Datensätzen
+%	%	\item Übertragung von non-FL Verfahren auf FL und die Probleme die dabei entstehen (z.B. beim Hyperparametertuning) (p.30ff)
+%	%	\item Kompression / Effizienzsteigerung von FL (p.32ff.)
+%	%	\item sehr interessanter Absatz zu Kompatibilität von DP und Kompressionstechniken (p.33)
+%	%	\item DP in FL (p. 44ff), vor allem die Referenzen zu Hybrid DP tun das was ich machen will aber anders
+%	%	\item Kapitel 4.3 (p.48 ff) für mein Szenario mit einem vertrauenswürdigen Server
+%	%	\item p.50 hat vieles was bei mir in Future Work kann
+%	%	\item p.54 hat ganz klaren Vergleich zwischen Local und Central DP!
+%\end{itemize}
 
 In diesem Kapitel beschreibe ich den Stand der Forschung in den für meine Arbeit relevanten Forschungsgebieten. Da sie mehrere Problemfelder umfasst, werde ich das Kapitel im folgenden in drei Teile unterteilen. In \autoref{sec:rw-idp-ml} gehe ich auf Arbeiten ein, die individualisierte Differential Privacy aus \autoref{fund-idp} auf Machine Learning Algorithmen übertragen. In \autoref{sec:rw-fl} beschreibe ich den Stand der Forschung in Bezug auf Fragen des Federated Learning, beispielsweise wie mit unterschiedlichen Verteilungen in den Trainingsdatensätzen umgegangen werden kann. In \autoref{sec:rw-fldp} gehe ich auf Arbeiten ein, welche die Notwendigkeit von Differential Privacy im Federated Learning belegen und auf Algorithmen, welche Differential Privacy mit einheitlichen Privacy-Budgets im Federated Learning umsetzen, um die Basis für Algorithmen mit individualisierten Budgets zu legen, die ich in \autoref{sec:rw-flidp} beschreibe.
 
@@ -92,6 +92,8 @@ Einen ähnlichen Ansatz liefern \textcite{geyer:2017}, allerdings begrenzen sie 
 Sie evaluieren ihren Algorithmus auf dem \texttt{EMNIST}-Datensatz und auf synthetischen Daten, bei denen die Verzerrung der Datenverteilungen zwischen den Clients gesteuert werden kann. Bei \texttt{MNIST} weisen sie einen Teil der Daten zufällig zu und den übrigen Teil sortiert nach der Klasse, um Datenheterogenität zu simulieren. Die Ergebnisse zeigen, dass \texttt{DP-SCAFFOLD} bei gleichverteilten Daten zwar eine ein wenig schlechtere Performanz hat als \texttt{DP-FedAvg}, allerdings deutlich robuster ist, wenn die Daten zwischen den einzelnen Clients heterogener werden.
 
 \textcite{ramaswamy:2020} nutzen den \texttt{DP-FedAvg} als Grundlage, um ein \textit{Next-Word-Prediction} Modell in einer Produktivumgebung zu trainieren. Im Vorfeld des Trainings führen sie ein Hyperparameter Tuning auf einem öffentlichen Datensatz durch, um Privacy-Kosten zu vermeiden. Sie zeigen, dass sie die Nützlichkeit gegenüber dem vorher genutzten Sprachmodell steigern können. Allerdings machen sie Abstriche bei dem formalen Nachweis des genutzten Privacy-Budgets, da das zufällige Sampling der Clients nicht eingehalten werden kann, welches nötig ist um das Budget gemäß dem Theorem von \textcite{wang:2020} abzuschätzen. Stattdessen weisen sie empirisch nach, dass ihre Anwendung von Differential Privacy gegen das ungewollte Einprägen von exakten Trainingsdaten im Modell hilft.
+
+\textcite{sun:2021} schlagen einen Algorithmus mit lokaler Differential Privacy vor, in dem die einzelnen Gewichte der Gradienten zwischen allen Clients vermischt werden, bevor sie an den Server geschickt werden. Sie argumentieren, dass sie kleinere Budgets verwenden können, da der Server die Gewichte nicht mehr den einzelnen Clients zuordnen kann. Sie evaluieren ihren Algorithmus auf MNIST \cite{lecun:1998}, Fashion-MNIST \cite{xiao:2017} und CIFAR-10 \cite{krizhevsky:2009}. Sie erzielen auf MNIST mit einem kleinen CNN eine Genauigkeit von $~96\%$ und auf CIFAR-10 mit einem VGG-ähnlichen Modell $~60\%$. Sie nutzen auf MNIST $100$ Runden und auf CIFAR-10 $500$ Runden. Darüber hinaus erhöhen sie ihr Budget von $\epsilon = 1$ bei MNIST auf $\epsilon = 10$ auf CIFAR-10. Das ist nötig, da die Klassifikation auf CIFAR-10 komplexer ist als auf MNIST.
 
 
 \section{Federated Learning with Individualized Differential Privacy}\label{sec:rw-flidp}
