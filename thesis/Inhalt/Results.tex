@@ -18,9 +18,9 @@ Bei MNIST und SVHN erreicht das Modell bereits innerhalb von 10 Epochen gute Erg
 		\hline
 		Dataset & Accuracy & Loss \\
 		\hline
-		MNIST & 0.9858 & 0.0494 \\
-		SVHN & 0.8963 & 0.3695 \\
-		CIFAR-10 & 0.5881 & 1.1652 \\
+		MNIST & 0.9842 & 0.0535 \\
+		SVHN & 0.8758 & 0.4203 \\
+		CIFAR-10 & 0.634 & 1.0395 \\
 		\hline
 	\end{tabular}
 	\caption{The results of non-federated training without differential privacy}
@@ -33,17 +33,17 @@ Die Trainingszeit liegt bei wenigen Sekunden oder Minuten. Derartige Experimente
 
 \begin{figure}
 	\centering
-	\begin{subfigure}{0.3\textwidth}
+	\begin{subfigure}{0.32\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/mnist-results-local.png}
 		\caption{MNIST}
 	\end{subfigure}
-	\begin{subfigure}{0.3\textwidth}
+	\begin{subfigure}{0.32\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/svhn-results-local.png}
 		\caption{SVHN}
 	\end{subfigure}
-	\begin{subfigure}{0.3\textwidth}
+	\begin{subfigure}{0.32\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar-results-local.png}
 		\caption{CIFAR-10}
@@ -110,29 +110,29 @@ Wie in \autoref{chap:methods} beschrieben, verwende ich für die Hyperparameter 
 
 Bei MNIST konnten die DP-Algorithmen ähnlich gute Ergebnisse erzielen wie das nicht-private \texttt{FedAvg}. In \autoref{fig:fed-emnist-results} ist dennoch ein Einfluss des Privacy Setups auf das Ergebnis zu sehen. Vor allem \texttt{strict-dp} konvergiert ein bisschen instabiler und kommt nicht ganz an die anderen Ergebnisse heran. Außerdem fällt der Loss bei \texttt{no-dp} bereits deutlich früher ab und bei den anderen Setups erst nach ungefähr 15 Runden. Die restlichen Privacy-Niveaus liegen sehr nah beieinander, allerdings ist auffällig, dass \texttt{relaxed-dp} schlechter abschneidet, als die individualisierten Niveaus.
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/emnist-accuracy.png}
 		\caption{validation accuracy (non-i.i.d)}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/emnist-loss.png}
 		\caption{validation loss (non-i.i.d)}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/emnist-accuracy-iid.png}
 		\caption{validation accuracy (i.i.d)}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/emnist-loss-iid.png}
 		\caption{validation loss (i.i.d)}
 	\end{subfigure}
-	\caption{Metrics of the different privacy setups on MNIST (non-iid) in the course of training}
+	\caption{Metrics of the different privacy setups on MNIST in the course of training}
 	\label{fig:fed-emnist-results}
 \end{figure}
 
@@ -167,12 +167,12 @@ Die Noise Multiplier sind ebenfalls aufsteigend, je nach Budgets des Setups, all
 
 \begin{figure}
 	\centering
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/svhn-accuracy.png}
 		\caption{validation accuracy}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/svhn-loss.png}
 		\caption{validation loss}
@@ -186,24 +186,24 @@ Bei CIFAR-10 ist auffällig, dass die Performanz des Modells kaum vom Privacy-Ni
 
 Bei dem Training auf dem gleichverteilten Datensatz werden alle Modelle deutlich besser. Auch hier liegen die verschiedenen Privacy-Setups nah an dem nicht-privat trainierten Modell. Es fällt aber auf, dass die Verbesserungen der privat trainierten Modelle etwas weniger gleichmäßig ist. Zwischen den individualisierten und den homogenen Budgets ist kein großer Unterschied zu erkennen.
 
-\begin{figure}
+\begin{figure}[tb]
 	\centering
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar10-accuracy.png}
 		\caption{validation accuracy (non-i.i.d)}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar10-loss.png}
 		\caption{validation loss (non-i.i.d)}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar10-accuracy-iid.png}
 		\caption{validation accuracy (i.i.d)}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar10-loss-iid.png}
 		\caption{validation loss (i.i.d)}
@@ -224,24 +224,24 @@ Bei einem höheren Budget von $\epsilon = \{5, 10, 20\}$ entspricht der Training
 
 Auf dem SVHN Datensatz verläuft das Training noch deutlich schlechter als in \autoref{fig:fed-svhn-results}. Im Vergleich zu den kleineren Budgets ist der größte Unterschied bei \texttt{relaxed-dp} zu sehen. Die Genauigkeit des Modells steigt an und ist deutlich über den $20\%$. Die anderen Privacy Niveaus bleiben allerdings ungefähr bei den gleichen Werten. Es fällt jedoch auf, dass die Genauigkeiten nicht mehr so stark einbrechen und dass auch \texttt{strict-dp} auf die $20\%$ Genauigkeit kommt.
 
-\begin{figure}
+\begin{figure}[tb]
 	\centering
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{Bilder/cifar10-accuracy-iid-eps-1-2-3.png}
 		\caption{CIFAR-10 (i.i.d.) with $\epsilon = \{1,2,3\}$}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{Bilder/cifar10-accuracy-iid-eps-5-10-20.png}
 		\caption{CIFAR-10 (i.i.d.) with $\epsilon = \{5,10,20\}$}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{Bilder/svhn-accuracy-eps-1-2-3.png}
 		\caption{SVHN with $\epsilon = \{1,2,3\}$}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{Bilder/svhn-accuracy-eps-5-10-20.png}
 		\caption{SVHN with $\epsilon = \{5,10,20\}$}

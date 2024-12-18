@@ -1,0 +1,33 @@
+digraph {
+	rankdir=LR
+	node [color=lightblue fontname=Helvetica shape=box style="rounded, filled"]
+	Input [label=Input]
+	rescaling [label=Rescaling]
+	conv2d [label=Conv2D]
+	max_pooling2d [label=MaxPooling2D]
+	dropout [label=Dropout]
+	dropout -> conv2d_1 [constraint=false]
+	conv2d_1 [label=Conv2D]
+	max_pooling2d_1 [label=MaxPooling2D]
+	dropout_1 [label=Dropout]
+	conv2d_2 [label=Conv2D]
+	max_pooling2d_2 [label=MaxPooling2D]
+	max_pooling2d_2 -> dropout_2 [constraint=false]
+	dropout_2 [label=Dropout]
+	flatten [label=Flatten]
+	dense [label=Dense]
+	dropout_3 [label=Dropout]
+	dense_1 [label=Dense]
+	Input -> rescaling
+	rescaling -> conv2d
+	conv2d -> max_pooling2d
+	max_pooling2d -> dropout
+	conv2d_1 -> max_pooling2d_1
+	max_pooling2d_1 -> dropout_1
+	dropout_1 -> conv2d_2
+	conv2d_2 -> max_pooling2d_2
+	dropout_2 -> flatten
+	flatten -> dense
+	dense -> dropout_3
+	dropout_3 -> dense_1
+}

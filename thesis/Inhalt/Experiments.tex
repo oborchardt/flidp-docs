@@ -11,7 +11,21 @@ Ich evaluiere meinen Algorithmus auf drei Datensätzen, MNIST \cite{lecun:1998},
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.9\textwidth]{Bilder/dataset_examples.png}
+	\begin{subfigure}{0.32\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/svhn-examples.png}
+		\caption{SVHN}
+	\end{subfigure}
+	\begin{subfigure}{0.32\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/mnist-examples.png}
+		\caption{MNIST}
+	\end{subfigure}
+	\begin{subfigure}{0.32\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Bilder/cifar10-examples.png}
+		\caption{CIFAR-10}
+	\end{subfigure}
 	\caption{Examples from the three training datasets}
 	\label{fig:dataset-examples}
 \end{figure}
@@ -27,7 +41,7 @@ Die Berechnungen habe ich auf dem Clara Cluster der Universität Leipzig ausgef�
 
 \begin{figure}[tb]
 	\centering
-	\includegraphics[width=0.9\textwidth]{Bilder/label_distribution.png}
+	\includegraphics[width=\textwidth]{Bilder/label_distribution.png}
 	\caption{Label distribution on exemplary clients from the different datasets}
 	\label{fig:label-distribution}
 \end{figure}
@@ -45,17 +59,17 @@ Tensorflow Federated stellt einen Datensatz bereit, der auf einer erweiterten Ve
 
 \begin{figure}[tb]
 	\centering
-	\begin{subfigure}{0.3\textwidth}
+	\begin{subfigure}{0.32\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/emnist_label_distribution.png}
-		\caption{EMNIST}
+		\caption{MNIST}
 	\end{subfigure}
-	\begin{subfigure}{0.3\textwidth}
+	\begin{subfigure}{0.32\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/svhn_label_distribution.png}
 		\caption{SVHN}
 	\end{subfigure}
-	\begin{subfigure}{0.3\textwidth}
+	\begin{subfigure}{0.32\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar_label_distribution.png}
 		\caption{CIFAR-10}
@@ -76,6 +90,23 @@ Dort wird für jeden Client ein Vektor aus der Dirichlet-Verteilung gezogen, wel
 
 \autoref{fig:label-distribution-all} zeigt die Verteilung der Labels in den gesamten Trainingsdaten. Es ist auffällig, dass es in SVHN deutlich mehr kleinere Ziffern gibt als größere, mit Ausnahme der $0$. Allerdings lässt sich das womöglich dadurch erklären, dass Hausnummern in der Regel aufsteigend vorliegen und es daher für jede Ziffer $9$ auch $1$ bis $8$ gegeben haben muss. Diese ungleiche Verteilung wirkt sich, wie in \autoref{fig:label-distribution} zu sehen ist, auch auf die Menge der Trainingsbeispiele auf den Clients aus.
 
+\section{Exemplary setup of individual sampling rates and the noise multiplier}
+Um zu veranschaulichen, wie welche Trainingsparameter zu welchen Sampling Rates für den Algorithmus führen und die Auswirkungen zu zeigen, habe ich diese für leicht variierte Setups berechnet. Ich zeige dies ausgehend von den Parametern des MNIST-Datensatzes. Dieser umfasst $3383$ Clients, dementsprechend wähle ich $\delta= 1e-5$. 
+
+Zunächst verteile ich die Privacy Budgets mit der Verteilung $[0.34, 0.43, 0.23]$ unter den Clients. Die konkrete Zuweisung der Budgets anhand dieser Verteilung unterliegt dem Zufall, kann also leicht variieren. Mit Privacy-Budgets von $\epsilon = [1,2,3]$, $50$ Clients pro Runde und 100 Runden berechnet \autoref{alg:boenisch-sample} einen Noise Multiplier $\sigma = 0.92$ und Sampling Rates für die Budgets von $q = [0.003, 0.016, 0.028]$. Wie gefordert liegt der Erwartungswert der Clients pro Runde ungefähr bei $50$, genau bei $50.078$.
+
+Wenn die Budgets auf $\epsilon = [10, 20, 30]$ erhöht werden, ändern sich die Sampling Rates leicht, vor allem sinkt aber der Noise Multiplier auf $\sigma = 0.38$. Das führt dazu, dass im weiteren Training die Gradienten deutlich weniger verrauscht werden.
+
+Bei einer Verteilung der Budgets unter den Clients, die mehr Clients mit strengeren Budgets erzeugt, steigt $\sigma$ ebenfalls. Auch die Sampling Rates ändern sich deutlich. Bei einer Verteilung von $[0.54, 0.37, 0.09]$ steigt der Noise Multiplier auf $\sigma = 0.99$ und die Sampling Rates liegen bei $q = [0.006, 0.022, 0.036]$. Das führt auf der neuen Verteilung zu $50.072$ erwarteten Clients pro Runde.
+
+Wenn die Clients pro Runde gleich bleiben, aber die Anzahl der Clients im Datensatz herabgesetzt wird, steigt der Noise Multiplier ebenfalls. Das liegt daran, dass ein einzelner Client damit im Training häufiger gezogen wird und deshalb sein Beitrag zu dem Modell wieder stärker begrenzt werden muss um seine Privatheit zu schützen. Die Sampling Rates verändern sich auch, allerdings bleibt die Anzahl der Clients pro Runde im Mittel erhalten. Wenn statt den $3383$ Clients nur $1000$ Clients angenommen werden steigt der Noise Multiplier auf $\sigma = 1.50$. In der Praxis würde das natürlich auch dazu führen, dass es pro Client mehr Daten geben würde, also die Updates zwar stärker verrauscht werden würden, aber vermutlich auch aussagekräftiger wären.
+
+Ähnlich ist es, wenn die Anzahl der Trainingsrunden erhöht wird. Auch hier wird ein einzelner Client innerhalb des Trainings vermutlich häufiger gezogen, als bei weniger Runden. Bei $1000$ Runden steigt der Noise Multiplier auf $\sigma = 1.32$
+
+Auch wenn die Clients pro Runde erhöht werden ist das der Fall. Bei $200$ statt den bisherigen $50$ Clients pro Runde liegt der Noise Multiplier bei $\sigma = 1.68$.
+
+
+
 \section{IID versions of the datasets}\label{sec:iid-dataset-creation}
 Für MNIST und CIFAR-10 erstelle ich abgesehen von den oben genannten Datensätzen noch eine Version, bei der die Daten zufällig auf den Clients verteilt werden. Der Grund dafür ist, dass \texttt{FedAvg}, auf dem mein Algorithmus basiert, Schwierigkeiten mit Verzerrungen in den Trainingsdaten hat. Diese Versionen sollen also vor allem als eine Baseline sein und zur Vergleichbarkeit meiner Ergebnissen beitragen.
 
@@ -94,7 +125,7 @@ Die Schichten des Modells bestehen aus Convolutional, MaxPooling und Dropout Lay
 
 \begin{figure}[tb]
 	\centering
-	\includegraphics[height=0.6\textheight]{Bilder/model_architecture.png}
+	\includegraphics[width=0.8\textwidth]{Bilder/model_architecture_1.png}
 	\caption{Architecture of the model used for the classification tasks}
 	\label{fig:model-architecture}
 \end{figure}
