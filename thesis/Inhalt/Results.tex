@@ -14,14 +14,14 @@ Bei MNIST und SVHN erreicht das Modell bereits innerhalb von 10 Epochen gute Erg
 
 \begin{table}
 	\centering
-	\begin{tabular}{|c|c|c|}
-		\hline
+	\begin{tabular}{ccc}
+		\toprule
 		Dataset & Accuracy & Loss \\
-		\hline
+		\midrule
 		MNIST & 0.9842 & 0.0535 \\
 		SVHN & 0.8758 & 0.4203 \\
 		CIFAR-10 & 0.634 & 1.0395 \\
-		\hline
+		\bottomrule
 	\end{tabular}
 	\caption{The results of non-federated training without differential privacy}
 	\label{tab:local-model-results}
@@ -62,18 +62,18 @@ Es ist auffällig, dass die Modelle auf allen Datensätzen in der gleichverteilt
 
 \begin{table}
 	\centering
-	\begin{tabular}{|l|p{4em}|p{4em}|p{4em}|p{4em}|p{4em}|p{4em}|}
-		\hline
-		\multirow{2}{4em}{Setup} & \multicolumn{2}{c|}{MNIST} & \multicolumn{2}{c|}{SVHN} & \multicolumn{2}{c|}{CIFAR-10} \\
-		\cline{2-7}
+	\begin{tabular}{lp{4em}p{4em}p{4em}p{4em}p{4em}p{4em}}
+		\toprule 
+	 	& \multicolumn{2}{c}{MNIST} & \multicolumn{2}{c}{SVHN} & \multicolumn{2}{c}{CIFAR-10} \\
+		\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
 		& i.i.d. & non-i.i.d. & i.i.d. & non-i.i.d. & i.i.d. & non-i.i.d. \\
-		\hline
+		\midrule
 		\texttt{no-dp} & 0.906 & 0.896 & 0.825 & - & 0.419 & 0.246 \\
 		\texttt{relaxed-dp} & 0.931 & 0.855 & 0.544 & - & 0.407 & 0.252 \\
 		\texttt{relaxed-idp} & 0.917 & 0.883 & 0.418 & - & 0.394 & 0.255 \\
 		\texttt{strict-idp} & 0.91 & 0.887 & 0.446 & - & 0.386 & 0.235 \\
 		\texttt{strict-dp} & 0.895 & 0.811 & 0.292 & - & 0.387 & 0.246 \\
-		\hline
+		\bottomrule
 	\end{tabular}
 	\caption{Accuracies of the DP setups on all datasets}
 	\label{tab:all-fed-results}
@@ -90,17 +90,17 @@ Wie in \autoref{chap:methods} beschrieben, verwende ich für die Hyperparameter 
 
 \begin{table}[tb]
 	\centering
-	\begin{tabular}{|l|c|c|c|}
-		\hline
+	\begin{tabular}{lccc}
+		\toprule
 		Hyperparameter & MNIST & SVHN & CIFAR-10 \\
-		\hline
+		\midrule
 		Rounds & 100 & 100 & 100 \\
 		Clients per round & 50 & 30 & 30 \\
 		Batchsize & 128 & 128 & 128 \\
 		Local Epochs & 5 & 5 & 5 \\
 		Client learning rate & 0.001 & 0.001 & 0.001 \\
 		Server learning rate & 1.0 & 1.0 & 1.0 \\
-		\hline
+		\bottomrule
 	\end{tabular}
 	\caption{Hyperparameters used on each dataset for the federated training}
 	\label{tab:fl-hyperparameters}
@@ -140,16 +140,16 @@ Die vorher berechneten Noise Multiplier für jedes Setup sind in \autoref{tab:no
 
 \begin{table}
 	\centering
-	\begin{tabular}{|l|c|c|c|}
-		\hline
+	\begin{tabular}{lccc}
+		\toprule
 		Setup & MNIST & SVHN & CIFAR-10 \\
-		\hline
+		\midrule
 		\texttt{no-dp} & - & - & - \\
 		\texttt{relaxed-dp} & 0.769 & 0.348 & 0.384 \\
 		\texttt{relaxed-idp} & 0.917 & 0.415 & 0.461 \\
 		\texttt{strict-idp} & 1.000 & 0.444 & 0.494 \\
 		\texttt{strict-dp} & 1.180 & 0.508 & 0.568 \\
-		\hline
+		\bottomrule
 	\end{tabular}
 	\caption{Noise Multipliers of the different setups}
 	\label{tab:noise-multipliers}
