@@ -1,4 +1,4 @@
-\chapter{Results}\label{chap:results}
+\chapter{Ergebnisse}\label{chap:results}
 %\begin{itemize}
 %	\item Hyperparameter beschreiben (Clients pro Runde, Learning Rate yadayadayada)
 %	\item Numerisch beschreiben was es für Unterschiede gibt (bei iid ist das Delta von der Privacy setups so und so usw)
@@ -23,7 +23,7 @@ Bei MNIST und SVHN erreicht das Modell bereits innerhalb von 10 Epochen gute Erg
 		CIFAR-10 & 0.634 & 1.0395 \\
 		\bottomrule
 	\end{tabular}
-	\caption{The results of non-federated training without differential privacy}
+	\caption{Die Ergebnisse von nicht privaten und zentral durchgeführten Trainingsdurchläufen}
 	\label{tab:local-model-results}
 \end{table}
 
@@ -48,13 +48,13 @@ Die Trainingszeit liegt bei wenigen Sekunden oder Minuten. Derartige Experimente
 		\includegraphics[width=\textwidth]{Bilder/cifar-results-local.png}
 		\caption{CIFAR-10}
 	\end{subfigure}
-	\caption{Training and validation accuracies of the non-federated training processes}
+	\caption{Genauigkeiten auf den Trainings- und Validierungsdatensätzen im nicht-privaten, zentralen Training}
 	\label{fig:local-training-histories}
 \end{figure}
 
 \section{Federated Training}\label{sec:fl-training-results}
 
-Die Ergebnisse des Trainings im Federated Learning sind in \autoref{tab:all-fed-results} zu sehen. Die Ergebnisse sind nach den Datensätzen aufgeteilt und jeweils für die normale Version (\textit{non-i.i.d.}) und die gleichverteilte Version (\textit{i.i.d.}) notiert. Die gleichverteilte Version ist durch das in \autoref{sec:iid-dataset-creation} beschriebene Verfahren entstanden.
+Die Ergebnisse des Trainings im Federated Learning sind in \autoref{tab:all-fed-results} zu sehen. Die Ergebnisse sind nach den Datensätzen aufgeteilt und jeweils für die normale Version (\textit{non-i.i.d.}) und die unabhängig gleichverteilte Version (\textit{i.i.d.}) notiert. Die gleichverteilte Version ist durch das in \autoref{sec:iid-dataset-creation} beschriebene Verfahren entstanden.
 
 Die Genauigkeit bezieht sich in jedem Fall auf die Genauigkeit auf den Testdaten. Für die Evaluierung habe ich die Testdaten zu einem zentralen Datensatz zusammengefügt und dann das Modell darauf evaluiert. Eine andere Möglichkeit wäre es gewesen, die Evaluierung ebenfalls auf den Clients durchzuführen, allerdings war ich nur an der allgemeinen Performanz des Modells interessiert. Für den Fall, dass man ein vortrainiertes Modell für jeden Client noch einmal nachtrainiert hätte, damit es auf seinen Daten gut funktioniert, wäre diese Art der Evaluierung angemessener gewesen.
 
@@ -75,7 +75,7 @@ Es ist auffällig, dass die Modelle auf allen Datensätzen in der gleichverteilt
 		\texttt{strict-dp} & 0.895 & 0.811 & 0.292 & - & 0.387 & 0.246 \\
 		\bottomrule
 	\end{tabular}
-	\caption{Accuracies of the DP setups on all datasets}
+	\caption{Mit den verschieden Privacy Setups erzielte Genauigkeiten im Federated Training}
 	\label{tab:all-fed-results}
 \end{table}
 
@@ -102,7 +102,7 @@ Wie in \autoref{chap:methods} beschrieben, verwende ich für die Hyperparameter 
 		Server learning rate & 1.0 & 1.0 & 1.0 \\
 		\bottomrule
 	\end{tabular}
-	\caption{Hyperparameters used on each dataset for the federated training}
+	\caption{Hyperparameter, die auf den verschiedenen Datensätzen genutzt wurden}
 	\label{tab:fl-hyperparameters}
 \end{table}
 
@@ -115,24 +115,24 @@ Bei MNIST konnten die DP-Algorithmen ähnlich gute Ergebnisse erzielen wie das n
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/emnist-accuracy.png}
-		\caption{validation accuracy (non-i.i.d)}
+		\caption{Genauigkeit auf Validierungsdaten (non-i.i.d)}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/emnist-loss.png}
-		\caption{validation loss (non-i.i.d)}
+		\caption{Loss auf Validierungsdaten (non-i.i.d)}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/emnist-accuracy-iid.png}
-		\caption{validation accuracy (i.i.d)}
+		\caption{Genauigkeit auf Validierungsdaten (i.i.d)}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/emnist-loss-iid.png}
-		\caption{validation loss (i.i.d)}
+		\caption{Loss auf Validierungsdaten (i.i.d)}
 	\end{subfigure}
-	\caption{Metrics of the different privacy setups on MNIST in the course of training}
+	\caption{Genauigkeit und Loss der verschiedenen Privacy Setups im Verlauf des Trainings auf MNIST}
 	\label{fig:fed-emnist-results}
 \end{figure}
 
@@ -151,7 +151,7 @@ Die vorher berechneten Noise Multiplier für jedes Setup sind in \autoref{tab:no
 		\texttt{strict-dp} & 1.180 & 0.508 & 0.568 \\
 		\bottomrule
 	\end{tabular}
-	\caption{Noise Multipliers of the different setups}
+	\caption{Noise Multiplier der verschiedenen Setups}
 	\label{tab:noise-multipliers}
 \end{table}
 
@@ -170,14 +170,14 @@ Die Noise Multiplier sind ebenfalls aufsteigend, je nach Budgets des Setups, all
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/svhn-accuracy.png}
-		\caption{validation accuracy}
+		\caption{Genauigkeit auf Validierungsdaten}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/svhn-loss.png}
-		\caption{validation loss}
+		\caption{Loss auf Validierungsdaten}
 	\end{subfigure}
-	\caption{Metrics of the different privacy setups on SVHN in the course of training}
+	\caption{Genauigkeit und Loss der verschiedenen Privacy Setups im Verlauf des Trainings auf SVHN}
 	\label{fig:fed-svhn-results}
 \end{figure}
 
@@ -191,28 +191,28 @@ Bei dem Training auf dem gleichverteilten Datensatz werden alle Modelle deutlich
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar10-accuracy.png}
-		\caption{validation accuracy (non-i.i.d)}
+		\caption{Genauigkeit auf Validierungsdaten (non-i.i.d)}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar10-loss.png}
-		\caption{validation loss (non-i.i.d)}
+		\caption{Loss auf Validierungsdaten (non-i.i.d)}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar10-accuracy-iid.png}
-		\caption{validation accuracy (i.i.d)}
+		\caption{Genauigkeit auf Validierungsdaten (i.i.d)}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{Bilder/cifar10-loss-iid.png}
-		\caption{validation loss (i.i.d)}
+		\caption{Loss auf Validierungsdaten (i.i.d)}
 	\end{subfigure}
-	\caption{Metrics of the different privacy setups on CIFAR-10 in the course of training}
+	\caption{Genauigkeit und Loss der verschiedenen Privacy Setups im Verlauf des Trainings auf CIFAR-10}
 	\label{fig:fed-cifar10-results}
 \end{figure}
 
-\subsection{SVHN and CIFAR-10 with smaller budgets}
+\subsection{SVHN und CIFAR-10 mit kleineren Privacy Budgets}
 
 Wie bereits erwähnt habe ich für CIFAR-10 und SVHN deutlich größere Privacy Budgets genutzt als für MNIST. Dies habe ich nicht willkürlich so festgelegt, sondern nach und nach größere Budgets ausprobiert. In \autoref{fig:cifar-svhn-small-budgets} sind die Trainingsverläufe mit kleineren Privacy Budgets zu sehen.
 
@@ -229,23 +229,23 @@ Auf dem SVHN Datensatz verläuft das Training noch deutlich schlechter als in \a
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{Bilder/cifar10-accuracy-iid-eps-1-2-3.png}
-		\caption{CIFAR-10 (i.i.d.) with $\epsilon = \{1,2,3\}$}
+		\caption{CIFAR-10 (i.i.d.) mit $\epsilon = \{1,2,3\}$}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{Bilder/cifar10-accuracy-iid-eps-5-10-20.png}
-		\caption{CIFAR-10 (i.i.d.) with $\epsilon = \{5,10,20\}$}
+		\caption{CIFAR-10 (i.i.d.) mit $\epsilon = \{5,10,20\}$}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{Bilder/svhn-accuracy-eps-1-2-3.png}
-		\caption{SVHN with $\epsilon = \{1,2,3\}$}
+		\caption{SVHN mit $\epsilon = \{1,2,3\}$}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{Bilder/svhn-accuracy-eps-5-10-20.png}
-		\caption{SVHN with $\epsilon = \{5,10,20\}$}
+		\caption{SVHN mit $\epsilon = \{5,10,20\}$}
 	\end{subfigure}
-	\caption{validation accuracy histories for CIFAR-10 and SVHN with smaller privacy budgets}
+	\caption{Verlauf der Genauigkeiten auf den Validierungsdaten von CIFAR-10 und SVHN im Training mit kleineren Privacy Budgets}
 	\label{fig:cifar-svhn-small-budgets}
 \end{figure}

@@ -1,4 +1,4 @@
-\chapter{Experiments}\label{chap:experiments}
+\chapter{Experimente}\label{chap:experiments}
 %\begin{itemize}
 %	\item lokale Experimente(?)
 %	\item Eindeutige Benennung der Datensätze, auch in plots (vor allem emnist vs mnist!)
@@ -26,23 +26,23 @@ Ich evaluiere meinen Algorithmus auf drei Datensätzen, MNIST \cite{lecun:1998},
 		\includegraphics[width=\textwidth]{Bilder/cifar10-examples.png}
 		\caption{CIFAR-10}
 	\end{subfigure}
-	\caption{Examples from the three training datasets}
+	\caption{Beispiele der drei verwendeten Trainingsdatensätze}
 	\label{fig:dataset-examples}
 \end{figure}
 
-\section{Environment}
+\section{Umgebung und Bibliotheken}
 Ich habe den Algorithmus aus \autoref{chap:methods} mit Python in Tensorflow Federated implementiert. Das ist ein auf Tensorflow aufgebautes Framework, das das Federated Training von Neuronalen Netzen, die in Tensorflow definiert werden, relativ einfach gestaltet. Das Framework ist sehr modular aufgebaut und erlaubt es Schritte im Federated Learning, wie zum Beispiel die Aggregation der Updates durch eine andere Aggregation auszutauschen. Abgesehen vom Federated Learning hat das Framework mit Federated Core den Anspruch, eine Basis für verteilte Berechnungen zu sein. Dafür hat es beispielsweise Datentypen so adaptiert, dass sie abgesehen vom eigentlichen Datentypen immer auch die Geräte beinhalten, an denen sie sich befinden. Die High-level Federated Learning API beinhaltet typische Algorithmen wie \texttt{FedAvg} oder \texttt{DP-FedAvg}.
 
 \autoref{alg:boenisch-sample} habe ich so adaptiert, dass statt Opacus die Bibliothek \textit{dp-accounting} genutzt wird. Ich habe mich dazu entschieden, da der Rest meines Environments auf Tensorflow basiert und ich daher PyTorch nicht als weitere Abhängigkeit haben wollte.
 
 Die Berechnungen habe ich auf dem Clara Cluster der Universität Leipzig ausgeführt. Um das Environment aufzusetzen und zu definieren habe ich ein Docker Image definiert, welches Python, CUDA und notwendige Bibliotheken installiert.
 
-\section{Datasets}
+\section{Verwendete Datensätze}
 
 \begin{figure}[tb]
 	\centering
 	\includegraphics[width=\textwidth]{Bilder/label_distribution.png}
-	\caption{Label distribution on exemplary clients from the different datasets}
+	\caption{Verteilung der Label in den Daten beispielhafter Clients aus den verwendeten Datensätzen}
 	\label{fig:label-distribution}
 \end{figure}
 
@@ -53,7 +53,7 @@ Tensorflow Federated stellt einen Datensatz bereit, der auf einer erweiterten Ve
 \begin{figure}[tb]
 	\centering
 	\includegraphics[width=0.8\textwidth]{Bilder/emnist_feature_distribution_skew.png}
-	\caption{The digit eight from different clients in MNIST showing the different handwritings}
+	\caption{Die Ziffer acht bei verschiedenen Clients des MNIST Datensatzes zeigt die unterschiedlichen Handschriften}
 	\label{fig:emnist-feature-skew}
 \end{figure}
 
@@ -74,7 +74,7 @@ Tensorflow Federated stellt einen Datensatz bereit, der auf einer erweiterten Ve
 		\includegraphics[width=\textwidth]{Bilder/cifar_label_distribution.png}
 		\caption{CIFAR-10}
 	\end{subfigure}
-	\caption{Distribution of labels in the training datasets among all clients}
+	\caption{Die Verteilung der Label auf der Gesamtheit der Clients in den Trainingsdatensätzen}
 	\label{fig:label-distribution-all}
 \end{figure}
 
@@ -90,7 +90,7 @@ Dort wird für jeden Client ein Vektor aus der Dirichlet-Verteilung gezogen, wel
 
 \autoref{fig:label-distribution-all} zeigt die Verteilung der Labels in den gesamten Trainingsdaten. Es ist auffällig, dass es in SVHN deutlich mehr kleinere Ziffern gibt als größere, mit Ausnahme der $0$. Allerdings lässt sich das womöglich dadurch erklären, dass Hausnummern in der Regel aufsteigend vorliegen und es daher für jede Ziffer $9$ auch $1$ bis $8$ gegeben haben muss. Diese ungleiche Verteilung wirkt sich, wie in \autoref{fig:label-distribution} zu sehen ist, auch auf die Menge der Trainingsbeispiele auf den Clients aus.
 
-\section{Exemplary setup of individual sampling rates and the noise multiplier}
+\section{Exemplarische individuelle Sampling Rates und der Noise Multiplier}
 Um zu veranschaulichen, wie welche Trainingsparameter zu welchen Sampling Rates für den Algorithmus führen und die Auswirkungen zu zeigen, habe ich diese für leicht variierte Setups berechnet. Ich zeige dies ausgehend von den Parametern des MNIST-Datensatzes. Dieser umfasst $3383$ Clients, dementsprechend wähle ich $\delta= 1e-5$. 
 
 Zunächst verteile ich die Privacy Budgets mit der Verteilung $[0.34, 0.43, 0.23]$ unter den Clients. Die konkrete Zuweisung der Budgets anhand dieser Verteilung unterliegt dem Zufall, kann also leicht variieren. Mit Privacy-Budgets von $\epsilon = [1,2,3]$, $50$ Clients pro Runde und 100 Runden berechnet \autoref{alg:boenisch-sample} einen Noise Multiplier $\sigma = 0.92$ und Sampling Rates für die Budgets von $q = [0.003, 0.016, 0.028]$. Wie gefordert liegt der Erwartungswert der Clients pro Runde ungefähr bei $50$, genau bei $50.078$.
@@ -107,7 +107,7 @@ Auch wenn die Clients pro Runde erhöht werden ist das der Fall. Bei $200$ statt
 
 
 
-\section{IID versions of the datasets}\label{sec:iid-dataset-creation}
+\section{Unabhängig gleichverteilte Versionen der Datensätze}\label{sec:iid-dataset-creation}
 Für MNIST und CIFAR-10 erstelle ich abgesehen von den oben genannten Datensätzen noch eine Version, bei der die Daten zufällig auf den Clients verteilt werden. Der Grund dafür ist, dass \texttt{FedAvg}, auf dem mein Algorithmus basiert, Schwierigkeiten mit Verzerrungen in den Trainingsdaten hat. Diese Versionen sollen also vor allem als eine Baseline sein und zur Vergleichbarkeit meiner Ergebnissen beitragen.
 
 \textit{Tensorflow Federated} stellt für die Erstellung gleichverteilter Datensätze eine Funktion bereit.\footnote{\url{https://www.tensorflow.org/federated/api_docs/python/tff/simulation/datasets/build_synthethic_iid_datasets}, (accessed 07-11-2024)} Diese erstellt einen \texttt{Iterator}, bei dem in jeder Iteration zufällig aus allen Trainingsdaten gezogen wird. Damit gibt es jedoch keine Zuweisung mehr von den Daten zu den Clients, das heißt wenn ein Client gezogen wird, werden seine Trainingsdaten dynamisch zusammengesetzt.
@@ -116,7 +116,7 @@ Ich wollte in meinem Fall gerne eine Beziehung der Clients zu den Daten beibehal
 
 Dazu habe ich eine Funktion geschrieben, die einen Datensatz als Eingabe bekommt und dann die Datenpunkte zufällig den Clients zuweist. Diese Funktion liefert dann einen Datensatz zurück in dem Clients feste Datenpunkte zugewiesen sind.
 
-\section{Model Architecture}
+\section{Modellarchitektur}
 Die Datensätze, auf denen ich meinen Algorithmus auswerte sind für Bildklassifizierungen gemacht. Daher verwende ich in meinen Experimenten ein einfaches Convolutional Neural Network. Das Neuronale Netz ist für alle Datensätze das gleiche, lediglich die \texttt{input\_shape} passe ich den jeweiligen Daten an. Außerdem gibt es einen Rescaling Layer, der die Pixel auf das Intervall $[0;1]$ normalisiert. Bei MNIST ist das nicht nötig, da bereits alle Werte zwischen $0$ und $1$ liegen.
 
 Das Neuronale Netz selbst ist sehr klein und enthält nur $21578$ trainierbare Parameter. Ich habe mich dafür entschieden, das Training damit durchzuführen, da größere Modelle einen erheblichen Mehraufwand beim Training bedeuten, weil im Trainingsprozess viele Clients simuliert werden müssen. Bereits bei auf Effizienz ausgerichteten Modellen wie \textit{MobileNet} \cite{howard:2017} und \textit{EfficientNet} \cite{tan:2019} war ein zügiges Training nicht mehr möglich.
@@ -126,7 +126,7 @@ Die Schichten des Modells bestehen aus Convolutional, MaxPooling und Dropout Lay
 \begin{figure}[tb]
 	\centering
 	\includegraphics[width=0.8\textwidth]{Bilder/model_architecture_1.png}
-	\caption{Architecture of the model used for the classification tasks}
+	\caption{Architektur des für die Klassifizierung genutzen Modells}
 	\label{fig:model-architecture}
 \end{figure}
 
@@ -139,18 +139,18 @@ Ich führe die Experimente jeweils mit insgesamt fünf Privacy-Niveaus durch. Im
 
 \begin{table}[tb]
 	\centering
-	\begin{tabular}{|c|c|c|c|}
-		\hline
+	\begin{tabular}{cccc}
+		\toprule
 		Level & $\epsilon_1$ & $\epsilon_2$ & $\epsilon_3$ \\
-		\hline
+		\midrule
 		\texttt{no-dp} & - & - & - \\
 		\texttt{relaxed-dp} & - & - & $100\%$ \\
 		\texttt{relaxed-idp} & $34\%$ & $43\%$ & $23\%$ \\
 		\texttt{strict-idp} & $54\%$ & $37\%$ & $9\%$ \\
 		\texttt{strict-dp} & $100\%$ & - & - \\
-		\hline
+		\bottomrule
 	\end{tabular}
-	\caption{The distribution of Privacy Budgets in the different Privacy Setups with $\epsilon_1$ being the smallest, $\epsilon_2$ the intermediate and $\epsilon_3$ the largest Privacy Budget}
+	\caption{Die Verteilung der Privacy Budgets in den verschiedenen Setups, wobei $\epsilon_1$ das kleinste, $\epsilon_2$ das mittlere und $\epsilon_3$ das größte Budget ist}
 	\label{tab:privacy-niveau-distribution}
 \end{table}
 
@@ -158,16 +158,16 @@ Für jeden Datensatz definiere ich drei Privacy-Budgets jeweils für Clients die
 
 \begin{table}[tb]
 	\centering
-	\begin{tabular}{|c|c|c|c|}
-		\hline
+	\begin{tabular}{cccc}
+		\toprule
 		Dataset & $\epsilon_1$ & $\epsilon_2$ & $\epsilon_3$ \\
-		\hline
+		\midrule
 		MNIST & $1.0$ & $2.0$ & $3.0$ \\
 		SVHN & $15.0$ & $25.0$ & $40.0$ \\
 		CIFAR10 & $15.0$ & $25.0$ & $40.0$ \\
-		\hline
+		\bottomrule
 	\end{tabular}
-	\caption{The Privacy Budgets for each dataset}
+	\caption{Die gewählten Privacy Budgets für die Datensätze}
 	\label{tab:privacy-budgets-per-dataset}
 \end{table}
 

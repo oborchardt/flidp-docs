@@ -1,4 +1,4 @@
-\chapter{Related work}\label{chap:related-work}
+\chapter{Verwandte Arbeiten}\label{chap:related-work}
 
 %\begin{itemize}
 %	%	\item Konvergenz des FL verbessern durch Algorithmen
@@ -18,7 +18,7 @@
 
 In diesem Kapitel beschreibe ich den Stand der Forschung in den für meine Arbeit relevanten Forschungsgebieten. Da sie mehrere Problemfelder umfasst, werde ich das Kapitel im folgenden in drei Teile unterteilen. In \autoref{sec:rw-idp-ml} gehe ich auf Arbeiten ein, die individualisierte Differential Privacy aus \autoref{fund-idp} auf Machine Learning Algorithmen übertragen. In \autoref{sec:rw-fl} beschreibe ich den Stand der Forschung in Bezug auf Fragen des Federated Learning, beispielsweise wie mit unterschiedlichen Verteilungen in den Trainingsdatensätzen umgegangen werden kann. In \autoref{sec:rw-fldp} gehe ich auf Arbeiten ein, welche die Notwendigkeit von Differential Privacy im Federated Learning belegen und auf Algorithmen, welche Differential Privacy mit einheitlichen Privacy-Budgets im Federated Learning umsetzen, um die Basis für Algorithmen mit individualisierten Budgets zu legen, die ich in \autoref{sec:rw-flidp} beschreibe.
 
-\section{Individualized Differential Privacy in Machine Learning}\label{sec:rw-idp-ml}
+\section{Individualisierte Differential Privacy im Machine Learning}\label{sec:rw-idp-ml}
 
 Wie in \autoref{sec:fund-dp-in-ml} angedeutet, ist die Arbeit mit individualisierten Privacy Budgets eine Möglichkeit, die Nützlichkeit eines Machine Learning Modells unter Einhaltung der Privacy Budgets der Nutzer zu erhöhen.
 
@@ -77,7 +77,7 @@ Auch wenn sich der Algorithmus in der Praxis bewährt hat\cite{hard:2018, ramasw
 
 Ein weiteres Problem ist die Wahl geeigneter Hyperparameter für das Training. Da der eigentliche Trainingsprozess in Produktivumgebungen mehrere Tage\cite[p.5]{hard:2018} oder Wochen\cite[p.4]{ramaswamy:2020} dauern kann, ist es in der Regel nicht möglich viele Trainingsdurchläufe durchzuführen. In Verbindung mit Differential Privacy ist das Problem noch verschärft, da bei mehreren Trainingsdurchläufen auch die Privacy Kosten steigen. Damit gibt es dabei ebenfalls einen Trade-Off zwischen Netzwerk- und Ressourcennutzung und guten Hyperparametern. Auch \textcite[p.31]{kairouz:2021} plädieren für mehr Forschung in diesem Bereich und merken darüber hinaus an, dass die Anzahl der Hyperparameter im Federated Learning noch deutlich größer ist, als bei dem zentralisierten Training.
 
-\section{Federated Learning with Differential Privacy}\label{sec:rw-fldp}
+\section{Federated Learning mit Differential Privacy}\label{sec:rw-fldp}
 % evtl hier den ganzen Algorithmus näher beschreiben? -> mit Pseudo Code etc damit klar wird wo Rauschen hinzugefügt wird und wo geclippt wird
 Zwar verhindert Federated Learning gegenüber zentralisierten Trainingsverfahren den direkten Austausch von Trainingsdaten, was intuitiv einen besseren Schutz der Privatheit nahelegt. Verschiedene Arbeiten \cite{wang:2019, geiping:2020, ma:2020} diskutieren Angriffe auf Federated Learning Systeme und zeigen, dass Modelle und Modellupdates auch im Federated Learning angegriffen und einzelne Trainingsbeispiele rekonstruiert werden können. In Verbindung mit Attacken auf klassisch trainierte Modelle zeigen diese Fälle die Notwendigkeit von verlässlichen Abwehrmechanismen wie Differential Privacy auch im Federated Learning. Die Wirksamkeit von Differential Privacy gegen Membership Inference Attacken im Federated Learning wird von \textcite{naseri:2022} noch einmal empirisch gezeigt, sowohl für die lokale als auch globale Anwendung von Differential Privacy.
 
@@ -96,7 +96,7 @@ Sie evaluieren ihren Algorithmus auf dem \texttt{EMNIST}-Datensatz und auf synth
 \textcite{sun:2021} schlagen einen Algorithmus mit lokaler Differential Privacy vor, in dem die einzelnen Gewichte der Gradienten zwischen allen Clients vermischt werden, bevor sie an den Server geschickt werden. Sie argumentieren, dass sie kleinere Budgets verwenden können, da der Server die Gewichte nicht mehr den einzelnen Clients zuordnen kann. Sie evaluieren ihren Algorithmus auf MNIST \cite{lecun:1998}, Fashion-MNIST \cite{xiao:2017} und CIFAR-10 \cite{krizhevsky:2009}. Sie erzielen auf MNIST mit einem kleinen CNN eine Genauigkeit von $~96\%$ und auf CIFAR-10 mit einem VGG-ähnlichen Modell $~60\%$. Sie nutzen auf MNIST $100$ Runden und auf CIFAR-10 $500$ Runden. Darüber hinaus erhöhen sie ihr Budget von $\epsilon = 1$ bei MNIST auf $\epsilon = 10$ auf CIFAR-10. Das ist nötig, da die Klassifikation auf CIFAR-10 komplexer ist als auf MNIST.
 
 
-\section{Federated Learning with Individualized Differential Privacy}\label{sec:rw-flidp}
+\section{Federated Learning mit individualisierter Differential Privacy}\label{sec:rw-flidp}
 
 Wie bei zentralen Lernverfahren, gibt es auch im Federated Learning mit Differential Privacy einen Trade-Off zwischen Nützlichkeit und Privatheit der Modelle. Auch hier ist die Individualisierung von Privacy Budgets eine Möglichkeit, um die Nützlichkeit zu verbessern und trotzdem die Privacy Anforderungen der einzelnen Nutzer einzuhalten.
 
