@@ -5,12 +5,12 @@
 %	\item $\delta$'s pro Datensatz erwähnen und sagen wie ich sie gewählt habe
 %\end{itemize}
 
-In diesem Kapitel gehe ich auf die Ergebnisse der Experimente aus \autoref{chap:experiments} ein. In \autoref{sec:non-fl-training-results} beschreibe ich Ergebnisse von lokalen Trainingsdurchläufen mit dem identischen Modell. In \autoref{sec:fl-training-results} beschreibe ich detaillierter welche Ergebnisse ich im Federated Learning erzielt habe und beschreibe die genutzten Hyperparameter.
+In diesem Kapitel gehe ich auf die Ergebnisse der Experimente aus \autoref{chap:experiments} ein. In \autoref{sec:non-fl-training-results} beschreibe ich Ergebnisse von lokalen Trainingsdurchläufen mit dem identischen Modell. In \autoref{sec:fl-training-results} erläutere ich detaillierter, welche Ergebnisse ich im Federated Learning erzielt habe und beschreibe die genutzten Hyperparameter.
 
 \section{Non-federated Training} \label{sec:non-fl-training-results}
-Die Ergebnisse der lokalen Trainingsdurchläufe sind wie zu erwarten etwas besser als im Federated Learning, auch wenn sie nicht der state-of-the-art entsprechen. Das liegt an dem einfachen und kleinen Modell, das ich für das Training genutzt habe.
+Die Ergebnisse der lokalen Trainingsdurchläufe sind, wie zu erwarten, etwas besser als im Federated Learning, auch wenn sie nicht der \textit{state-of-the-art} entsprechen. Das liegt an dem einfachen und kleinen Modell, das ich für das Training genutzt habe.
 
-Bei MNIST und SVHN erreicht das Modell bereits innerhalb von 10 Epochen gute Ergebnisse. Bei CIFAR-10 sind die Ergebnisse deutlich schlechter, weshalb ich hier mit einem \texttt{EarlyStopping}-callback gearbeitet habe, der Abbricht sobald das Modell overfittet. Trotzdem liegt die erreichte Accuracy unter 50\%. Eine Übersicht ist in \autoref{tab:local-model-results}).
+Bei MNIST und SVHN erreicht das Modell bereits innerhalb von 10 Epochen gute Ergebnisse. Bei CIFAR-10 sind die Ergebnisse deutlich schlechter, weshalb ich hier mit einem \texttt{EarlyStopping}-Callback gearbeitet habe, der abbricht sobald das Modell \textit{overfittet}. Trotzdem liegt die erreichte Accuracy unter 50\%. Eine Übersicht zeigt \autoref{tab:local-model-results}.
 
 \begin{table}
 	\centering
@@ -27,9 +27,9 @@ Bei MNIST und SVHN erreicht das Modell bereits innerhalb von 10 Epochen gute Erg
 	\label{tab:local-model-results}
 \end{table}
 
-Allerdings liegt der Fokus meiner Arbeit auf dem Federated Learning Algorithmus und die lokalen Trainingsdurchläufe sollten vor allem zum Vergleich und zum Finden von angemessenen Modellen und Hyperparametern dienen. Dafür war es hilfreich, denn ich konnte beispielsweise mein Convolutional Neural Network mit einem Feed-Forward Netz vergleichen. 
+Allerdings liegt der Fokus meiner Arbeit auf dem Federated Learning Algorithmus und die lokalen Trainingsdurchläufe sollten vor allem zum Vergleich und zum Finden von angemessenen Modellen und Hyperparametern dienen. Sie waren hilfreich, denn ich konnte beispielsweise mein Convolutional Neural Network mit einem Feed-Forward Netz vergleichen. 
 
-Die Trainingszeit liegt bei wenigen Sekunden oder Minuten. Derartige Experimente wären im Federated Learning sehr viel umständlicher gewesen, da es einen deutlich erhöhten Rechenaufwand mit sich bringt und auch instabiler ist was die Kovergenz der Modelle betrifft.
+Die Trainingszeit liegt bei wenigen Sekunden oder Minuten. Derartige Experimente wären im Federated Learning sehr viel umständlicher gewesen, da das Training einen deutlich erhöhten Rechenaufwand mit sich bringt und auch, was die Konvergenz der Modelle betrifft, instabiler ist.
 
 \begin{figure}
 	\centering
@@ -56,7 +56,7 @@ Die Trainingszeit liegt bei wenigen Sekunden oder Minuten. Derartige Experimente
 
 Die Ergebnisse des Trainings im Federated Learning sind in \autoref{tab:all-fed-results} zu sehen. Die Ergebnisse sind nach den Datensätzen aufgeteilt und jeweils für die normale Version (\textit{non-i.i.d.}) und die unabhängig gleichverteilte Version (\textit{i.i.d.}) notiert. Die gleichverteilte Version ist durch das in \autoref{sec:iid-dataset-creation} beschriebene Verfahren entstanden.
 
-Die Genauigkeit bezieht sich in jedem Fall auf die Genauigkeit auf den Testdaten. Für die Evaluierung habe ich die Testdaten zu einem zentralen Datensatz zusammengefügt und dann das Modell darauf evaluiert. Eine andere Möglichkeit wäre es gewesen, die Evaluierung ebenfalls auf den Clients durchzuführen, allerdings war ich nur an der allgemeinen Performanz des Modells interessiert. Für den Fall, dass man ein vortrainiertes Modell für jeden Client noch einmal nachtrainiert hätte, damit es auf seinen Daten gut funktioniert, wäre diese Art der Evaluierung angemessener gewesen.
+Die Genauigkeit bezieht sich in jedem Fall auf die Auswertung des Modells auf den Testdaten. Für die Evaluierung habe ich die Testdaten zu einem zentralen Datensatz zusammengefügt und dann das Modell darauf evaluiert. Eine andere Möglichkeit wäre gewesen, die Evaluierung ebenfalls auf den Clients durchzuführen. Für den Fall, dass man ein vortrainiertes Modell für jeden Client noch einmal nachtrainiert, damit es auf seinen Daten gut funktioniert, wäre diese Art der Evaluierung angemessener gewesen. Allerdings war ich nur an der allgemeinen Performanz des Modells interessiert.
 
 Es ist auffällig, dass die Modelle auf allen Datensätzen in der gleichverteilten Version besser abschneiden. Das deckt sich mit dem Stand der Forschung zu \texttt{FedAvg}.
 
@@ -80,11 +80,11 @@ Es ist auffällig, dass die Modelle auf allen Datensätzen in der gleichverteilt
 \end{table}
 
 \subsection{Hyperparameter Setups}
-Ich habe das Training mit allen Datensätzen auf $100$ Runden begrenzt. Grund dafür war einerseits die Trainingszeiten kurz zu halten, andererseits hat die Anzahl der Runden eine Wechselwirkung mit dem Privacy Loss. Bei einer höheren Rundenzahl wird jeder Client im Verlauf des Trainings häufiger oder mit einer größeren Wahrscheinlichkeit gezogen, daher muss im Umkehrschluss das Rauschen größer werden. 
+Ich habe das Training mit allen Datensätzen auf $100$ Runden begrenzt. Grund dafür war einerseits die Trainingszeiten kurz zu halten, andererseits gibt es auch eine Wechselwirkung mit der Anzahl der Runden und dem Privacy Loss. Bei einer höheren Rundenzahl erhöht er sich, denn jeder Client wird im Verlauf des Trainings häufiger oder mit einer größeren Wahrscheinlichkeit gezogen. Daher muss im Umkehrschluss das Rauschen größer werden. 
 
 Ein weiterer Hyperparameter, der einen Einfluss auf die Stärke des Rauschens hat, ist die Anzahl der Clients, die pro Runde gezogen werden sollen. Davon hängt die Wahrscheinlichkeit mit der die Clients gezogen werden ab. Hier gilt ebenso, dass bei einer größeren Wahrscheinlichkeit die Daten eines Clients einen größeren Einfluss auf das trainierte Modell haben und damit das Rauschen vergrößert werden muss.
 
-Hyperparameter, die sich nicht auf den Privacy Loss auswirken sind die Learning Rates auf dem Server und die Learning Rates auf den Clients. Auch die Anzahl der Epochen, die jeder Client auf seinen Daten trainiert und die Größe der Batches wirken sich nicht auf den Privacy Loss aus.
+Hyperparameter, die sich nicht auf den Privacy Loss auswirken sind die Learning Rates auf dem Server und die Learning Rates auf den Clients. Auch die Anzahl der Epochen, die jeder Client auf seinen Daten trainiert, und die Größe der Batches wirken sich nicht auf den Privacy Loss aus.
 
 Wie in \autoref{chap:methods} beschrieben, verwende ich für die Hyperparameter des \textit{Adaptive Clippings} die Standardwerte.
 
@@ -108,7 +108,7 @@ Wie in \autoref{chap:methods} beschrieben, verwende ich für die Hyperparameter 
 
 \subsection{MNIST}
 
-Bei MNIST konnten die DP-Algorithmen ähnlich gute Ergebnisse erzielen wie das nicht-private \texttt{FedAvg}. In \autoref{fig:fed-emnist-results} ist dennoch ein Einfluss des Privacy Setups auf das Ergebnis zu sehen. Vor allem \texttt{strict-dp} konvergiert ein bisschen instabiler und kommt nicht ganz an die anderen Ergebnisse heran. Außerdem fällt der Loss bei \texttt{no-dp} bereits deutlich früher ab und bei den anderen Setups erst nach ungefähr 15 Runden. Die restlichen Privacy-Niveaus liegen sehr nah beieinander, allerdings ist auffällig, dass \texttt{relaxed-dp} schlechter abschneidet, als die individualisierten Niveaus.
+Bei MNIST konnten die DP-Algorithmen ähnlich gute Ergebnisse erzielen wie das nicht-private \texttt{FedAvg}. In \autoref{fig:fed-emnist-results} ist dennoch ein Einfluss des Privacy Setups auf das Ergebnis zu sehen. Vor allem \texttt{strict-dp} konvergiert ein bisschen instabiler und kommt nicht ganz an die anderen Ergebnisse heran. Außerdem fällt der Loss bei \texttt{no-dp} bereits deutlich früher ab. Bei den anderen Setups erfolgt die Absenkung erst nach ungefähr 15 Runden. Die restlichen Privacy-Niveaus liegen sehr nah beieinander, allerdings ist auffällig, dass \texttt{relaxed-dp} schlechter abschneidet, als die individualisierten Niveaus.
 
 \begin{figure}[h]
 	\centering
@@ -155,15 +155,15 @@ Die vorher berechneten Noise Multiplier für jedes Setup sind in \autoref{tab:no
 	\label{tab:noise-multipliers}
 \end{table}
 
-Bei dem Training auf MNIST konnte ich mit $50$ Clients pro Runde im Erwartungswert gute Ergebnisse erzielen. Zwar würde man erwarten, dass mit mehr Clients das Modell in jeder Runde eine repräsentativere Stichprobe der Daten sieht, allerdings ist das wie beschrieben ein Parameter der auch das Rauschen verstärkt. Daher konnte ich mit größeren Zahlen keine besseren Ergebnisse beobachten.
+Bei dem Training auf MNIST konnte ich mit $50$ Clients pro Runde im Erwartungswert gute Ergebnisse erzielen. Zwar würde man erwarten, dass das Modell mit mehr Clients in jeder Runde eine repräsentativere Stichprobe der Daten sieht, allerdings ist die Anzahl der Clients wie beschrieben ein Parameter der auch das Rauschen verstärkt. Daher konnte ich mit größeren Zahlen keine besseren Ergebnisse beobachten.
 
 \subsection{SVHN}
 
-Bei SVHN ist der Unterschied zwischen dem Training mit und ohne Differential Privacy sehr viel deutlicher zu sehen. Während die Metriken sich ohne Differential Privacy im Trainingsprozess kontinuierlich verbessern, hat jedes Setup mit Differential Privacy ab einem Punkt im Training Probleme sich weiter zu verbessern. Vor allem \texttt{strict-dp} kann sich nur für kurze Zeit am Anfang verbessern. Bereits \texttt{relaxed-dp} erreicht kaum mehr eine halb so gute Genauigkeit wie das \texttt{no-dp} und die beiden individualisierten Setups liegen noch ein wenig darunter, liefern allerdings deutlich bessere Ergebnisse als \texttt{strict-dp}. Interessant ist, dass \texttt{strict-idp} noch ein bisschen besser abschneidet, als \texttt{relaxed-idp}, allerdings kann das Zufall sein.
+Bei SVHN ist der Unterschied zwischen dem Training mit und ohne Differential Privacy sehr viel deutlicher zu sehen. Während die Metriken sich ohne Differential Privacy im Trainingsprozess kontinuierlich verbessern, hat jedes Setup mit Differential Privacy ab einem bestimmten Punkt im Training Probleme sich weiter zu verbessern. Vor allem \texttt{strict-dp} kann sich nur für kurze Zeit am Anfang verbessern. Bereits \texttt{relaxed-dp} erreicht kaum mehr eine halb so gute Genauigkeit wie das \texttt{no-dp}. Die beiden individualisierten Setups liegen noch ein wenig darunter, liefern allerdings deutlich bessere Ergebnisse als \texttt{strict-dp}. Auffällig ist, dass \texttt{strict-idp} noch ein bisschen besser abschneidet, als \texttt{relaxed-idp}, allerdings kann das Zufall sein.
 
 Die Nähe der individualisierten Niveaus zu \texttt{relaxed-dp} und der Abstand zu \texttt{strict-dp} zeigt hier sehr deutlich den Vorteil der individualisierten Budgets. Während \texttt{relaxed-dp} zwar noch bessere Ergebnisse erzielt, werden hier die Abstriche bei der Privacy der Clients mit den Budgets $\epsilon_1$ bzw. $\epsilon_2$ sehr groß. Andererseits hält \texttt{strict-dp} zwar alle Budgets ein, da auf alle Clients $\epsilon_1$ angewendet wird, allerdings ist hier die Nützlichkeit des Modells stark beeinträchtigt.
 
-Die Noise Multiplier sind ebenfalls aufsteigend, je nach Budgets des Setups, allerdings sind sie insgesamt deutlich niedriger als bei MNIST. Dies zeigt, dass dieser Datensatz deutlich anfälliger gegenüber dem Hinzufügen von Rauschen ist und sich die Ergebnisse sehr schnell verschlechtern können.
+Die \textit{Noise Multiplier} sind ebenfalls aufsteigend, allerdings sind sie insgesamt deutlich niedriger als bei MNIST. Dies zeigt, dass dieser Datensatz deutlich anfälliger gegenüber dem Hinzufügen von Rauschen ist und sich die Ergebnisse sehr schnell verschlechtern können.
 
 \begin{figure}
 	\centering
@@ -214,17 +214,17 @@ Bei dem Training auf dem gleichverteilten Datensatz werden alle Modelle deutlich
 
 \subsection{SVHN und CIFAR-10 mit kleineren Privacy Budgets}
 
-Wie bereits erwähnt habe ich für CIFAR-10 und SVHN deutlich größere Privacy Budgets genutzt als für MNIST. Dies habe ich nicht willkürlich so festgelegt, sondern nach und nach größere Budgets ausprobiert. In \autoref{fig:cifar-svhn-small-budgets} sind die Trainingsverläufe mit kleineren Privacy Budgets zu sehen.
+Wie bereits erwähnt habe ich für CIFAR-10 und SVHN deutlich größere Privacy Budgets genutzt als für MNIST. Dies habe ich nicht willkürlich so festgelegt, sondern ich habe nach und nach größere Budgets ausprobiert. In \autoref{fig:cifar-svhn-small-budgets} sind die Trainingsverläufe mit kleineren Privacy Budgets zu sehen.
 
 In der ersten Spalte sind die Trainingsverläufe mit den zu MNIST identischen Budgets von $\epsilon = \{1,2,3\}$ zu sehen. Bei CIFAR-10 fällt auf, dass bei \texttt{strict-dp} keine Verbesserung im Trainingsverlauf stattfindet. Die mit den individualisierten Niveaus trainierten Modelle können sich zunächst etwas verbessern, allerdings sinkt die Validation Accuracy im Verlauf des Trainings wieder.
 
-Auf dem SVHN Datensatz verbessert sich keines der Modelle, die mit Differential Privacy trainiert werden. Alle bleiben beinahe konstant bei einer Genauigkeit von ca. $20\%$, während das nicht-privat trainierte Modell seine $80\%$ Genauigkeit erreicht. Teilweise bricht deren Genauigkeit immer wieder unter dieses Level ein. Das Modell mit dem strengsten Budget (\texttt{strict-dp}) landet sogar bei ungefähr $10\%$, was zufälligem Raten entspricht.
+Auf dem SVHN Datensatz verbessert sich keines der Modelle, die mit Differential Privacy trainiert werden. Alle bleiben beinahe konstant bei einer Genauigkeit von ca. $20\%$, während das nicht-privat trainierte Modell eine Genauigkeit von $80\%$ erreicht. Teilweise bricht die Genauigkeit der privaten Modelle auch immer wieder ein. Das Modell mit dem strengsten Budget (\texttt{strict-dp}) landet sogar bei ungefähr $10\%$, was zufälligem Raten entspricht.
 
-Bei einem höheren Budget von $\epsilon = \{5, 10, 20\}$ entspricht der Trainingsverlauf auf CIFAR-10 deutlich mehr dem aus \autoref{fig:fed-cifar10-results}. Bei \texttt{strict-dp} sieht man, dass sich die Genauigkeit ab Runde $80$ wieder langsam verringert.
+Bei einem höheren Budget von $\epsilon = \{5, 10, 20\}$ entspricht der Trainingsverlauf auf CIFAR-10 deutlich mehr dem Verlauf aus \autoref{fig:fed-cifar10-results}. Bei \texttt{strict-dp} sieht man, dass sich die Genauigkeit ab Runde $80$ wieder langsam verringert.
 
-Auf dem SVHN Datensatz verläuft das Training noch deutlich schlechter als in \autoref{fig:fed-svhn-results}. Im Vergleich zu den kleineren Budgets ist der größte Unterschied bei \texttt{relaxed-dp} zu sehen. Die Genauigkeit des Modells steigt an und ist deutlich über den $20\%$. Die anderen Privacy Niveaus bleiben allerdings ungefähr bei den gleichen Werten. Es fällt jedoch auf, dass die Genauigkeiten nicht mehr so stark einbrechen und dass auch \texttt{strict-dp} auf die $20\%$ Genauigkeit kommt.
+Auf dem SVHN Datensatz verläuft das Training noch deutlich schlechter als in \autoref{fig:fed-svhn-results} dargestellt. Im Vergleich zu den kleineren Budgets ist der größte Unterschied bei \texttt{relaxed-dp} zu sehen. Die Genauigkeit des Modells steigt an und ist deutlich über den $20\%$. Die anderen Privacy Niveaus bleiben allerdings ungefähr bei den gleichen Werten. Es fällt jedoch auf, dass die Genauigkeiten nicht mehr so stark einbrechen und dass auch \texttt{strict-dp} auf auf eine Genauigkeit von $20\%$ kommt.
 
-\begin{figure}[tb]
+\begin{figure}[t!]
 	\centering
 	\begin{subfigure}{0.45\textwidth}
 		\centering
@@ -247,5 +247,6 @@ Auf dem SVHN Datensatz verläuft das Training noch deutlich schlechter als in \a
 		\caption{SVHN mit $\epsilon = \{5,10,20\}$}
 	\end{subfigure}
 	\caption{Verlauf der Genauigkeiten auf den Validierungsdaten von CIFAR-10 und SVHN im Training mit kleineren Privacy Budgets}
+	\vspace{4in}
 	\label{fig:cifar-svhn-small-budgets}
 \end{figure}

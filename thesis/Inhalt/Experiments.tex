@@ -7,7 +7,7 @@
 %\end{itemize}
 
 % genau auf Experimente und deren Setups eingehen
-Ich evaluiere meinen Algorithmus auf drei Datensätzen, MNIST \cite{lecun:1998}, SVHN \cite{netzer:2011} und CIFAR10 \cite{krizhevsky:2009}. Im Vordergrund steht dabei die erreichbare Genauigkeit im Vergleich zu der Nutzung einheitlicher Privacy Budgets. Anders als \textcite{aldaghri:2023} untersuche ich jedoch auch unterschiedliche Verteilungen innerhalb der individualisierten Privacy Budgets. Abgesehen von den Auswirkungen von Differential Privacy auf die Genauigkeiten der Modelle, betrachte ich auch die Verteilung der Daten auf den Clients. Da wie in \autoref{fund-fl} beschrieben auch die Verzerrung der Trainingsdaten Auswirkungen auf die Ergebnisse hat erstelle ich für die Datensätze auch eine gleichverteilte Version.
+Ich evaluiere meinen Algorithmus auf drei Datensätzen, MNIST \cite{lecun:1998}, SVHN \cite{netzer:2011} und CIFAR10 \cite{krizhevsky:2009}. Im Vordergrund steht dabei die erreichbare Genauigkeit im Vergleich zu der Nutzung einheitlicher Privacy Budgets. Anders als \textcite{aldaghri:2023} untersuche ich jedoch auch unterschiedliche Verteilungen innerhalb der individualisierten Privacy Budgets. Abgesehen von den Auswirkungen von Differential Privacy auf die Genauigkeiten der Modelle, betrachte ich auch die Verteilung der Daten auf den Clients. Da wie in \autoref{fund-fl} beschrieben auch die Verzerrung der Trainingsdaten Auswirkungen auf die Ergebnisse hat, erstelle ich für die Datensätze auch eine gleichverteilte Version.
 
 \begin{figure}[h]
 	\centering
@@ -31,11 +31,11 @@ Ich evaluiere meinen Algorithmus auf drei Datensätzen, MNIST \cite{lecun:1998},
 \end{figure}
 
 \section{Umgebung und Bibliotheken}
-Ich habe den Algorithmus aus \autoref{chap:methods} mit Python in Tensorflow Federated implementiert. Das ist ein auf Tensorflow aufgebautes Framework, das das Federated Training von Neuronalen Netzen, die in Tensorflow definiert werden, relativ einfach gestaltet. Das Framework ist sehr modular aufgebaut und erlaubt es Schritte im Federated Learning, wie zum Beispiel die Aggregation der Updates durch eine andere Aggregation auszutauschen. Abgesehen vom Federated Learning hat das Framework mit Federated Core den Anspruch, eine Basis für verteilte Berechnungen zu sein. Dafür hat es beispielsweise Datentypen so adaptiert, dass sie abgesehen vom eigentlichen Datentypen immer auch die Geräte beinhalten, an denen sie sich befinden. Die High-level Federated Learning API beinhaltet typische Algorithmen wie \texttt{FedAvg} oder \texttt{DP-FedAvg}.
+Ich habe den Algorithmus aus \autoref{chap:methods} mit Python in Tensorflow Federated implementiert. Das ist ein auf Tensorflow aufgebautes Framework, welches das Federated Training von Neuronalen Netzen, die in Tensorflow definiert werden, relativ einfach gestaltet. Das Framework ist modular aufgebaut und es erlaubt Schritte im Federated Learning, wie zum Beispiel die Aggregation der Updates durch eine andere Aggregation auszutauschen. Abgesehen vom Federated Learning hat das Framework mit Federated Core den Anspruch, eine Basis für verteilte Berechnungen zu sein. Dafür hat es beispielsweise Datentypen so adaptiert, dass sie abgesehen vom eigentlichen Datentypen immer auch die Geräte beinhalten, an denen sie sich befinden. Die high-level Federated Learning API beinhaltet typische Algorithmen wie \texttt{FedAvg} oder \texttt{DP-FedAvg}.
 
-\autoref{alg:boenisch-sample} habe ich so adaptiert, dass statt Opacus die Bibliothek \textit{dp-accounting} genutzt wird. Ich habe mich dazu entschieden, da der Rest meines Environments auf Tensorflow basiert und ich daher PyTorch nicht als weitere Abhängigkeit haben wollte.
+\autoref{alg:boenisch-sample} habe ich so adaptiert, dass statt Opacus die Bibliothek \textit{dp-accounting} genutzt wird. Dazu habe ich mich entschieden, da der Rest meines Environments auf Tensorflow basiert und es daher keinen Grund mehr für eine Abhängigkeit von PyTorch gibt.
 
-Die Berechnungen habe ich auf dem Clara Cluster der Universität Leipzig ausgeführt. Um das Environment aufzusetzen und zu definieren habe ich ein Docker Image definiert, welches Python, CUDA und notwendige Bibliotheken installiert.
+Die Berechnungen wurden auf dem Clara Cluster der Universität Leipzig ausgeführt. Um das Environment aufzusetzen und zu definieren, habe ich ein Docker Image definiert, welches Python, CUDA und andere notwendige Bibliotheken installiert.
 
 \section{Verwendete Datensätze}
 
@@ -48,7 +48,7 @@ Die Berechnungen habe ich auf dem Clara Cluster der Universität Leipzig ausgef�
 
 Der MNIST-Datensatz (Modified National Institute of Standards and Technology) ist ein weit verbreiteter Benchmark im Bereich des maschinellen Lernens, insbesondere für Bildklassifizierungsaufgaben. Er besteht aus 70.000 Graustufenbildern handgeschriebener Ziffern, wobei jedes Bild eine Größe von 28x28 Pixeln hat. Der Datensatz ist in 60.000 Trainingsbilder und 10.000 Testbilder unterteilt, wobei die Ziffern von 0 bis 9 reichen. Jedes Bild ist mit der entsprechenden Ziffer beschriftet, was es zu einem überwachten Lernproblem macht. Aufgrund seiner Einfachheit und Relevanz wird der MNIST-Datensatz häufig zum Testen neuer Algorithmen und Modelle in Aufgaben wie der Ziffernerkennung verwendet.
 
-Tensorflow Federated stellt einen Datensatz bereit, der auf einer erweiterten Version von MNIST basiert. Die Ziffern sind dabei nach ihrem jeweiligen Autor aufgeteilt, was eine realistische Annahme im Federated Learning ist. Die Methodik bei der Aufteilung folgt \textcite{caldas:2018}. So wird ein \textit{Feature Distribution Skew} aus \autoref{fund-fl-data-heterogenity} simuliert. In \autoref{fig:emnist-feature-skew} ist die handgeschriebene Ziffer 8 von verschiedenen Clients zu sehen. Die unterschiedlichen Handschriften sind klar zu erkennen und stellen in diesem Datensatz die Verzerrung der Features dar.
+Tensorflow Federated stellt einen Datensatz bereit, der auf einer erweiterten Version von MNIST basiert. Die Ziffern sind dabei nach ihrem jeweiligen Autor aufgeteilt. Die Aufteilung stellt eine realistische Annahme im Federated Learning dar. Die Methodik bei der Aufteilung folgt \textcite{caldas:2018}. So wird ein \textit{Feature Distribution Skew} aus \autoref{fund-fl-data-heterogenity} simuliert. In \autoref{fig:emnist-feature-skew} ist die handgeschriebene Ziffer 8 von verschiedenen Clients zu sehen. Die unterschiedlichen Handschriften sind klar zu erkennen und stellen in diesem Datensatz die Verzerrung der Features dar.
 
 \begin{figure}[tb]
 	\centering
@@ -84,44 +84,42 @@ Es gibt keine Version dieses Datensatzes innerhalb von Tensorflow Federated, dah
 
 Der CIFAR-10-Datensatz (Canadian Institute For Advanced Research) ist ein bekannter Benchmark-Datensatz im Bereich des maschinellen Lernens und der Bildklassifikation. Er enthält 60.000 farbige Bilder mit einer Größe von 32x32 Pixeln, die in 10 verschiedene Klassen unterteilt sind: Flugzeuge, Autos, Vögel, Katzen, Hirsche, Hunde, Frösche, Pferde, Schiffe und Lastwagen. Jede Klasse ist mit 6.000 Bildern repräsentiert, und der Datensatz ist in 50.000 Trainingsbilder und 10.000 Testbilder aufgeteilt. CIFAR-10 stellt eine größere Herausforderung als einfachere Datensätze wie MNIST dar, da die Bilder vielfältigere und komplexere Objekte aus der realen Welt enthalten. 
 
-Tensorflow Federated beinhaltet zwar keine Version des CIFAR-10 Datensatzes, allerdings gibt es den CIFAR-100-Datensatz \cite{krizhevsky:2009}. Jedoch ist dieser noch komplexer, daher habe ich mich entschlossen den CIFAR-10 Datensatz so aufzubereiten, wie es beim Tensorflow Federated CIFAR-100 Datensatz gemacht wurde. 
+Tensorflow Federated beinhaltet zwar keine Version des CIFAR-10 Datensatzes, allerdings gibt es den CIFAR-100 Datensatz \cite{krizhevsky:2009}. Dieser ist jedoch noch komplexer, weshalb ich mich stattdessen dazu entschlossen habe den CIFAR-10 Datensatz so aufzubereiten, wie es von Tensorflow Federated beim CIFAR-100 Datensatz gemacht wurde. 
 
 Dort wird für jeden Client ein Vektor aus der Dirichlet-Verteilung gezogen, welcher für jede Klasse die Wahrscheinlichkeit repräsentiert, ein Trainingsbeispiel aus der jeweiligen Klasse zu ziehen. Dementsprechend zieht jeder Client Beispiele aus dem Datensatz. Wenn eine Klasse keine weiteren Daten enthält, wird der Zahlenvektor für jeden Client neu gezogen, allerdings nur mit den Klassen, die noch nicht aufgebraucht sind. Am Ende erhält man so Clients, bei denen die Klassen je nach Client unterschiedlich stark vertreten sind und es wird ein \textit{Label Distribution Skew} aus \autoref{fund-fl-data-heterogenity} abgebildet. Der Effekt ist in \autoref{fig:label-distribution} zu sehen. Die Verteilung der Klassen bei den CIFAR-10 Clients ist sehr viel unregelmäßiger als die der anderen Datensätze und hat viele Lücken.
 
 \autoref{fig:label-distribution-all} zeigt die Verteilung der Labels in den gesamten Trainingsdaten. Es ist auffällig, dass es in SVHN deutlich mehr kleinere Ziffern gibt als größere, mit Ausnahme der $0$. Allerdings lässt sich das womöglich dadurch erklären, dass Hausnummern in der Regel aufsteigend vorliegen und es daher für jede Ziffer $9$ auch $1$ bis $8$ gegeben haben muss. Diese ungleiche Verteilung wirkt sich, wie in \autoref{fig:label-distribution} zu sehen ist, auch auf die Menge der Trainingsbeispiele auf den Clients aus.
 
 \section{Exemplarische individuelle Sampling Rates und der Noise Multiplier}
-Um zu veranschaulichen, wie welche Trainingsparameter zu welchen Sampling Rates für den Algorithmus führen und die Auswirkungen zu zeigen, habe ich diese für leicht variierte Setups berechnet. Ich zeige dies ausgehend von den Parametern des MNIST-Datensatzes. Dieser umfasst $3383$ Clients, dementsprechend wähle ich $\delta= 1e-5$. 
+Um zu veranschaulichen, welche Trainingsparameter zu welchen Sampling Rates für den Algorithmus führen und um die Auswirkungen zu zeigen, habe ich diese für leicht variierte Setups berechnet. Ich zeige dies ausgehend von den Parametern des MNIST-Datensatzes. Dieser umfasst $3383$ Clients, dementsprechend wähle ich $\delta= 1e-5$. 
 
-Zunächst verteile ich die Privacy Budgets mit der Verteilung $[0.34, 0.43, 0.23]$ unter den Clients. Die konkrete Zuweisung der Budgets anhand dieser Verteilung unterliegt dem Zufall, kann also leicht variieren. Mit Privacy-Budgets von $\epsilon = [1,2,3]$, $50$ Clients pro Runde und 100 Runden berechnet \autoref{alg:boenisch-sample} einen Noise Multiplier $\sigma = 0.92$ und Sampling Rates für die Budgets von $q = [0.003, 0.016, 0.028]$. Wie gefordert liegt der Erwartungswert der Clients pro Runde ungefähr bei $50$, genau bei $50.078$.
+Zunächst verteile ich die Privacy Budgets mit der Verteilung $[0.34, 0.43, 0.23]$ auf den Clients. Die konkrete Zuweisung der Budgets anhand dieser Verteilung unterliegt dem Zufall, kann also leicht variieren. Mit Privacy-Budgets von $\epsilon = [1,2,3]$, $50$ Clients pro Runde und 100 Runden berechnet \autoref{alg:boenisch-sample} einen Noise Multiplier $\sigma = 0.92$ und Sampling Rates für die Budgets von $q = [0.003, 0.016, 0.028]$. Wie gefordert liegt der Erwartungswert der Clients pro Runde ungefähr bei $50$, genau bei $50.078$.
 
 Wenn die Budgets auf $\epsilon = [10, 20, 30]$ erhöht werden, ändern sich die Sampling Rates leicht, vor allem sinkt aber der Noise Multiplier auf $\sigma = 0.38$. Das führt dazu, dass im weiteren Training die Gradienten deutlich weniger verrauscht werden.
 
 Bei einer Verteilung der Budgets unter den Clients, die mehr Clients mit strengeren Budgets erzeugt, steigt $\sigma$ ebenfalls. Auch die Sampling Rates ändern sich deutlich. Bei einer Verteilung von $[0.54, 0.37, 0.09]$ steigt der Noise Multiplier auf $\sigma = 0.99$ und die Sampling Rates liegen bei $q = [0.006, 0.022, 0.036]$. Das führt auf der neuen Verteilung zu $50.072$ erwarteten Clients pro Runde.
 
-Wenn die Clients pro Runde gleich bleiben, aber die Anzahl der Clients im Datensatz herabgesetzt wird, steigt der Noise Multiplier ebenfalls. Das liegt daran, dass ein einzelner Client damit im Training häufiger gezogen wird und deshalb sein Beitrag zu dem Modell wieder stärker begrenzt werden muss um seine Privatheit zu schützen. Die Sampling Rates verändern sich auch, allerdings bleibt die Anzahl der Clients pro Runde im Mittel erhalten. Wenn statt den $3383$ Clients nur $1000$ Clients angenommen werden steigt der Noise Multiplier auf $\sigma = 1.50$. In der Praxis würde das natürlich auch dazu führen, dass es pro Client mehr Daten geben würde, also die Updates zwar stärker verrauscht werden würden, aber vermutlich auch aussagekräftiger wären.
+Wenn die Clients pro Runde gleich bleiben, aber die Anzahl der Clients im Datensatz herabgesetzt wird, steigt der Noise Multiplier ebenfalls. Das liegt daran, dass ein einzelner Client im Training häufiger gezogen wird und deshalb sein Beitrag zu dem Modell wieder stärker begrenzt werden muss, um seine Privatheit zu schützen. Die Sampling Rates verändern sich auch, allerdings bleibt die Anzahl der Clients pro Runde im Mittel erhalten. Wenn statt den $3383$ Clients nur $1000$ Clients angenommen werden, steigt der Noise Multiplier auf $\sigma = 1.50$. In der Praxis würde das natürlich auch dazu führen, dass es pro Client mehr Daten geben würde, also die Updates zwar stärker verrauscht werden würden, aber vermutlich auch aussagekräftiger wären.
 
 Ähnlich ist es, wenn die Anzahl der Trainingsrunden erhöht wird. Auch hier wird ein einzelner Client innerhalb des Trainings vermutlich häufiger gezogen, als bei weniger Runden. Bei $1000$ Runden steigt der Noise Multiplier auf $\sigma = 1.32$
 
-Auch wenn die Clients pro Runde erhöht werden ist das der Fall. Bei $200$ statt den bisherigen $50$ Clients pro Runde liegt der Noise Multiplier bei $\sigma = 1.68$.
-
-
+Das ist auch der Fall, wenn die Clients pro Runde erhöht werden. Bei $200$ Clients statt den bisherigen $50$ Clients pro Runde liegt der Noise Multiplier bei $\sigma = 1.68$.
 
 \section{Unabhängig gleichverteilte Versionen der Datensätze}\label{sec:iid-dataset-creation}
-Für MNIST und CIFAR-10 erstelle ich abgesehen von den oben genannten Datensätzen noch eine Version, bei der die Daten zufällig auf den Clients verteilt werden. Der Grund dafür ist, dass \texttt{FedAvg}, auf dem mein Algorithmus basiert, Schwierigkeiten mit Verzerrungen in den Trainingsdaten hat. Diese Versionen sollen also vor allem als eine Baseline sein und zur Vergleichbarkeit meiner Ergebnissen beitragen.
+Für MNIST und CIFAR-10 erstelle ich abgesehen von den oben genannten Datensätzen noch eine Version, bei der die Daten zufällig auf den Clients verteilt werden. Der Grund dafür ist, dass \texttt{FedAvg}, auf dem mein Algorithmus basiert, Schwierigkeiten mit Verzerrungen in den Trainingsdaten hat. Diese Versionen sollen also vor allem eine Baseline sein und zur Vergleichbarkeit meiner Ergebnissen beitragen.
 
 \textit{Tensorflow Federated} stellt für die Erstellung gleichverteilter Datensätze eine Funktion bereit.\footnote{\url{https://www.tensorflow.org/federated/api_docs/python/tff/simulation/datasets/build_synthethic_iid_datasets}, (accessed 07-11-2024)} Diese erstellt einen \texttt{Iterator}, bei dem in jeder Iteration zufällig aus allen Trainingsdaten gezogen wird. Damit gibt es jedoch keine Zuweisung mehr von den Daten zu den Clients, das heißt wenn ein Client gezogen wird, werden seine Trainingsdaten dynamisch zusammengesetzt.
 
-Ich wollte in meinem Fall gerne eine Beziehung der Clients zu den Daten beibehalten, das heißt wenn in meinem Fall der gleiche Client in verschiedenen Runden gezogen wird, trainiert er auch auf den gleichen Daten.
+Ich wollte gerne eine Beziehung der Clients zu den Daten beibehalten, das heißt, wenn in meinem Fall der gleiche Client in verschiedenen Runden gezogen wird, trainiert er auch auf den gleichen Daten.
 
-Dazu habe ich eine Funktion geschrieben, die einen Datensatz als Eingabe bekommt und dann die Datenpunkte zufällig den Clients zuweist. Diese Funktion liefert dann einen Datensatz zurück in dem Clients feste Datenpunkte zugewiesen sind.
+Dazu habe ich eine Funktion geschrieben, die einen Datensatz als Eingabe bekommt und dann die Datenpunkte zufällig den Clients zuweist. Diese Funktion liefert dann einen Datensatz, in dem Clients feste Datenpunkte zugewiesen sind.
 
 \section{Modellarchitektur}
-Die Datensätze, auf denen ich meinen Algorithmus auswerte sind für Bildklassifizierungen gemacht. Daher verwende ich in meinen Experimenten ein einfaches Convolutional Neural Network. Das Neuronale Netz ist für alle Datensätze das gleiche, lediglich die \texttt{input\_shape} passe ich den jeweiligen Daten an. Außerdem gibt es einen Rescaling Layer, der die Pixel auf das Intervall $[0;1]$ normalisiert. Bei MNIST ist das nicht nötig, da bereits alle Werte zwischen $0$ und $1$ liegen.
+Die Datensätze, auf denen ich meinen Algorithmus auswerte sind für Bildklassifizierungen gemacht. Daher verwende ich in meinen Experimenten ein einfaches Convolutional Neural Network. Das neuronale Netz ist für alle Datensätze das gleiche, lediglich die \texttt{input\_shape} passe ich den jeweiligen Daten an. Außerdem gibt es einen Rescaling Layer, der die Pixel auf das Intervall $[0;1]$ normalisiert. Bei MNIST ist das nicht nötig, da bereits alle Werte zwischen $0$ und $1$ liegen.
 
-Das Neuronale Netz selbst ist sehr klein und enthält nur $21578$ trainierbare Parameter. Ich habe mich dafür entschieden, das Training damit durchzuführen, da größere Modelle einen erheblichen Mehraufwand beim Training bedeuten, weil im Trainingsprozess viele Clients simuliert werden müssen. Bereits bei auf Effizienz ausgerichteten Modellen wie \textit{MobileNet} \cite{howard:2017} und \textit{EfficientNet} \cite{tan:2019} war ein zügiges Training nicht mehr möglich.
+Das Neuronale Netz selbst ist sehr klein und enthält nur $21.578$ trainierbare Parameter. Ich habe mich entschieden, das Training damit durchzuführen, da größere Modelle einen erheblichen Mehraufwand beim Training bedeuten, weil im Trainingsprozess viele Clients simuliert werden müssen. Bereits bei auf Effizienz ausgerichteten Modellen wie \textit{MobileNet} \cite{howard:2017} und \textit{EfficientNet} \cite{tan:2019} war ein zügiges Training nicht mehr möglich.
 
-Die Schichten des Modells bestehen aus Convolutional, MaxPooling und Dropout Layern. Darüber hinaus gibt es am Ende zwei Linear Layers für die Klassifikation.
+Die Schichten des Modells bestehen aus Convolutional, MaxPooling und Dropout Layern. Darüber hinaus gibt es am Ende zwei Linear Layer für die Klassifikation.
 
 \begin{figure}[tb]
 	\centering
@@ -130,9 +128,9 @@ Die Schichten des Modells bestehen aus Convolutional, MaxPooling und Dropout Lay
 	\label{fig:model-architecture}
 \end{figure}
 
-Um das Training einfach zu halten habe ich auf weitere Vorverarbeitungsschritte der Bilder verzichtet. Ich führe auch keine Augmentation der Trainingsdaten durch, zum Beispiel durch zufälliges drehen oder zuschneiden der Bilder.
+Um das Training einfach zu halten, habe ich auf weitere Vorverarbeitungsschritte der Bilder verzichtet. Ich führe auch keine Augmentierung der Trainingsdaten durch, zum Beispiel durch zufälliges Drehen oder Zuschneiden der Bilder.
 
-Durch lokale Experimente auf zentralen Trainingsdaten habe ich überprüft, dass mein Modell auf allen Datensätzen in der Lage ist zu lernen. Daher ist das Modell für mein Ziel ausreichend, nämlich meinen Trainingsalgorithmus zu testen und Aussagen über die Auswirkungen verschiedener Parameter zu treffen.
+Durch lokale Experimente auf zentralen Trainingsdaten habe ich überprüft, dass mein Modell auf allen Datensätzen in der Lage ist zu lernen. Daher ist es ausreichend um meinen Trainingsalgorithmus zu testen und Aussagen über die Auswirkungen verschiedener Parameter zu treffen.
 
 \section{Privacy Setups}
 Ich führe die Experimente jeweils mit insgesamt fünf Privacy-Niveaus durch. Im folgenden werde ich mich mit den Namen \texttt{no-dp}, \texttt{relaxed-dp}, \texttt{relaxed-idp}, \texttt{strict-idp} und \texttt{strict-dp} auf diese beziehen. In dieser Reihenfolge haben sie ansteigende Anforderungen an die Differential Privacy. \autoref{tab:privacy-niveau-distribution} zeigt die Verteilung der Privacy Budgets für jedes der Setups. \texttt{strict-idp} und \texttt{relaxed-idp} sind die beiden Setups, die mit individualisierten Privacy Budgets arbeiten. Die anderen nutzen entweder homogene Budgets oder gar keine und dienen zum Vergleich mit meinen Ergebnissen. Die Erwartung ist, dass \texttt{no-dp} und \texttt{relaxed-dp} besser abschneiden, als \texttt{relaxed-idp} und \texttt{strict-idp}, während \texttt{strict-dp} die größten Abstriche bei der Nützlichkeit erwarten lässt.
@@ -154,7 +152,7 @@ Ich führe die Experimente jeweils mit insgesamt fünf Privacy-Niveaus durch. Im
 	\label{tab:privacy-niveau-distribution}
 \end{table}
 
-Für jeden Datensatz definiere ich drei Privacy-Budgets jeweils für Clients die niedrige, mittlere und hohe Anforderungen an ihre Privatheit haben. Ich musste in meinen Experimenten feststellen, dass einheitliche Budgets über alle Datensätze nicht funktionieren, weil die Modelle dann bei SVHN und CIFAR-10 nicht konvergieren. Das unterstreicht noch einmal unterschiedlichen Schwierigkeitsgrade zwischen den Datensätzen und deckt sich tendenziell mit den Erfahrungen von \textcite{sun:2021}.
+Für jeden Datensatz definiere ich drei Privacy-Budgets jeweils für Clients, die niedrige, mittlere und hohe Anforderungen an ihre Privatheit haben. Ich musste in meinen Experimenten feststellen, dass einheitliche Budgets über alle Datensätze nicht funktionieren, weil die Modelle dann bei SVHN und CIFAR-10 nicht konvergieren. Das unterstreicht noch einmal die unterschiedlichen Schwierigkeitsgrade zwischen den Datensätzen und deckt sich tendenziell mit den Erfahrungen von \textcite{sun:2021}.
 
 \begin{table}[tb]
 	\centering
@@ -171,7 +169,7 @@ Für jeden Datensatz definiere ich drei Privacy-Budgets jeweils für Clients die
 	\label{tab:privacy-budgets-per-dataset}
 \end{table}
 
-Die Annahmen, dass es drei Gruppen mit unterschiedlichen Anforderungen an die Privatheit gibt und auch die Verteilungen dieser Gruppen innerhalb der Clients folgt \textcite{boenisch:2023} und ist durch empirische Studien gedeckt \cite{jensen:2005, acquisti:2005}. Eine Übersicht der Budgets auf den Datensätzen steht in \autoref{tab:privacy-budgets-per-dataset}.
+Die Annahmen, dass es drei Gruppen mit unterschiedlichen Anforderungen an die Privatheit gibt und auch die Verteilungen dieser Gruppen innerhalb der Clients folgt \textcite{boenisch:2023} und ist durch empirische Studien gedeckt \cite{jensen:2005, acquisti:2005}. Eine Übersicht der Budgets auf den Datensätzen findet sich \autoref{tab:privacy-budgets-per-dataset}.
 
 %\begin{table}[tb]
 %	\centering
