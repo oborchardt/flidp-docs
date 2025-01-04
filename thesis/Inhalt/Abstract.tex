@@ -1,4 +1,13 @@
-% \section*{Zusammenfassung}
-% \label{sec:Zusammenfassung}
-%
-% Zusammenfassung meiner Arbeit hier....
+\section*{Kurzfassung}\label{sec:abstract}
+
+In dieser Masterarbeit wird ein Algorithmus entwickelt, um individualisierte Privatheitsgarantien im \textit{Federated Learning} durch individuelle Sampling-Raten umzusetzen. Dieser Ansatz baut auf etablierten Methoden aus dem zentralen Training mit \textit{Differential Privacy} und der Datenanalyse auf.  
+
+Zunächst wird die Relevanz von \textit{Differential Privacy} im Machine Learning und speziell im \textit{Federated Learning} beleuchtet. Der \textit{Privacy-Utility Tradeoff} wird beschrieben, und die Notwendigkeit zur Optimierung dieses Tradeoffs wird dargelegt. Individualisierte Privacy-Budgets werden als Möglichkeit zur Optimierung des Tradeoffs weiter beleuchtet. Sie ermöglichen es, die Modellgenauigkeit verbessern, ohne die Datenschutzanforderungen der Nutzer zu verletzen, und können somit die Akzeptanz und Verbreitung von Datenschutzalgorithmen fördern. Gleichzeitig bilden sie die Anforderungen der Nutzer an die Privatheit besser ab, da diese in der Praxis ebenfalls sehr heterogen sind.
+
+Der in dieser Arbeit entwickelte Algorithmus setzt individualisierte \textit{Differential Privacy} im \textit{Federated Learning} durch Sampling-Raten um, im Gegensatz zu bestehenden Ansätzen mit individuellen \textit{Noise Multipliers} oder zusätzlichen Parametern. Experimente auf verschiedenen Datensätzen zeigen, dass individualisierte Privacy-Budgets vor allem in Szenarien von Vorteil sind, in denen Modelle mit strengen einheitlichen Budgets nicht mehr konvergieren. Stattdessen weniger strenge, einheitliche Budgets zu nutzen, würde die Privatheit einzelner Nutzer verletzen.
+
+Die Experimente unterstreichen auch die Herausforderungen für das \textit{Federated Learning}, die das Training auf heterogen verteilten Daten mit sich bringt. Zudem wird gezeigt, dass kleine Privacy-Budgets bei komplexen Datensätzen oft unzureichend sind, während sie bei einfacheren Datensätzen effektiv sein können.  
+
+Außerdem werden praktische Herausforderungen des \textit{Federated Learning} in Produktivumgebungen wie Hyperparameter-Optimierung, Rechenaufwand und die Zuverlässigkeit von teilnehmenden Clients diskutiert.  
+
+\textit{Federated Learning} und \textit{Differential Privacy} bleiben essenzielle Ansätze, um die Privatheit der Nutzer in einer datengetriebenen Welt zu schützen. Individualisierte Privacy-Budgets, umgesetzt durch Sampling-Raten, sind eine vielversprechende Möglichkeit um dabei die Performanz der Modelle zu verbessern. Außerdem sind sie gut in bestehende Algorithmen integrierbar.  
